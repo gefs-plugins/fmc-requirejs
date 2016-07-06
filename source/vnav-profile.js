@@ -20,9 +20,8 @@ define(function () {
 	};
 
 	return {
-		profile: gefs.aircraft.setup.fmc || DEFAULT_PROFILE,
 		forceUpdate: function () {
-			this.profile = gefs.aircraft.setup.fmc || DEFAULT_PROFILE;
+			return gefs.aircraft.setup.fmc || DEFAULT_PROFILE;
 		}
 	};
 });

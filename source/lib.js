@@ -79,7 +79,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 				if (!isMach) switchMode();
 			}
 			
-			var profile = vnavProfile.profile.climb;
+			var profile = vnavProfile.forceUpdate().climb;
 			var index;
 			for (var i=0; i<profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
@@ -98,7 +98,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 				if (isMach) switchMode();
 			}
 			
-			var profile = vnavProfile.profile.descent;
+			var profile = vnavProfile.forceUpdate().descent;
 			var index;
 			for (var i=0; i<profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
