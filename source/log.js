@@ -93,7 +93,7 @@ define(['lib'], function (lib) {
 		/**
 		 * Clears the log
 		 */
-		removedata: function () {
+		removeData: function () {
 			$('#logData tr').remove('.data');
 		}
 	};
