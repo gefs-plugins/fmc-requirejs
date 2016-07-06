@@ -3,6 +3,7 @@
   , "flight": true
   , "metersToFeet": true
   , "autopilot_pp": true
+  , "Aircraft": true
   , "define": true
   , "require": true
   , "requirejs": true
