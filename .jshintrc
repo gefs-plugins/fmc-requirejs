@@ -1,0 +1,29 @@
+{ "globals":
+  { "gefs": true
+  , "flight": true
+  , "metersToFeet": true
+  , "autopilot_pp": true
+  , "define": true
+  , "require": true
+  , "requirejs": true
+  }
+, "laxcomma": true
+, "laxbreak": true
+, "eqnull": true
+, "smarttabs": true
+, "globalstrict": true
+, "jquery": true
+, "curly": false
+, "browser": true
+, "expr": true
+, "devel": true
+, "debug": true
+, "funcscope": true
+, "unused": true
+, "bitwise": true
+, "boss": true
+, "-W079": false
+, "-W058": false
+, "-W002": false
+, "-W004": false
+}
