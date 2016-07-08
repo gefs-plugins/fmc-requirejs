@@ -14,14 +14,6 @@ define(['lib', 'log', 'toggle', 'waypoints'], function (lib, log, toggle, waypoi
 			$('<i>').addClass('icon-list-alt')
 		);
 		
-	var button = $('<button>')
-		.addClass('fmc-toggle-button mdl-button mdl-js-button mdl-button--colored')
-		.attr('data-upgraded', ',MaterialButton')
-		.attr('data-toggle', 'modal')
-		.attr('data-target', '#fmcModal')
-		.text('FMC ')
-		
-		
 	// External distance indicator
 	var externalDist = $('<div>')
 		.addClass('setup-section')
