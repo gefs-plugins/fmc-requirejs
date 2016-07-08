@@ -1,8 +1,10 @@
 /* For FMC button */
+button.fmc-btn, button.fmc-btn:hover, button.fmc-btn:active, button.fmc-btn:focus:not(:active) {
+	color: white;
+	background: green;
+}
 
 /* For external distance indicator */
-#externaldist {}
+
 
 /* For modal dialog */
-
-	/* TODO */
