@@ -25,7 +25,7 @@ function (consts, distance, lib, lnav, log, math, progress, toggle, vnavProfile,
 	log.speedTimer = setInterval(log.speed, 15000);
 	
 	// Adds one input field on start
-	waypoints.addWaypoints();
+	waypoints.addWaypoint();
 	
 	window.fmc = {
 		version: "",

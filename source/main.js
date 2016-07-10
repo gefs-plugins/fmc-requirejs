@@ -4,14 +4,22 @@
 
 "use strict";
 
+// make sure code is run after GEFS is ready
 (function () {
-	define(function (require) {
-		var timer = setInterval(function () {
-			if (window.gefs && gefs.aircraft && gefs.aircraft.object3d) {
-				clearInterval(timer);
-				require('debug');
-				require('ui/main');
-			}
-		}, 4);
-	});
+  // check if gefs.init has already been called
+  if (window.gefs && gefs.map3d) require(['ui/main', 'debug']);
+  else {
+    var oldInit = gefs.init;
+    var timer = setInterval(function () {
+      if (!window.gefs || !gefs.init) return;
+
+      clearInterval(timer);
+      // The original gefs.init function might have already run between two checks.
+      if (window.gefs && gefs.map3d) require(['ui/main', 'debug']);
+      else gefs.init = function () {
+        oldInit();
+        require(['ui/main', 'debug']);
+      };
+    }, 4);
+  }
 })();

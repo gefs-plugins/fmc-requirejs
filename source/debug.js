@@ -63,7 +63,7 @@ require(['log', 'vnav-profile'], function (log, vnavProfile) {
 	};
 	
 	// ============== FMC Modal debug ================
-	
+	/*
 	// Hides backdrop for the modal	
 	$('#fmcModal').modal({
 		backdrop: false,
@@ -74,5 +74,5 @@ require(['log', 'vnav-profile'], function (log, vnavProfile) {
 	$('#fmcModal').keyup(function (event) {
 		event.stopImmediatePropagation();
 	});
-	
+	*/
 });
