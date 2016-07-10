@@ -1,6 +1,6 @@
 "use strict"; // jshint unused:false
 
-require(['consts', 'distance', 'lib', 'LNAV', 'log', 'math', 'progress', 'toggle', 'vnav-profile', 'VNAV', 'waypoints', 'text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html','text!ui/ui.css'], 
+define(['consts', 'distance', 'lib', 'LNAV', 'log', 'math', 'progress', 'toggle', 'vnav-profile', 'VNAV', 'waypoints', 'text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html','text!ui/ui.css', 'redefine'], 
 function (consts, distance, lib, lnav, log, math, progress, toggle, vnavProfile, vnav, waypoints, ui_button, ui_externaldist, ui_modal, ui_css) {
 
 	/* ---- UI Initialization ---- */

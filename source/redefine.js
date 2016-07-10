@@ -1,6 +1,6 @@
 "use strict"; 
 
-require(['log', 'vnav-profile'], function (log, vnavProfile) {
+define(['log', 'vnav-profile'], function (log, vnavProfile) {
 	
 	/** 
 	 * Defines Array prototype to move an array
