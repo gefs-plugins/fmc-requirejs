@@ -7,7 +7,7 @@
 // make sure code is run after GEFS is ready
 (function (initFMC) {
 	// check if gefs.init has already been called
-	if (window.gefs && gefs.canvas) initFMC();
+	if (window.gefs && gefs.canvas) require(['ui/main']);
 	else {
 		var oldInit = gefs.init;
 		var timer = setInterval(function () {
@@ -15,15 +15,11 @@
 
 			clearInterval(timer);
 			// The original gefs.init function might have already run between two checks.
-			if (window.gefs && gefs.canvas) initFMC();
+			if (window.gefs && gefs.canvas) require(['ui/main']);
 			else gefs.init = function () {
 				oldInit();
-				initFMC();
+				require(['ui/main']);
 			};
 		}, 4);
 	}
-})(function () {
-	define(function (require) {
-		require('ui/main');
-	});
-});
+})();
