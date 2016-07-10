@@ -1,0 +1,26 @@
+{
+	"name": "fmc-requirejs",
+	"version": "0.0.1",
+	"description": "Proxy server to test FMC RequireJS port",
+	"main": "index.js",
+	"dependencies": {
+		"robohydra": "^0.6.4"
+	},
+	"devDependencies": {
+		"requirejs": "latest"
+	},
+	"scripts": {
+		"start": "robohydra -I ./ -n -P testing -q"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gefs-plugins/fmc-requirejs.git"
+	},
+	"author": "Harry Xue",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/gefs-plugins/fmc-requirejs/issues"
+	},
+	"homepage": "https://github.com/gefs-plugins/fmc-requirejs#readme", 
+	"private": true
+}
