@@ -1,7 +1,7 @@
 "use strict"; // jshint unused:false
 
-define(['consts', 'distance', 'lib', 'LNAV', 'log', 'math', 'progress', 'toggle', 'vnav-profile', 'VNAV', 'waypoints', 'redefine'], 
-function (consts, distance, lib, lnav, log, math, progress, toggle, vnavProfile, vnav, waypoints) {
+define(['consts', 'distance', 'lib', 'log', 'math', 'toggles', 'vnav-profile', 'waypoints', 'nav/LNAV', 'nav/progress', 'nav/VNAV', 'redefine'], 
+function (consts, distance, lib, log, math, toggles, vnavProfile, waypoints, lnav, progress, vnav) {
 
 	/* ---- UI actions binding ---- */
 
