@@ -7,7 +7,7 @@ define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
 		 * Computes the full route distance with waypoints until index
 		 * 
 		 * @param {Number} end The index of the end of the route to be calculated
-		 * @return {Number} The route distance
+		 * @returns {Number} The route distance
 		 */
 		route: function (end) {
 			var loc = gefs.aircraft.llaLocation || [0, 0, 0];
@@ -33,7 +33,7 @@ define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
 		 * Computes the distance needed to climb or descend to a certain altitude from current altitude
 		 * 
 		 * @param {Number} deltaAlt The altitude difference
-		 * @return {Number} The distance
+		 * @returns {Number} The distance
 		 */
 		target: function (deltaAlt) {
 			var targetDist;
@@ -49,7 +49,7 @@ define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
 		 * Computes the turning distance to next waypoint for an aircraft to be on course
 		 * 
 		 * @param {Number} angle Angle of turning
-		 * @return {Number} The turning distance
+		 * @returns {Number} The turning distance
 		 */
 		turn: function (angle) {
 			var v = gefs.aircraft.animationValue.kcas;

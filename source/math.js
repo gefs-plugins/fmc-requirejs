@@ -6,7 +6,7 @@ define(['consts'], function (consts) {
 		 * Turns degrees to radians
 		 * 
 		 * @param {Number} degrees The degree to be converted
-		 * @return {Number} Radians of the degree
+		 * @returns {Number} Radians of the degree
 		 */
 		toRadians: function (d) {
 			return d * Math.PI / 180;
@@ -16,7 +16,7 @@ define(['consts'], function (consts) {
 		 * Converts radians to degrees
 		 * 
 		 * @param {Number} radians The radian to be converted
-		 * @return {Number} Degree of the radian
+		 * @returns {Number} Degree of the radian
 		 */
 		toDegrees: function (r) {
 			return r * 180 / Math.PI;
@@ -25,7 +25,7 @@ define(['consts'], function (consts) {
 		/**
 		 * Computes the ground speed of the aircraft
 		 * 
-		 * @return {Number} The ground speed of the aircraft
+		 * @returns {Number} The ground speed of the aircraft
 		 */
 		getGroundSpeed: function () {
 			var tas = gefs.aircraft.animationValue.ktas;
@@ -41,7 +41,7 @@ define(['consts'], function (consts) {
 		 * @param {Number} lon1 Longetude of first coordinate
 		 * @param {Number} lat2 Latitude of second coordinate
 		 * @param {Number} lon2 Longetude of second coordinate
-		 * @return {Number} The distance computed, in nautical miles
+		 * @returns {Number} The distance computed, in nautical miles
 		 */
 		getDistance: function (lat1, lon1, lat2, lon2) {
 			var dlat = this.toRadians(lat2 - lat1);
@@ -60,7 +60,7 @@ define(['consts'], function (consts) {
 		 * @param {Number} lon1 Longetude of first coordinate
 		 * @param {Number} lat2 Latitude of second coordinate
 		 * @param {Number} lon2 Longetude of second coordinate
-		 * @return {Number} The bearing computed, in degrees 360 format
+		 * @returns {Number} The bearing computed, in degrees 360 format
 		 */
 		getBearing: function (lat1, lon1, lat2, lon2) {
 			lat1 = this.toRadians(lat1);
@@ -78,7 +78,7 @@ define(['consts'], function (consts) {
 		 * 
 		 * @param {Number} deltaAlt The altitude difference
 		 * @param {Number} nextDist The distance to the restriction point
-		 * @return {Number} The climb rate necessary to attain the restriction
+		 * @returns {Number} The climb rate necessary to attain the restriction
 		 */
 		getClimbrate: function (deltaAlt, nextDist) {
 			var gs = this.getGroundSpeed();

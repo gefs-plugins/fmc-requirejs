@@ -60,7 +60,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 * Gets each plane's flight parameters, for VNAV
 	 *
 	 * @param {String} aircraft The aircraft name
-	 * @return {Array} vertical speed and speed
+	 * @returns {Array} vertical speed and speed
 	 */
 	function getFlightParameters () {
 		var spd, vs;
@@ -116,7 +116,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 *
 	 * @param {Number} n The index to be activated or deactivated
 	 */
-	function activateLeg(n) {
+	function activateLeg (n) {
 		if (waypoints.nextWaypoint != n) {
 			if (n <= waypoints.route.length) {
 				waypoints.nextWaypoint = n;
@@ -144,10 +144,10 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	/**
 	 * Gets the next waypoint that has an altitude restriction
 	 *
-	 * @return The index of the waypoint if eligible,
+	 * @returns The index of the waypoint if eligible,
 	 * 		   -1 if not eligible
 	 */
-	function getNextWaypointWithAltRestriction() {
+	function getNextWaypointWithAltRestriction () {
 		for (var i = waypoints.nextWaypoint; i <= waypoints.route.length; i++) {
 			if (waypoints.route[i - 1][3]) return i;
 		}
@@ -158,9 +158,9 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 * Helper method for log, formats the time
 	 * 
 	 * @param {Array} time An array of the time: [hours, minutes]
-	 * @return {String} Formatted time: "hours : minutes"
+	 * @returns {String} Formatted time: "hours : minutes"
 	 */
-	function formatTime(time) {
+	function formatTime (time) {
 		time[1] = checkZeros(time[1]); // FIXME Cannot assign to read only property '1' of string '--'
 		return time[0] + ":" + time[1];
 	}
@@ -169,9 +169,9 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 * Helper method, format zeros
 	 *
 	 * @param {Number} i The number to be checked
-	 * @return {String} The original number with 0's added
+	 * @returns {String} The original number with 0's added
 	 */
-	function checkZeros(i) {
+	function checkZeros (i) {
 		if (i < 10) i = "0" + i;
 		return i;
 	}
@@ -181,9 +181,9 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 *
 	 * @param {Number} h The hours
 	 * @param {Number} m The minutes
-	 * @return {Array} Array of eligible time, [h, m]
+	 * @returns {Array} Array of eligible time, [h, m]
 	 */
-	function timeCheck(h, m) {
+	function timeCheck (h, m) {
 		if (m >= 60) {
 			m -= 60;
 			h++;
@@ -195,11 +195,11 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	/**
 	 * Gets "Estimated Time En-Route"
 	 *
-	 * @param {Number} The distance to the destination
+	 * @param {Number} d The distance to the destination
 	 * @param {Boolean} a Is the aircraft in arrival
-	 * @return {Array} The time after <code>timeCheck(h, m)</code>
+	 * @returns {Array} The time after <code>timeCheck(h, m)</code>
 	 */
-	function getete(d, a) {
+	function getETE (d, a) {
 		var hours = d / gefs.aircraft.animationValue.ktas;
 		var h = parseInt(hours);
 		var m = Math.round(60 * (hours - h));
@@ -212,9 +212,9 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 *
 	 * @param {Number} hours Hours
 	 * @param {Number} minutes Minutes
-	 * @return {Array} The timer after <code>timeCheck(hours, minutes)</code>
+	 * @returns {Array} The timer after <code>timeCheck(hours, minutes)</code>
 	 */
-	function geteta(hours, minutes) {
+	function getETA (hours, minutes) {
 		var date = new Date();
 		var h = date.getHours();
 		var m = date.getMinutes();
@@ -240,7 +240,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 		formatTime: formatTime,
 		checkZeros: checkZeros,
 		timeCheck: timeCheck,
-		getete: getete,
-		geteta: geteta
+		getETE: getETE,
+		getETA: getETA
 	};
 });
