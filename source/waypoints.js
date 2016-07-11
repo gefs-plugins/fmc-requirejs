@@ -1,6 +1,6 @@
 "use strict";
 
-define(['lib'], function (lib) {
+define(['lib', 'text!ui/waypoints.html'], function (lib, wptInputField) {
 	return {
 		input: "",
 		route: [],
@@ -9,7 +9,7 @@ define(['lib'], function (lib) {
 		/**
 		 * Turns the waypoints into an array
 		 *
-		 * @return {Array} The array of waypoint names
+		 * @returnss {Array} The array of waypoint names
 		 */
 		makeFixesArray: function () {
 			var result = [];
@@ -27,7 +27,7 @@ define(['lib'], function (lib) {
 		/**
 		 * Joins the fixes array into a string
 		 *
-		 * @return {String} All waypoints, each seperated by a space
+		 * @returnss {String} All waypoints, each seperated by a space
 		 */
 		toFixesString: function () {
 			return this.makeFixesArray().join(" ");
@@ -36,7 +36,7 @@ define(['lib'], function (lib) {
 		/**
 		 * Makes a sharable route
 		 * 
-		 * @return {String} A sharable route with airports and waypoints, 
+		 * @returnss {String} A sharable route with airports and waypoints, 
 		 * 					using <code>JSON.stringify</code> method
 		 */
 		toRouteString: function () {
@@ -52,7 +52,7 @@ define(['lib'], function (lib) {
 		 * Accesses autopilot_pp library and find the coordinates for the waypoints
 		 * 
 		 * @param {String} wpt The waypoint to check for eligibility
-		 * @return {Array} Array of coordinates if eligible, 
+		 * @returnss {Array} Array of coordinates if eligible, 
 		 *         {Boolean} false otherwise
 		 */
 		getCoords: function (wpt) {
@@ -67,7 +67,7 @@ define(['lib'], function (lib) {
 		 * Turns the coordinate entered from minutes-seconds format to decimal format
 		 * 
 		 * @param {String} a Coordinate in minutes-seconds format
-		 * @return {Number} Coordinate in decimal format
+		 * @returnss {Number} Coordinate in decimal format
 		 */
 		formatCoords: function (a) {
 			if (a.indexOf(' ') > -1) {
@@ -135,10 +135,15 @@ define(['lib'], function (lib) {
 		/**
 		 * Adds 1 waypoint input field to end of waypoints list
 		 */
+
+		// TODO Migrate the commented jQuery section to ui/waypoints.html
 		addWaypoint: function () {
 			this.route.length++;
 			this.route[this.route.length - 1] = [];
-			$('<tr>')
+			$(wptInputField).appendTo('#waypoints');
+			/* UI actions go here */
+
+			/* $('<tr>')
 				.addClass('waypoint')
 				.append(
 
@@ -273,7 +278,7 @@ define(['lib'], function (lib) {
 							})
 						)
 					)
-				).appendTo('#waypoints');
+				).appendTo('#waypoints'); */
 		},
 		
 		/**
