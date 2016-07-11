@@ -5,7 +5,7 @@ define(['lib', 'VNAV'], function (lib, vnav) {
 		/**
 		 * Enables VNAV if not activated, disables if activated
 		 */
-		tVNAV: function () {
+		vnav: function () {
 			if (lib.VNAV) {
 				lib.VNAV = false;
 				$('#vnavButton').removeClass('btn btn-warning').addClass('btn');
@@ -20,7 +20,7 @@ define(['lib', 'VNAV'], function (lib, vnav) {
 		/**
 		 * Enables or disables the speed control in VNAV
 		 */
-		tSpd: function () {
+		speed: function () {
 			if ($('#tSpd').hasClass('btn-warning')) {
 				$('#tSpd')
 					.removeClass('btn-warning')

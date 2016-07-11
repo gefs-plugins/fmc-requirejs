@@ -5,7 +5,7 @@ define(['consts'], function (consts) {
 		/**
 		 * Turns degrees to radians
 		 * 
-		 * @param {Number} degrees The degree to be converted
+		 * @param {Number} d The degree to be converted
 		 * @returns {Number} Radians of the degree
 		 */
 		toRadians: function (d) {
@@ -15,7 +15,7 @@ define(['consts'], function (consts) {
 		/**
 		 * Converts radians to degrees
 		 * 
-		 * @param {Number} radians The radian to be converted
+		 * @param {Number} r The radian to be converted
 		 * @returns {Number} Degree of the radian
 		 */
 		toDegrees: function (r) {
