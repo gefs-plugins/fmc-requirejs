@@ -4,4 +4,4 @@ node_modules
 ._*
 package
 .idea
-
+*.log

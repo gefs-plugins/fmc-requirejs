@@ -3,17 +3,23 @@
 // jshint node:true
 var heads = require('robohydra').heads;
 var RoboHydraHeadFilesystem = heads.RoboHydraHeadFilesystem;
-var RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
+var RoboHydraHeadStatic = heads.RoboHydraHeadStatic;
 var RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
+var RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
 var path = require('path');
-var script = '<script data-main="/fmc/main" src="/fmc/require.js"></script></head>';
+var script = '<script data-main="/fmc/main" src="/requirejs/require.js"></script></head>';
 
-exports.getBodyParts = function (conf) {
+exports.getBodyParts = function (conf) { //jshint unused:false
 	return {
 		heads: [
 			new RoboHydraHeadFilesystem({
 				mountPath: '/fmc',
 				documentRoot: path.join(__dirname, '../source')
+			}),
+			
+			new RoboHydraHeadFilesystem({
+				mountPath: '/requirejs',
+				documentRoot: path.join(__dirname, '../node_modules/requirejs')
 			}),
 
 			new RoboHydraHeadFilter({
