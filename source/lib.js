@@ -161,7 +161,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 	 * @return {String} Formatted time: "hours : minutes"
 	 */
 	function formatTime(time) {
-		time[1] = checkZeros(time[1]);
+		time[1] = checkZeros(time[1]); // FIXME Cannot assign to read only property '1' of string '--'
 		return time[0] + ":" + time[1];
 	}
 
