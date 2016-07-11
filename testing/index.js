@@ -3,7 +3,6 @@
 // jshint node:true
 var heads = require('robohydra').heads;
 var RoboHydraHeadFilesystem = heads.RoboHydraHeadFilesystem;
-var RoboHydraHeadStatic = heads.RoboHydraHeadStatic;
 var RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
 var RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
 var path = require('path');

@@ -1,6 +1,6 @@
 "use strict";
 
-define(['lib', 'VNAV'], function (lib, vnav) {
+define(['lib', 'nav/VNAV'], function (lib, vnav) {
 	return {
 		/**
 		 * Enables VNAV if not activated, disables if activated
