@@ -1,20 +1,13 @@
 "use strict"; // jshint unused:false
 
-define(['consts', 'distance', 'lib', 'LNAV', 'log', 'math', 'progress', 'toggle', 'vnav-profile', 'VNAV', 'waypoints', 'text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html','text!ui/ui.css', 'redefine'], 
-function (consts, distance, lib, lnav, log, math, progress, toggle, vnavProfile, vnav, waypoints, ui_button, ui_externaldist, ui_modal, ui_css) {
-
-	/* ---- UI Initialization ---- */
-	$('<style>').text(ui_css).appendTo('head');
-	// TODO
+define(['consts', 'distance', 'lib', 'LNAV', 'log', 'math', 'progress', 'toggle', 'vnav-profile', 'VNAV', 'waypoints', 'redefine'], 
+function (consts, distance, lib, lnav, log, math, progress, toggle, vnavProfile, vnav, waypoints) {
 
 	/* ---- UI actions binding ---- */
 
 	
 	
 	/* ---- All Initializations ---- */
-
-
-
 
 	// Initializes all timers
 	lnav.timer = setInterval(lnav.update, 5000);
