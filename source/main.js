@@ -10,7 +10,7 @@
 (function (initFMC, initUI) {
 	// Places ui elements
 	initUI();
-	
+
 	// Check if gefs.init has already been called
 	if (window.gefs && gefs.canvas) initFMC();
 	else {

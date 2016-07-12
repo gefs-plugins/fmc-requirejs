@@ -15,7 +15,7 @@ exports.getBodyParts = function (conf) { //jshint unused:false
 				mountPath: '/fmc',
 				documentRoot: path.join(__dirname, '../source')
 			}),
-			
+
 			new RoboHydraHeadFilesystem({
 				mountPath: '/requirejs',
 				documentRoot: path.join(__dirname, '../node_modules/requirejs')

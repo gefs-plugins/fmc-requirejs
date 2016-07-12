@@ -10,7 +10,7 @@
 	"concorde": {
 		"climb": [],
 		"descent": []
-	}, 
+	},
 	"DEFAULT": {
 		"climb": [
 			[1500, 4000, 210, 3000],

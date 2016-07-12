@@ -33,7 +33,7 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 					times[3] = lib.getETA(times[2][0], times[2][1]);
 				}
 			}
-		
+
 			lib.print(flightdist, nextdist, times);
 		}
 	};

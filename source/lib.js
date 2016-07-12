@@ -1,7 +1,7 @@
 "use strict";
 
 define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, waypoints, vnavProfile) {
-	
+
 	var tod;
 	var VNAV = false;
 	var arrival = [];
@@ -59,7 +59,6 @@ define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, 
 	/**
 	 * Gets each plane's flight parameters, for VNAV
 	 *
-	 * @param {String} aircraft The aircraft name
 	 * @returns {Array} vertical speed and speed
 	 */
 	function getFlightParameters () {
@@ -78,7 +77,7 @@ define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, 
 			} else if (a >= 30000) {
 				if (!isMach) switchMode();
 			}
-			
+
 			var profile = getVNAVProfile().climb;
 			var index;
 			for (var i=0; i<profile.length; i++) {
@@ -98,7 +97,7 @@ define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, 
 			} else {
 				if (isMach) switchMode();
 			}
-			
+
 			var profile = getVNAVProfile().descent;
 			var index;
 			for (var i=0; i<profile.length; i++) {
@@ -158,7 +157,7 @@ define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, 
 
 	/**
 	 * Helper method for log, formats the time
-	 * 
+	 *
 	 * @param {Array} time An array of the time: [hours, minutes]
 	 * @returns {String} Formatted time: "hours : minutes"
 	 */
@@ -224,7 +223,7 @@ define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, 
 		m += Number(minutes);
 		return timeCheck(h, m);
 	}
-	
+
 	/**
 	 * Gets the climb/descent profile for VNAV
 	 *

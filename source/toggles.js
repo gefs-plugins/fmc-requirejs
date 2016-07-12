@@ -15,7 +15,7 @@ define(['lib', 'nav/VNAV'], function (lib, vnav) {
 				$('#vnavButton').removeClass('btn').addClass('btn btn-warning');
 				vnav.timer = setInterval(vnav.update, 5000);
 			} else alert('Please enter a cruising altitude.');
-		}, 
+		},
 
 		/**
 		 * Enables or disables the speed control in VNAV

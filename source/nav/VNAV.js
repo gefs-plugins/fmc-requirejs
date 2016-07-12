@@ -2,7 +2,7 @@
 
 define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, waypoints) {
 	return {
-		timer: null, 
+		timer: null,
 
 		/**
 		 * Controls VNAV, plane's vertical navigation, set on a timer
@@ -14,7 +14,7 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 
 			var next = lib.nextWptAltRes();
 			var hasRestriction = next !== -1;
-			
+
 			var tod = lib.tod;
 			var cruise = lib.cruise;
 			var fieldElev = lib.fieldElev;

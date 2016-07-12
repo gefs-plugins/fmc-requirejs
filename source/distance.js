@@ -5,7 +5,7 @@ define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
 	return {
 		/**
 		 * Computes the full route distance with waypoints until index
-		 * 
+		 *
 		 * @param {Number} end The index of the end of the route to be calculated
 		 * @returns {Number} The route distance
 		 */
@@ -31,7 +31,7 @@ define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
 
 		/**
 		 * Computes the distance needed to climb or descend to a certain altitude from current altitude
-		 * 
+		 *
 		 * @param {Number} deltaAlt The altitude difference
 		 * @returns {Number} The distance
 		 */
@@ -47,7 +47,7 @@ define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
 
 		/**
 		 * Computes the turning distance to next waypoint for an aircraft to be on course
-		 * 
+		 *
 		 * @param {Number} angle Angle of turning
 		 * @returns {Number} The turning distance
 		 */

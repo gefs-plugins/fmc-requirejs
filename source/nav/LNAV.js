@@ -3,7 +3,7 @@
 define(['distance', 'lib', 'waypoints'], function (distance, lib, waypoints) {
 	return {
 		timer: null, //setInterval(updateLNAV, 5000);
-		
+
 		/**
 		 * Controls LNAV, plane's lateral navigation, set on a timer
 		 */

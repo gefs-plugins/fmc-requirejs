@@ -1,13 +1,13 @@
 "use strict";
 
 define(['lib'], function (lib) {
-	
+
 	return {
 		mainTimer: null, // = setInterval(updateLog, 120000);
 		gearTimer: null, // = setInterval(checkGear, 12000);
 		flapsTimer: null, // = setInterval(checkFlaps, 5000);
 		speedTimer: null, // = setInterval(checkSpeed, 15000);
-	
+
 		/**
 		 * Updates plane's flight log, set on a timer
 		 *
@@ -53,7 +53,7 @@ define(['lib'], function (lib) {
 				this.mainTimer = setInterval(this.update, 120000);
 			} else this.mainTimer = setInterval(this.update, 30000);
 		},
-	
+
 		/**
 		 * Checks for gear retraction and extension for log, set on a timer
 		 */
@@ -88,8 +88,8 @@ define(['lib'], function (lib) {
 			clearInterval(this.speedTimer);
 			if (altitude < 10000) this.speedTimer = setInterval(this.speed, 15000);
 			else this.speedTimer = setInterval(this.speed, 30000);
-		}, 
-		
+		},
+
 		/**
 		 * Clears the log
 		 */

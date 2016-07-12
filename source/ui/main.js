@@ -5,8 +5,8 @@ function (consts, distance, lib, log, math, toggles, waypoints, lnav, progress, 
 
 	/* ---- UI actions binding ---- */
 
-	
-	
+
+
 	/* ---- All Initializations ---- */
 
 	// Initializes all timers
@@ -16,10 +16,10 @@ function (consts, distance, lib, log, math, toggles, waypoints, lnav, progress, 
 	log.gearTimer = setInterval(log.gear, 12000);
 	log.flapsTimer = setInterval(log.flaps, 5000);
 	log.speedTimer = setInterval(log.speed, 15000);
-	
+
 	// Adds one input field on start
 	waypoints.addWaypoint();
-	
+
 	window.fmc = {
 		version: "",
 		requirejs: requirejs,

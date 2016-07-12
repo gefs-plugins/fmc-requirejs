@@ -1,8 +1,8 @@
 "use strict"; 
 
 define(['log'], function (log) {
-	
-	/** 
+
+	/**
 	 * Defines Array prototype to move an array
 	 *
 	 * @param {Number} index1 The start index
@@ -18,7 +18,7 @@ define(['log'], function (log) {
 		this.splice(index2, 0, this.splice(index1, 1)[0]);
 		return this;
 	};
-	
+
 	// Adds a confirm window to prevent accidental reset
 	gefs.resetFlight = function () {
 		if (window.confirm('Reset Flight?')) {
@@ -28,7 +28,7 @@ define(['log'], function (log) {
 			}
 		}
 	};
-	
+
 	// Tracks pause event to log
 	gefs.togglePause = function () {
 		if (!gefs.pause) {
@@ -39,10 +39,10 @@ define(['log'], function (log) {
 			log.update('Flight resumed');
 		}
 	};
-	
+
 	// ============== FMC Modal debug ================
 	/*
-	// Hides backdrop for the modal	
+	// Hides backdrop for the modal
 	$('#fmcModal').modal({
 		backdrop: false,
 		show: false
