@@ -7,5 +7,7 @@ define(['text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html'
 	// FMC toggle button
 	$(button).insertAfter('button.gefs-f-standard-ui[data-panel=".gefs-map-list"]');
 
+	// Modal dialog
+	$(modal).appendTo('body');
 	// TODO
 });
