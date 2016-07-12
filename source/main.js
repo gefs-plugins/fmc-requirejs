@@ -1,5 +1,7 @@
 /*!
- * PUT LICENSE INFORMATION HERE!
+ * @license Copyright (c) 2016 Ethan Shields and other contributors
+ * Released under the MIT license. For more details, please visit
+ * https://github.com/gefs-plugins/fmc-requirejs/blob/master/LICENSE
  */
 
 "use strict";
