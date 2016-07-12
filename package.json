@@ -21,6 +21,6 @@
 	"bugs": {
 		"url": "https://github.com/gefs-plugins/fmc-requirejs/issues"
 	},
-	"homepage": "https://github.com/gefs-plugins/fmc-requirejs#readme", 
+	"homepage": "https://github.com/gefs-plugins/fmc-requirejs#readme",
 	"private": true
 }
