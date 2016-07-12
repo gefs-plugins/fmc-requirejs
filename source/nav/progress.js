@@ -25,12 +25,12 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 			else flightdist = math.getDistance(lat1, lon1, lat2, lon2);
 
 			if (!gefs.aircraft.groundContact && lib.arrival) {
-				times[0] = lib.getete(flightdist, true);
-				times[1] = lib.geteta(times[0][0], times[0][1]);
-				times[4] = lib.getete(nextdist, false);
+				times[0] = lib.getETE(flightdist, true);
+				times[1] = lib.getETA(times[0][0], times[0][1]);
+				times[4] = lib.getETE(nextdist, false);
 				if ((flightdist - lib.tod) > 0) {
-					times[2] = lib.getete((flightdist - lib.tod), false);
-					times[3] = lib.geteta(times[2][0], times[2][1]);
+					times[2] = lib.getETE((flightdist - lib.tod), false);
+					times[3] = lib.getETA(times[2][0], times[2][1]);
 				}
 			}
 		
