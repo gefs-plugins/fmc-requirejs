@@ -1,91 +1,65 @@
-<!--TODO-->
-<!--
-	Cross browser support for MDL's dialog is not perfect. A plugin called jQuery-MDL-Dialog might be useful
--->
-
+<!-- FMC Modal Dialog -->
 <dialog class="fmc-modal">
     <h4 class="fmc-modal__title">
 		<strong>Flight Management Computer</strong>
 	</h4>
 
-    <!-- Uses a transparent header that draws on top of the layout's background -->
-    <style>
-    .demo-layout-transparent {
-      background: url('../assets/demos/transparent.jpg') center / cover;
-    }
-    .demo-layout-transparent .mdl-layout__header,
-    .demo-layout-transparent .mdl-layout__drawer-button {
-      /* This background is dark, so we set text to white. Use 87% black instead if
-         your background is light. */
-      color: white;
-    }
-    </style>
+    <div class="fmc-modal__layout-container">
+        <div class="fmc-modal__layout mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
 
-
-    <div class="fmc-modal__content mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
-        <header class="mdl-layout__header">
             <!-- Tabs -->
-            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-                <a href="#rte" class="mdl-layout__tab is-active">RTE</a>
-                <a href="#dep" class="mdl-layout__tab">DEP/ARR</a>
-                <a href="#vnav" class="mdl-layout__tab">VNAV</a>
-                <a href="#prog" class="mdl-layout__tab">PROG</a>
-                <a href="#load" class="mdl-layout__tab">LOAD</a>
-                <a href="#log" class="mdl-layout__tab">LOG</a>
-            </div>
-        </header>
-        <main class="mdl-layout__content">
-            <section class="mdl-layout__tab-panel is-active" id="rte">
-                <div class="page-content">
-                    <p>RTE PAGE</p>
+            <header class="mdl-layout__header fmc-modal__no-shadow">
+                <div class="mdl-layout__tab-bar fmc-modal__tab-bar mdl-js-ripple-effect">
+                    <a href="#rte" class="mdl-layout__tab fmc-btn__fade is-active">RTE</a>
+                    <a href="#dep" class="mdl-layout__tab fmc-btn__fade">DEP/ARR</a>
+                    <a href="#vnav" class="mdl-layout__tab fmc-btn__fade">VNAV</a>
+                    <a href="#prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
+                    <a href="#load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
+                    <a href="#log" class="mdl-layout__tab fmc-btn__fade">LOG</a>
                 </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="dep">
-                <div class="page-content">
-                    <p>DEP/ARR PAGE</p>
-                </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="vnav">
-                <div class="page-content">
-                    <p>VNAV PAGE</p>
-                </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="prog">
-                <div class="page-content">
-                    <p>PROG PAGE</p>
-                </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="load">
-                <div class="page-content">
-                    <p>LOAD ROUTE PAGE</p>
-                </div>
-            </section>
-            <section class="mdl-layout__tab-panel" id="log">
-                <div class="page-content">
-                    <p>LOG PAGE</p>
-                </div>
-            </section>
-        </main>
+                <!-- Divider between tabs and contents -->
+                <div class="fmc-modal__divider"></div>
+            </header>
+
+            <!-- Modal contents -->
+            <main class="mdl-layout__content">
+                <section class="mdl-layout__tab-panel is-active" id="rte">
+                    <div class="page-content">
+                        <p>RTE PAGE</p>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="dep">
+                    <div class="page-content">
+                        <p>DEP/ARR PAGE</p>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="vnav">
+                    <div class="page-content">
+                        <p>VNAV PAGE</p>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="prog">
+                    <div class="page-content">
+                        <p>PROG PAGE</p>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="load">
+                    <div class="page-content">
+                        <p>LOAD ROUTE PAGE</p>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="log">
+                    <div class="page-content">
+                        <p>LOG PAGE</p>
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
 
-
-
+    <!-- Modal actions: close -->
     <div class="fmc-modal__actions">
 		<button type="button" class="actions mdl-button">Save Changes</button>
 		<button type="button" class="actions mdl-button close">Close</button>
     </div>
 </dialog>
-<script>
-    var dialog = document.querySelector('dialog');
-    var showDialogButton = document.getElementsByClassName('fmc-btn')[0];
-    if (!dialog.showModal) {
-		dialogPolyfill.registerDialog(dialog);
-    }
-    showDialogButton.addEventListener('click', function() {
-    	if (!dialog.open) dialog.showModal();
-		else dialog.close();
-    });
-    dialog.querySelector('.close').addEventListener('click', function() {
-    	dialog.close();
-    });
-</script>

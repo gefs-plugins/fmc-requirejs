@@ -1,19 +1,38 @@
 /* For FMC button */
-button.fmc-btn {
+button.fmc-btn, button.fmc-btn:hover, button.fmc-btn:active, button.fmc-btn:focus:not(:active) {
 	color: white;
 	background: green;
 }
 
-button.fmc-btn:hover, button.fmc-btn:active, button.fmc-btn:focus:not(:active) {
-	color: white;
-	background: green;
-	opacity: 0.7;
+button.fmc-btn__fade {
+	opacity: 1;
+	transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-webkit-transition: opacity 0.2s ease-in-out;
+}
+
+button.fmc-btn__fade:hover {
+	opacity: 0.8;
 }
 
 /* For external distance indicator */
 
 
 /* For modal dialog */
+a.fmc-btn__fade {
+	transition: background 0.3s ease-in-out,
+				color 0.3s ease-in-out;
+	-moz-transition: background 0.3s ease-in-out,
+				color 0.3s ease-in-out;
+	-webkit-transition: background 0.3s ease-in-out,
+				color 0.3s ease-in-out;
+}
+
+a.fmc-btn__fade:hover:not(.is-active) {
+	background: rgb(83, 109, 254); /* Matches MDL's color */
+	color: white;
+}
+
 dialog.fmc-modal {
 	height: 75%;
 	width: 700px;
@@ -21,14 +40,32 @@ dialog.fmc-modal {
 	border-radius: 7px;
 }
 
-.fmc-modal h4 {
+dialog.fmc-modal h4 {
 	text-align: center;
+	margin-top: 10px !important;
 }
 
-div.fmc-modal__content {
+dialog.fmc-modal .fmc-modal__no-shadow {
+	box-shadow: none !important;
+	background: white !important;
+}
+
+div.fmc-modal__layout-container {
+	position: relative;
+	height: 85%;
+}
+
+div.fmc-modal__layout {
 	width: 700px;
 }
 
-header.mdl-layout__header, div.mdl-layout__tab-bar-container {
-	background: white;
+div.fmc-modal__tab-bar {
+	height: 50px !important;
+	background: inherit !important;
+}
+
+div.fmc-modal__divider {
+	height: 2px;
+	margin-top: -2px;
+	background: rgba(66, 66, 66, 0.2);
 }
