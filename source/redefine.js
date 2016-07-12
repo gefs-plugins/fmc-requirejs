@@ -1,6 +1,6 @@
 "use strict"; 
 
-define(['log', 'vnav-profile'], function (log, vnavProfile) {
+define(['log'], function (log) {
 	
 	/** 
 	 * Defines Array prototype to move an array
@@ -17,28 +17,6 @@ define(['log', 'vnav-profile'], function (log, vnavProfile) {
 		}
 		this.splice(index2, 0, this.splice(index1, 1)[0]);
 		return this;
-	};
-	
-	/* 
-	 * Redefines load function to make sure functionality
-	 */
-	var oldLoad = Aircraft.prototype.load;
-	Aircraft.prototype.load = function (aircraftName, coordinates, bJustReload) {
-		// Obtains the old aircraft parts {Object} before loading
-		var oldParts = gefs.aircraft.object3d._children;
-
-		// Calls the original function to load an aircraft
-		oldLoad.call(this, aircraftName, coordinates, bJustReload);
-
-		// Checks if the old parts refer to a different object compared 
-		// with the current parts. It's crucial to set on a timer because 
-		// it takes time for the models to load completely
-		var timer = setInterval(function () {
-			if (oldParts !== gefs.aircraft.object3d._children) {
-				clearInterval(timer);
-				vnavProfile.forceUpdate();
-			}
-		}, 16);
 	};
 	
 	// Adds a confirm window to prevent accidental reset

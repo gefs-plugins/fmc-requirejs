@@ -1,6 +1,6 @@
 "use strict";
 
-define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfile, waypoints) {
+define(['distance', 'waypoints', 'text!vnav-profile.json'], function (distance, waypoints, vnavProfile) {
 	
 	var tod;
 	var VNAV = false;
@@ -79,11 +79,12 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 				if (!isMach) switchMode();
 			}
 			
-			var profile = vnavProfile.forceUpdate().climb;
+			var profile = getVNAVProfile().climb;
 			var index;
 			for (var i=0; i<profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
+					break;
 				}
 			}
 			spd = profile[index][2];
@@ -98,11 +99,12 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 				if (isMach) switchMode();
 			}
 			
-			var profile = vnavProfile.forceUpdate().descent;
+			var profile = getVNAVProfile().descent;
 			var index;
 			for (var i=0; i<profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
+					break;
 				}
 			}
 			spd = profile[index][2];
@@ -223,7 +225,20 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 		return timeCheck(h, m);
 	}
 	
+	/**
+	 * Gets the climb/descent profile for VNAV
+	 *
+	 * @local
+	 * @returns {Object} The profile needed by VNAV
+	 */
+	function getVNAVProfile () {
+		return gefs.aircraft.setup.fmc
+			|| JSON.parse(vnavProfile)[gefs.aircraft.name]
+			|| JSON.parse(vnavProfile)['DEFAULT'];
+	}
+
 	return {
+		// Variables
 		tod: tod,
 		VNAV: VNAV,
 		arrival: arrival,
@@ -231,7 +246,7 @@ define(['distance', 'vnav-profile', 'waypoints'], function (distance, vnavProfil
 		phase: phase,
 		todCalc: todCalc,
 		fieldElev: fieldElev,
-		
+		// Functions
 		updatePhase: updatePhase,
 		print: print,
 		flightParams: getFlightParameters,

@@ -1,8 +1,17 @@
-"use strict";
-
-define(function () {
-	// Default VNAV profile
-	var DEFAULT_PROFILE = {
+{
+	"a380": {
+		"climb": [],
+		"descent": []
+	},
+	"md11": {
+		"climb": [],
+		"descent": []
+	},
+	"concorde": {
+		"climb": [],
+		"descent": []
+	}, 
+	"DEFAULT": {
 		"climb": [
 			[1500, 4000, 210, 3000],
 			[4000, 10000, 250, 2500],
@@ -17,11 +26,5 @@ define(function () {
 			[12000, 18000, 280, -1800],
 			[10000, 12000, 250, -1500]
 		]
-	};
-
-	return {
-		forceUpdate: function () {
-			return gefs.aircraft.setup.fmc || DEFAULT_PROFILE;
-		}
-	};
-});
+	}
+}
