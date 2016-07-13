@@ -40,6 +40,11 @@ dialog.fmc-modal {
 	border-radius: 7px;
 }
 
+dialog.fmc-modal .fmc-modal__close {
+	height: 25px;
+	margin: -13px 0;
+}
+
 dialog.fmc-modal h4 {
 	text-align: center;
 	margin-top: 10px !important;
