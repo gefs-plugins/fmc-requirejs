@@ -1,11 +1,13 @@
 /* For FMC button */
-button.fmc-btn, button.fmc-btn:hover, button.fmc-btn:active, button.fmc-btn:focus:not(:active) {
+button.fmc-btn,
+button.fmc-btn:hover,
+button.fmc-btn:active,
+button.fmc-btn:focus:not(:active) {
 	color: white;
 	background: green;
 }
 
 button.fmc-btn__fade {
-	opacity: 1;
 	transition: opacity 0.2s ease-in-out;
 	-moz-transition: opacity 0.2s ease-in-out;
 	-webkit-transition: opacity 0.2s ease-in-out;
@@ -21,16 +23,24 @@ button.fmc-btn__fade:hover {
 /* For modal dialog */
 a.fmc-btn__fade {
 	transition: background 0.3s ease-in-out,
-				color 0.3s ease-in-out;
+				color 0.3s ease-in-out,
+				font-weight 0.3s ease-in-out;
 	-moz-transition: background 0.3s ease-in-out,
-				color 0.3s ease-in-out;
+				color 0.3s ease-in-out,
+				font-weight 0.3s ease-in-out;
 	-webkit-transition: background 0.3s ease-in-out,
-				color 0.3s ease-in-out;
+				color 0.3s ease-in-out,
+				font-weight 0.3s ease-in-out;
 }
 
 a.fmc-btn__fade:hover:not(.is-active) {
-	background: rgb(83, 109, 254); /* Matches MDL's color */
+	background: rgb(83, 109, 254);
 	color: white;
+}
+
+a.fmc-btn__fade.is-active {
+	color: rgb(83, 109, 254) !important;
+	font-weight: bold;
 }
 
 dialog.fmc-modal {
