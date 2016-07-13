@@ -52,7 +52,8 @@ dialog.fmc-modal {
 
 dialog.fmc-modal .fmc-modal__close {
 	height: 25px;
-	margin: -13px 0;
+	position: absolute;
+	right: 15px;
 }
 
 dialog.fmc-modal h4 {
@@ -83,4 +84,99 @@ div.fmc-modal__divider {
 	height: 2px;
 	margin-top: -2px;
 	background: rgba(66, 66, 66, 0.2);
+	margin-top: 16px;
+}
+
+
+header.mdl-layout__header, a.mdl-layout__tab {
+	background: white;
+}
+
+.mdl-layout__header {
+	box-shadow: none !important;
+	min-height: 0px !important;
+	height: 48px;
+}
+
+div.mdl-layout__container {
+	width: 700px;
+}
+
+div.fmc-modal__content, div.mdl-layout__container {
+	height: 595px;
+}
+
+main.mdl-layout__content {
+	height: 100%;
+}
+
+div.fmc-model__actions {
+	vertical-align: bottom;
+}
+
+.dep-arr-field {
+	width: 100px !important;
+}
+
+.fn-field {
+	width: 200px !important;
+}
+
+div.wpt-input {
+	width: 120px;
+}
+
+div.pos-input {
+	width: 90px;
+}
+
+div.alt-input {
+	width: 60px;
+}
+
+table.wpt-actions td {
+	border-top: none;
+	border-bottom: none;
+	padding: 0px !important;
+}
+
+table.wpt-list td {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+div.wpt-input, div.pos-input, div.alt-input {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+div.add-wpt {
+	position: absolute;
+	right: 40px;
+	bottom: 0px;
+}
+
+.wpt-list h6 {
+	text-align: left;
+}
+
+.mdl-layout__content {
+	flex-grow: 0 !important;
+	-webkit-flex-grow: 0 !important;
+}
+
+hr.header-divider {
+	margin-top: 0px;
+}
+
+a.is-active {
+	font-weight: bold;
+}
+
+.demo-layout-transparent {
+  background: url('../assets/demos/transparent.jpg') center / cover;
+}
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+  color: white;
 }

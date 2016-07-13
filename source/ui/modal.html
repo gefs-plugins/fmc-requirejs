@@ -5,31 +5,182 @@
             <i class="material-icons">clear</i>
         </button>
     </div>
-    <h4><strong>Flight Management Computer</strong></h4>
+
+    <h4 class="fmc-modal__title"><strong>Flight Management Computer</strong></h4>
+
 
     <!-- FMC Modal layout -->
-    <div class="fmc-modal__layout-container">
-        <div class="fmc-modal__layout mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+    <div class="fmc-modal__content">
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
 
             <!-- Tabs -->
-            <header class="mdl-layout__header fmc-modal__no-shadow">
-                <div class="mdl-layout__tab-bar fmc-modal__tab-bar mdl-js-ripple-effect">
-                    <a href="#rte" class="mdl-layout__tab fmc-btn__fade is-active">RTE</a>
-                    <a href="#dep" class="mdl-layout__tab fmc-btn__fade">DEP/ARR</a>
-                    <a href="#vnav" class="mdl-layout__tab fmc-btn__fade">VNAV</a>
-                    <a href="#prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
-                    <a href="#load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
-                    <a href="#log" class="mdl-layout__tab fmc-btn__fade">LOG</a>
+            <header class="mdl-layout__header header-short">
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                    <a href="#rte" class="mdl-layout__tab is-active">RTE</a>
+                    <a href="#dep" class="mdl-layout__tab">DEP/ARR</a>
+                    <a href="#vnav" class="mdl-layout__tab">VNAV</a>
+                    <a href="#prog" class="mdl-layout__tab">PROG</a>
+                    <a href="#load" class="mdl-layout__tab">LOAD</a>
+                    <a href="#log" class="mdl-layout__tab">LOG</a>
                 </div>
-                <!-- Divider between tabs and contents -->
-                <div class="fmc-modal__divider"></div>
             </header>
+            <hr class="header-divider">
 
-            <!-- Modal contents -->
+            <!-- Tab Content -->
             <main class="mdl-layout__content">
                 <section class="mdl-layout__tab-panel is-active" id="rte">
                     <div class="page-content">
-                        <p>RTE PAGE</p>
+                        <table class="dep-arr">
+                            <tr>
+                                <td width>
+                                    <i class="material-icons">flight_takeoff</i>
+                                </td>
+                                <td width="150px">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label dep-arr-field">
+                                        <input class="mdl-textfield__input" type="text" id="sample3">
+                                        <label class="mdl-textfield__label" for="sample3">Departure</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="material-icons">flight_land</i>
+                                </td>
+                                <td width="150px">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label dep-arr-field">
+                                        <input class="mdl-textfield__input" type="text" id="sample3">
+                                        <label class="mdl-textfield__label" for="sample3">Arrival</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="material-icons">local_airport</i>
+                                </td>
+                                <td width="200px">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label fn-field">
+                                        <input class="mdl-textfield__input" type="text" id="sample3">
+                                        <label class="mdl-textfield__label" for="sample3">Flight #</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <table class="mdl-data-table mdl-js-data-table wpt-list">
+                            <tr>
+                                <td><h6>Waypoints</h6></td>
+                                <td><h6>Position</h6></td>
+                                <td></td>
+                                <td><h6>Altitude</h6></td>
+                                <td><h6>Actions</h6></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield wpt-input">
+                                        <input class="mdl-textfield__input" type="text" id="sample1">
+                                        <label class="mdl-textfield__label" for="sample1">Fix, VOR, ICAO</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield pos-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <label class="mdl-textfield__label" for="sample2">Lat.</label>
+                                        <span class="mdl-textfield__error">Invalid Latitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield pos-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <label class="mdl-textfield__label" for="sample2">Lon.</label>
+                                        <span class="mdl-textfield__error">Invalid Longitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield alt-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <label class="mdl-textfield__label" for="sample2">Ft.</label>
+                                        <span class="mdl-textfield__error">Invalid Altitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <table class="wpt-actions">
+                                        <tr>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">arrow_upward</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">arrow_downward</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">delete_forever</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield wpt-input">
+                                        <input class="mdl-textfield__input" type="text" id="sample1">
+                                        <label class="mdl-textfield__label" for="sample1">Fix, VOR, ICAO</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield pos-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <label class="mdl-textfield__label" for="sample2">Lat.</label>
+                                        <span class="mdl-textfield__error">Invalid Latitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield pos-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <label class="mdl-textfield__label" for="sample2">Lon.</label>
+                                        <span class="mdl-textfield__error">Invalid Longitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield alt-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <label class="mdl-textfield__label" for="sample2">Ft.</label>
+                                        <span class="mdl-textfield__error">Invalid Altitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <table class="wpt-actions">
+                                        <tr>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">arrow_upward</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">arrow_downward</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">delete_forever</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <div class="add-wpt">
+                            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored btn-add-wpt">
+                                <i class="material-icons">add</i>
+                            </button>
+                        </div>
                     </div>
                 </section>
                 <section class="mdl-layout__tab-panel" id="dep">
@@ -59,6 +210,7 @@
                 </section>
             </main>
         </div>
+
     </div>
 
     <!-- Modal actions: close -->
