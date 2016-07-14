@@ -1,1 +1,52 @@
 <!--Waypoint input field HTML file-->
+
+<tr class="wpt-row">
+    <td>
+        <div class="mdl-textfield mdl-js-textfield wpt-input">
+            <input class="mdl-textfield__input" type="text">
+            <label class="mdl-textfield__label" for="sample1">Fix, VOR, ICAO</label>
+        </div>
+    </td>
+    <td>
+        <div class="mdl-textfield mdl-js-textfield pos-input">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
+            <label class="mdl-textfield__label" for="sample2">Lat.</label>
+            <span class="mdl-textfield__error">Invalid Latitude</span>
+        </div>
+    </td>
+    <td>
+        <div class="mdl-textfield mdl-js-textfield pos-input">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
+            <label class="mdl-textfield__label" for="sample2">Lon.</label>
+            <span class="mdl-textfield__error">Invalid Longitude</span>
+        </div>
+    </td>
+    <td>
+        <div class="mdl-textfield mdl-js-textfield alt-input">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
+            <label class="mdl-textfield__label" for="sample2">Ft.</label>
+            <span class="mdl-textfield__error">Invalid Altitude</span>
+        </div>
+    </td>
+    <td>
+        <table class="wpt-actions">
+            <tr>
+                <td>
+                    <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="material-icons">arrow_upward</i>
+                    </button>
+                </td>
+                <td>
+                    <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="material-icons">arrow_downward</i>
+                    </button>
+                </td>
+                <td>
+                    <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="material-icons">delete_forever</i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

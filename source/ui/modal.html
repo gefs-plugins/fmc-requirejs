@@ -64,37 +64,88 @@
 
 
                         <table class="mdl-data-table mdl-js-data-table wpt-list">
-                            <tr>
+                            <tr class="wpt-header">
                                 <td><h6>Waypoints</h6></td>
                                 <td><h6>Position</h6></td>
                                 <td></td>
                                 <td><h6>Altitude</h6></td>
                                 <td><h6>Actions</h6></td>
                             </tr>
-                            <tr>
+                            <tr class="wpt-row">
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield wpt-input">
-                                        <input class="mdl-textfield__input" type="text" id="sample1">
+                                        <input class="mdl-textfield__input" type="text">
                                         <label class="mdl-textfield__label" for="sample1">Fix, VOR, ICAO</label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield pos-input">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
                                         <label class="mdl-textfield__label" for="sample2">Lat.</label>
                                         <span class="mdl-textfield__error">Invalid Latitude</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield pos-input">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
                                         <label class="mdl-textfield__label" for="sample2">Lon.</label>
                                         <span class="mdl-textfield__error">Invalid Longitude</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield alt-input">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
+                                        <label class="mdl-textfield__label" for="sample2">Ft.</label>
+                                        <span class="mdl-textfield__error">Invalid Altitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <table class="wpt-actions">
+                                        <tr>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">arrow_upward</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">arrow_downward</i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                                                    <i class="material-icons">delete_forever</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="wpt-row">
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield wpt-input">
+                                        <input class="mdl-textfield__input" type="text">
+                                        <label class="mdl-textfield__label" for="sample1">Fix, VOR, ICAO</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield pos-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
+                                        <label class="mdl-textfield__label" for="sample2">Lat.</label>
+                                        <span class="mdl-textfield__error">Invalid Latitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield pos-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
+                                        <label class="mdl-textfield__label" for="sample2">Lon.</label>
+                                        <span class="mdl-textfield__error">Invalid Longitude</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mdl-textfield mdl-js-textfield alt-input">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
                                         <label class="mdl-textfield__label" for="sample2">Ft.</label>
                                         <span class="mdl-textfield__error">Invalid Altitude</span>
                                     </div>
@@ -123,30 +174,30 @@
                             </tr>
 
 
-                            <tr>
+                            <tr class="wpt-row">
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield wpt-input">
-                                        <input class="mdl-textfield__input" type="text" id="sample1">
+                                        <input class="mdl-textfield__input" type="text">
                                         <label class="mdl-textfield__label" for="sample1">Fix, VOR, ICAO</label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield pos-input">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
                                         <label class="mdl-textfield__label" for="sample2">Lat.</label>
                                         <span class="mdl-textfield__error">Invalid Latitude</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield pos-input">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
                                         <label class="mdl-textfield__label" for="sample2">Lon.</label>
                                         <span class="mdl-textfield__error">Invalid Longitude</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="mdl-textfield mdl-js-textfield alt-input">
-                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+                                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?">
                                         <label class="mdl-textfield__label" for="sample2">Ft.</label>
                                         <span class="mdl-textfield__error">Invalid Altitude</span>
                                     </div>
@@ -173,7 +224,6 @@
                                     </table>
                                 </td>
                             </tr>
-
 
                         </table>
                         <div class="add-wpt">
