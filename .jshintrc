@@ -4,6 +4,7 @@
   , "metersToFeet": true
   , "autopilot_pp": true
   , "Aircraft": true
+  , "componentHandler": true
   , "define": true
   , "require": true
   , "requirejs": true
