@@ -1,6 +1,6 @@
 "use strict";
 
-define(['lib', 'text!ui/waypoints.html'], function (lib, wptInputField) {
+define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputField) {
 	return {
 		input: "",
 		route: [],

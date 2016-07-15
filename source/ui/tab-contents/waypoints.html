@@ -1,5 +1,6 @@
 <tr class="wpt-row">
     <td>
+        <!-- Waypoint input -->
         <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" id="wpt-input" pattern="\w*\d*">
             <label class="mdl-textfield__label" for="wpt-input">Fix, VOR, ICAO</label>
@@ -7,6 +8,7 @@
         </div>
     </td>
     <td>
+        <!-- Latitude input -->
         <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" id="lat-input" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
             <label class="mdl-textfield__label" for="lat-input">Lat.</label>
@@ -14,14 +16,15 @@
         </div>
     </td>
     <td>
+        <!-- Longitude input -->
         <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" id="lon-input" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
             <label class="mdl-textfield__label" for="lon-input">Lon.</label>
             <span class="mdl-textfield__error">Invalid Longitude</span>
         </div>
     </td>
-    </td>
     <td>
+        <!-- Altitude input -->
         <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" id="alt-input" type="number" max=3280000>
             <label class="mdl-textfield__label" for="alt-input">Ft.</label>
@@ -29,6 +32,7 @@
         </div>
     </td>
     <td>
+        <!-- Action buttons -->
         <button action="move-wpt-up" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
             <i class="material-icons">arrow_upward</i>
         </button>

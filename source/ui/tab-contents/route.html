@@ -1,0 +1,61 @@
+<!-- RTE tab contents -->
+<section class="mdl-layout__tab-panel" id="rte">
+    <div class="page-content">
+
+        <!-- Departure & Arrival info -->
+        <div class="fmc-dep-arr-table-container">
+            <table>
+                <tr>
+                    <!-- Departure input -->
+                    <td class="dep-input-field">
+                        <i class="material-icons">flight_takeoff</i>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="dep-input">
+                            <label class="mdl-textfield__label" for="dep-input">Departure</label>
+                        </div>
+                    </td>
+                    <!-- Arrival input -->
+                    <td class="arr-input-field">
+                        <i class="material-icons">flight_land</i>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="arr-input">
+                            <label class="mdl-textfield__label" for="arr-input">Arrival</label>
+                        </div>
+                    </td>
+                    <!-- Flight num input -->
+                    <td class="fn-input-field">
+                        <i class="material-icons">local_airport</i>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="fn-input">
+                            <label class="mdl-textfield__label" for="fn-input">Flight #</label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Waypoint lists -->
+        <div class="fmc-wpt-list-container">
+            <table class="mdl-data-table mdl-js-data-table">
+                <tr class="wpt-header">
+                    <th class="wpt-col">Waypoints</th>
+                    <th class="lat-col">Position</th>
+                    <th class="lon-col"></th>
+                    <th class="alt-col">Altitude</th>
+                    <th class="actions-col">Actions</th>
+                </tr>
+
+                <!--=====================================
+                    All waypoints input row
+                    Initiated by calling `addWaypoint`
+                ======================================-->
+
+            </table>
+        </div>
+        <div class="fmc-wpt-add-container">
+            <button action="add-wpt" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                <i class="material-icons">add</i>
+            </button>
+        </div>
+    </div>
+</section>
