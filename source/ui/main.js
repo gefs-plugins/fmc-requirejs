@@ -19,6 +19,11 @@ function (consts, distance, lib, log, math, toggles, waypoints, lnav, progress, 
 	});
 	// ----
 
+	// Add waypoint list
+	$('button[action="add-wpt"]').click(function () {
+		waypoints.addWaypoint();
+		componentHandler.upgradeDom();
+	});
 	/* ---- All Initializations ---- */
 
 	// Initializes all timers

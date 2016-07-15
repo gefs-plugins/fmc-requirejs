@@ -116,6 +116,12 @@ td.fn-input-field div {
 
 div.fmc-wpt-list-container {
 	margin-top: -24px;
+	height: 296px;
+	overflow: scroll;
+}
+
+div.fmc-wpt-list-container table {
+	border: none;
 }
 
 div.fmc-wpt-list-container tr:hover {
@@ -126,12 +132,20 @@ div.fmc-wpt-list-container th {
 	text-align: left;
 }
 
-div.fmc-wpt-list-container .wpt-col {
-	width: 10%;
+div.fmc-wpt-list-container td {
+	border: none;
 }
 
-div.fmc-wpt-list-container .lat-lon-col {
-	width: 25%;
+div.fmc-wpt-list-container .wpt-col {
+	width: 11%;
+}
+
+div.fmc-wpt-list-container .lat-col {
+	width: 11.5%;
+}
+
+div.fmc-wpt-list-container .lon-col {
+	width: 11.8%;
 }
 
 div.fmc-wpt-list-container .alt-col {
@@ -142,6 +156,19 @@ div.fmc-wpt-list-container .actions-col {
 	width: 10%;
 }
 
-div.fmc-wpt-list-container td {
-	border: none;
+tr.wpt-row div {
+	width: initial;
+}
+
+tr.wpt-row td {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+tr.wpt-row button {
+	float: left;
+}
+
+div.fmc-wpt-add-container {
+	float: right;
 }

@@ -1,30 +1,42 @@
 <tr class="wpt-row">
-    <td class="wpt-col">
+    <td>
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" id="wpt-input">
-            <label class="mdl-textfield__input" for="wpt-input">Fix, VOR, ICAO</label>
+            <input class="mdl-textfield__input" id="wpt-input" pattern="\w*\d*">
+            <label class="mdl-textfield__label" for="wpt-input">Fix, VOR, ICAO</label>
+            <span class="mdl-textfield__error">Invalid Waypoint</span>
         </div>
     </td>
-    <td class="lat-lon-col">
+    <td>
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" id="lat-input">
-            <label class="mdl-textfield__input" for="lat-input">Lat.</label>
+            <input class="mdl-textfield__input" id="lat-input" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+            <label class="mdl-textfield__label" for="lat-input">Lat.</label>
             <span class="mdl-textfield__error">Invalid Latitude</span>
         </div>
+    </td>
+    <td>
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" id="lon-input">
-            <label class="mdl-textfield__input" for="lon-input">Lon.</label>
+            <input class="mdl-textfield__input" id="lon-input" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+            <label class="mdl-textfield__label" for="lon-input">Lon.</label>
             <span class="mdl-textfield__error">Invalid Longitude</span>
         </div>
     </td>
-    <td class="alt-col">
+    </td>
+    <td>
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" id="alt-input">
-            <label class="mdl-textfield__input" for="alt-input">Lon.</label>
+            <input class="mdl-textfield__input" id="alt-input" type="number" max=3280000>
+            <label class="mdl-textfield__label" for="alt-input">Ft.</label>
             <span class="mdl-textfield__error">Invalid Altitude</span>
         </div>
     </td>
-    <td class="actions-col">
-        <!-- TO BE IMPLEMENTED -->
+    <td>
+        <button action="move-wpt-up" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+            <i class="material-icons">arrow_upward</i>
+        </button>
+        <button action="move-wpt-down" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+            <i class="material-icons">arrow_downward</i>
+        </button>
+        <button action="remove-wpt" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+            <i class="material-icons">delete_forever</i>
+        </button>
     </td>
 </tr>

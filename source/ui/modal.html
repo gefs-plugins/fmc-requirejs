@@ -35,6 +35,8 @@
                 <main class="mdl-layout__content">
                     <section class="mdl-layout__tab-panel is-active" id="rte">
                         <div class="page-content">
+
+                            <!-- Departure & Arrival info -->
                             <div class="fmc-dep-arr-table-container">
                                 <table>
                                     <tr>
@@ -65,16 +67,25 @@
                                     </tr>
                                 </table>
                             </div>
+
+                            <!-- Waypoint lists -->
                             <div class="fmc-wpt-list-container">
                                 <table class="mdl-data-table mdl-js-data-table">
                                     <tr class="wpt-header">
                                         <th class="wpt-col">Waypoints</th>
-                                        <th class="lat-lon-col">Position</th>
+                                        <th class="lat-col">Position</th>
+                                        <th class="lon-col"></th>
                                         <th class="alt-col">Altitude</th>
                                         <th class="actions-col">Actions</th>
                                     </tr>
                                     <!-- All waypoints input row -->
+                                    <!-- Initiated by calling `addWaypoint` -->
                                 </table>
+                            </div>
+                            <div class="fmc-wpt-add-container">
+                                <button action="add-wpt" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                                    <i class="material-icons">add</i>
+                                </button>
                             </div>
                         </div>
                     </section>
