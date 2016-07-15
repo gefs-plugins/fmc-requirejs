@@ -1,1 +1,30 @@
-<!--Waypoint input field HTML file-->
+<tr class="wpt-row">
+    <td class="wpt-col">
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="wpt-input">
+            <label class="mdl-textfield__input" for="wpt-input">Fix, VOR, ICAO</label>
+        </div>
+    </td>
+    <td class="lat-lon-col">
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" id="lat-input">
+            <label class="mdl-textfield__input" for="lat-input">Lat.</label>
+            <span class="mdl-textfield__error">Invalid Latitude</span>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" id="lon-input">
+            <label class="mdl-textfield__input" for="lon-input">Lon.</label>
+            <span class="mdl-textfield__error">Invalid Longitude</span>
+        </div>
+    </td>
+    <td class="alt-col">
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" id="alt-input">
+            <label class="mdl-textfield__input" for="alt-input">Lon.</label>
+            <span class="mdl-textfield__error">Invalid Altitude</span>
+        </div>
+    </td>
+    <td class="actions-col">
+        <!-- TO BE IMPLEMENTED -->
+    </td>
+</tr>

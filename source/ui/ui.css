@@ -50,9 +50,14 @@ dialog.fmc-modal {
 	border-radius: 7px;
 }
 
+dialog.fmc-modal::backdrop {
+	background: none;
+}
+
 dialog.fmc-modal .fmc-modal__close {
 	height: 25px;
 	margin: -13px 0;
+	float: right;
 }
 
 dialog.fmc-modal h4 {
@@ -74,8 +79,11 @@ div.fmc-modal__layout {
 	width: 700px;
 }
 
+div.fmc-modal__header {
+	height: 48px;
+}
+
 div.fmc-modal__tab-bar {
-	height: 50px !important;
 	background: inherit !important;
 }
 
@@ -83,4 +91,57 @@ div.fmc-modal__divider {
 	height: 2px;
 	margin-top: -2px;
 	background: rgba(66, 66, 66, 0.2);
+}
+
+div.fmc-modal__content {
+	height: inherit;
+	margin-top: 15px;
+}
+
+div.fmc-dep-arr-table-container {
+	margin-top: -10px;
+}
+
+td.dep-input-field div {
+	width: 200px;
+}
+
+td.arr-input-field div {
+	width: 200px;
+}
+
+td.fn-input-field div {
+	width: 200px;
+}
+
+div.fmc-wpt-list-container {
+	margin-top: -24px;
+}
+
+div.fmc-wpt-list-container tr:hover {
+	background-color: initial !important;
+}
+
+div.fmc-wpt-list-container th {
+	text-align: left;
+}
+
+div.fmc-wpt-list-container .wpt-col {
+	width: 10%;
+}
+
+div.fmc-wpt-list-container .lat-lon-col {
+	width: 25%;
+}
+
+div.fmc-wpt-list-container .alt-col {
+	width: 5%;
+}
+
+div.fmc-wpt-list-container .actions-col {
+	width: 10%;
+}
+
+div.fmc-wpt-list-container td {
+	border: none;
 }
