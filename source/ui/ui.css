@@ -44,7 +44,7 @@ a.fmc-btn__fade.is-active {
 }
 
 dialog.fmc-modal {
-	height: 75%;
+	height: 595.25px; /* Must define a set pixel */
 	width: 700px;
 	border: none;
 	border-radius: 7px;
@@ -115,7 +115,7 @@ td.fn-input-field div {
 }
 
 div.fmc-wpt-list-container {
-	margin-top: -24px;
+	margin-top: -23px;
 	height: 296px;
 	overflow: scroll;
 }
