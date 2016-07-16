@@ -3,7 +3,7 @@
  * All rights reserved. Licensed under the New BSD License
  */
 
-// The New BSD license (BSD)
+// The New BSD license (BSD-3-Clause)
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
