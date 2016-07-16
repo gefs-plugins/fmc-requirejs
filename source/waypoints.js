@@ -4,7 +4,7 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 	return {
 		input: "",
 		route: [],
-		nextWaypoint: "",
+		nextWaypoint: null,
 
 		/**
 		 * Turns the waypoints into an array
@@ -40,10 +40,11 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 		 * 					using <code>JSON.stringify</code> method
 		 */
 		toRouteString: function () {
+			var _this = $('.fmc-dep-arr-table-container');
 			return JSON.stringify ([
-				$('#departureInput').val(),
-				$('#arrivalInput').val(),
-				$('#flightNumInput').val(),
+				_this.find('input.dep').val(),
+				_this.find('input.arr').val(),
+				_this.find('input.fn').val(),
 				this.route
 			]);
 		},
@@ -56,11 +57,21 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 		 *         {Boolean} false otherwise
 		 */
 		getCoords: function (wpt) {
+			// FIXME
+			// autopilot_pp update currently not implemented
+			// autopilot_pp is an important dependency for FMC
+			try {
+				autopilot_pp.require('icaoairports');
+				autopilot_pp.require('waypoints');
+			} catch (e) {
+				return undefined;
+			}
+
 			if (autopilot_pp.require('icaoairports')[wpt]) {
 				return autopilot_pp.require('icaoairports')[wpt];
 			} else if (autopilot_pp.require('waypoints')[wpt]) {
 				return autopilot_pp.require('waypoints')[wpt];
-			} else return false;
+			} else return undefined;
 		},
 
 		/**
@@ -146,7 +157,7 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 		 * @param {Number} n The index of which will be removed
 		 */
 		removeWaypoint: function (n) {
-			$('#waypoints tr:nth-child(' + (n + 1) + ')').remove();
+			$('.fmc-wpt-list-container .wpt-row').eq(n).remove();
 			this.route.splice((n - 1), 1);
 			if (this.nextWaypoint == n) {
 				this.nextWaypoint = null;
@@ -191,7 +202,7 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 				this.route = [];
 				var route = arr[3];
 				var n = $('#waypoints tbody tr').length - 1;
-				for (var i = 0; i < n; i++) {
+				for (var i = 0; i < n; i++) { // FIXME index error/confusion
 					this.removeWaypoint(1);
 				}
 				// JSON.stringify turns undefined into null; this loop turns it back
@@ -228,25 +239,26 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 		 * @param {jQuery element} r The element to be moved in the UI
 		 * @param {Number} n Index of this waypoint
 		 * @param <restricted>{String} d Direction of shifting, "up" or "down"
+		 * FIXME Potential index confusion
 		 */
 		shiftWaypoint: function(r, n, d) {
-			console.log("Waypoint #" + n + " moved " + d);
-			if (!(d == "up" && n == 1 || d == "down" && n == this.route.length)) {
-				if (d == "up") {
-					this.route.move(n - 1, n - 2);
+			console.log("Waypoint #" + (n + 1) + "(index=" + n + ") moved " + d);
+			if (!(d === "up" && n === 0 || d === "down" && n === this.route.length - 1)) {
+				if (d === "up") {
+					this.route.move(n, n - 1);
 					r.insertBefore(r.prev());
-					if (this.nextWaypoint == n) {
-						this.nextWaypoint = n - 1;
-					} else if (this.nextWaypoint == n - 1) {
-						this.nextWaypoint = n + 1;
+					if (this.nextWaypoint == n + 1) {
+						this.nextWaypoint = n;
+					} else if (this.nextWaypoint == n) {
+						this.nextWaypoint = n + 2;
 					}
 				} else {
-					this.route.move(n - 1, n);
+					this.route.move(n, n + 1);
 					r.insertAfter(r.next());
-					if (this.nextWaypoint == n) {
-						this.nextWaypoint = n + 1;
-					} else if (this.nextWaypoint == n + 1) {
-						this.nextWaypoint = n - 1;
+					if (this.nextWaypoint == n + 1) {
+						this.nextWaypoint = n + 2;
+					} else if (this.nextWaypoint == n + 2) {
+						this.nextWaypoint = n;
 					}
 				}
 			}

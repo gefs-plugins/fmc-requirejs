@@ -2,32 +2,32 @@
     <td>
         <!-- Waypoint input -->
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" id="wpt-input" pattern="\w*\d*">
-            <label class="mdl-textfield__label" for="wpt-input">Fix, VOR, ICAO</label>
+            <input class="mdl-textfield__input wpt" pattern="\w*\d*">
+            <label class="mdl-textfield__label">Fix, VOR, ICAO</label>
             <span class="mdl-textfield__error">Invalid Waypoint</span>
         </div>
     </td>
     <td>
         <!-- Latitude input -->
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" id="lat-input" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
-            <label class="mdl-textfield__label" for="lat-input">Lat.</label>
+            <input class="mdl-textfield__input lat" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+            <label class="mdl-textfield__label">Lat.</label>
             <span class="mdl-textfield__error">Invalid Latitude</span>
         </div>
     </td>
     <td>
         <!-- Longitude input -->
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" id="lon-input" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
-            <label class="mdl-textfield__label" for="lon-input">Lon.</label>
+            <input class="mdl-textfield__input lon" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+            <label class="mdl-textfield__label">Lon.</label>
             <span class="mdl-textfield__error">Invalid Longitude</span>
         </div>
     </td>
     <td>
         <!-- Altitude input -->
         <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" id="alt-input" type="number" max=3280000>
-            <label class="mdl-textfield__label" for="alt-input">Ft.</label>
+            <input class="mdl-textfield__input alt" type="number" max=3280000 step=10>
+            <label class="mdl-textfield__label">Ft.</label>
             <span class="mdl-textfield__error">Invalid Altitude</span>
         </div>
     </td>
