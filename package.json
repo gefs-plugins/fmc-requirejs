@@ -7,7 +7,9 @@
 		"robohydra": "^0.6.4"
 	},
 	"devDependencies": {
-		"requirejs": "latest"
+		"requirejs": "latest",
+		"dialog-polyfill": "latest",
+		"bowser": "latest"
 	},
 	"scripts": {
 		"start": "robohydra -I ./ -n -P testing -q"
