@@ -45,6 +45,7 @@ a.fmc-btn__fade.is-active {
 
 dialog.fmc-modal {
 	height: 595.25px; /* Must define a set pixel */
+	/* FIXME Find out why this height is stretched in game */
 	width: 700px;
 	border: none;
 	border-radius: 7px;

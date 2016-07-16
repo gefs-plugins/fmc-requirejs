@@ -5,17 +5,26 @@ function (consts, distance, lib, log, math, toggles, waypoints, lnav, progress, 
 
 	/* ---- UI actions binding ---- */
 
-	// FMC Modal: open and close features
+	// Modal actions: open/close
 	var modal = document.getElementsByClassName('fmc-modal')[0];
-    var button = $('.fmc-btn');
-
-    button.click(function () {
-    	if (!modal.open) modal.showModal();
-		else modal.close();
-    });
-
-    $(modal).find('.close').click(function () {
+	$(modal).on('click', '.close', function () {
 		modal.close();
+	}).parent().on('click', '.fmc-btn', function () {
+		if (!modal.open) modal.showModal();
+		else modal.close();
+	});
+
+	// Modal tab contents: toggle
+	$('.fmc-modal__tab-bar').on('click', 'a', function (event) {
+		event.preventDefault();
+		var c = 'is-active',
+			_this = $(this),
+			_that = $('.fmc-modal__tab-bar .' + c);
+
+		$(_that.attr('panel')).removeClass(c);
+		$(_this.attr('panel')).addClass(c);
+		_that.removeClass(c);
+		_this.addClass(c);
 	});
 	// ----
 
