@@ -1,4 +1,4 @@
-/* For FMC button */
+/* button.html */
 button.fmc-btn,
 button.fmc-btn:hover,
 button.fmc-btn:active,
@@ -17,10 +17,10 @@ button.fmc-btn__fade:hover {
 	opacity: 0.8;
 }
 
-/* For external distance indicator */
+/* externaldist.html */
 
 
-/* For modal dialog */
+/* modal.html */
 a.fmc-btn__fade {
 	transition: font-size 0.3s ease-in-out,
 				font-weight 0.3s ease-in-out,
@@ -100,22 +100,20 @@ div.fmc-modal__content {
 	padding-top: 15px;
 }
 
+/* route.html */
 div.fmc-dep-arr-table-container {
 	margin-top: -10px;
 }
 
-td.dep-input-field div {
+div.fmc-dep-arr-table-container div {
 	width: 200px;
 }
 
-td.arr-input-field div {
-	width: 200px;
+div.fmc-wpt-add-container {
+	float: right;
 }
 
-td.fn-input-field div {
-	width: 200px;
-}
-
+/* waypoints.html */
 div.fmc-wpt-list-container {
 	margin-top: -23px;
 	height: 320px;
@@ -171,6 +169,8 @@ tr.wpt-row button {
 	float: left;
 }
 
-div.fmc-wpt-add-container {
-	float: right;
-}
+/* dep-arr.html */
+/* vnav.html */
+/* progress.html */
+/* load-route.html */
+/* log.html */
