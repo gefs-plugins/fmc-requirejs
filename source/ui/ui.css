@@ -72,6 +72,13 @@ dialog.fmc-modal .fmc-modal__no-shadow {
 	background: white !important;
 }
 
+@media screen and (max-width: 1024px) {
+	/* MDL's small screen hides modal header */
+	dialog.fmc-modal .fmc-modal__no-shadow {
+		display: block !important;
+	}
+}
+
 div.fmc-modal__layout-container {
 	position: relative;
 	height: 85%;
@@ -165,8 +172,20 @@ tr.wpt-row td {
 	padding-bottom: 0px !important;
 }
 
+tr.wpt-row .fmc-wpt-info {
+	color: rgb(83, 109, 254);
+	position: absolute;
+	font-size: 12px;
+	margin-top: 3px;
+	visibility: visible;
+	display: block;
+}
+
 tr.wpt-row button {
 	float: left;
+	min-width: 24px !important;
+	width: 24px;
+	height: 24px;
 }
 
 /* dep-arr.html */
