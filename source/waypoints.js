@@ -4,7 +4,7 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 	return {
 		input: "",
 		route: [],
-		nextWaypoint: null,
+		nextWaypoint: undefined,
 
 		/**
 		 * Turns the waypoints into an array
@@ -138,9 +138,7 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 				} else {
 					alert("Invalid Waypoints Input");
 				}
-			} else {
-				this.loadFromSave(s);
-			}
+			} else this.loadFromSave(s);
 		},
 
 		/**
@@ -149,6 +147,7 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 		addWaypoint: function () {
 			this.route.push([]);
 			$('.fmc-wpt-list-container tbody').append(wptInputField);
+			if (componentHandler) componentHandler.upgradeDom();
 		},
 
 		/**
@@ -199,33 +198,34 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 			localStorage.removeItem('fmcWaypoints');
 
 			if (arr) {
+				// Clears all
 				this.route = [];
+				$('.fmc-wpt-list-container .wpt-row').remove();
+
 				var route = arr[3];
-				var n = $('#waypoints tbody tr').length - 1;
-				for (var i = 0; i < n; i++) { // FIXME index error/confusion
-					this.removeWaypoint(1);
-				}
+
 				// JSON.stringify turns undefined into null; this loop turns it back
 				route.forEach(function (wpt) {
 					if (!wpt[3] || wpt[3] === null || wpt[3] === 0) wpt[3] = undefined;
 				});
 
-				if (arr[0]) $('#departureInput').val(arr[0]).change();
-				if (arr[1]) $('#arrivalInput').val(arr[1]).change();
-				if (arr[2]) $('#flightNumInput').val(arr[2]).change();
+				if (arr[0]) lib.fixInput($('.fmc-dep-arr-table-container input.dep').val(arr[0]).change());
+				if (arr[1]) lib.fixInput($('.fmc-dep-arr-table-container input.arr').val(arr[1]).change());
+				if (arr[2]) lib.fixInput($('.fmc-dep-arr-table-container input.fn').val(arr[2]).change());
 
 				for (var i = 0; i < route.length; i++) {
 					this.addWaypoint();
-					$('#waypoints input.wpt:eq(' + i + ')').val(route[i][0]).change(); // Input the fix
+					// Puts in the waypoint
+					lib.fixInput($('.fmc-wpt-list-container input.wpt').eq(i).val(route[i][0]).change());
 
 					// If the waypoint is not eligible or a duplicate
-					if (!route[i][4] || !$('#waypoints input.lat:eq(' + i + ')').val()) {
-						$('#waypoints input.lat:eq(' + i + ')').val(route[i][1]).change(); // Input the lat.
-						$('#waypoints input.lon:eq(' + i + ')').val(route[i][2]).change(); // Input the lon.
+					if (!route[i][4] || !$('.fmc-wpt-list-container input.lat').eq(i).val()) {
+						lib.fixInput($('.fmc-wpt-list-container input.lat').eq(i).val(route[i][1]).change()); // Puts in the lat.
+						lib.fixInput($('.fmc-wpt-list-container input.lon').eq(i).val(route[i][2]).change()); // Puts in the lon.
 					}
 
 					if (route[i][3]) // If there is an altitude restriction
-						$('#waypoints input.alt:eq(' + i + ')').val(route[i][3]).change();
+						lib.fixInput($('.fmc-wpt-list-container input.alt').eq(i).val(route[i][3]).change());
 				}
 				// Auto-saves the data once again
 				this.saveData();
@@ -252,6 +252,9 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 					} else if (this.nextWaypoint == n) {
 						this.nextWaypoint = n + 2;
 					}
+					console.log(lib);
+					lib.printNextWaypointInfo(n);
+					lib.printNextWaypointInfo(n - 1);
 				} else {
 					this.route.move(n, n + 1);
 					r.insertAfter(r.next());
@@ -260,6 +263,8 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 					} else if (this.nextWaypoint == n + 2) {
 						this.nextWaypoint = n;
 					}
+					lib.printNextWaypointInfo(n + 1);
+					lib.printNextWaypointInfo(n);
 				}
 			}
 		}

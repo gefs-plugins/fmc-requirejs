@@ -12,11 +12,8 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 			var lon1 = gefs.aircraft.llaLocation[1] || 0;
 			var lat2 = lib.arrival[1] || 0;
 			var lon2 = lib.arrival[2] || 0;
-			var times = ["--", "--", "--", "--", "--"]; // flightete, flighteta, todete, todeta, nextete
+			var times = [[], [], [], [], []]; // flightete, flighteta, todete, todeta, nextete
 			var nextdist = distance.route(waypoints.nextWaypoint);
-			if (nextdist < 10) {
-				nextdist = (Math.round(10 * nextdist)) / 10;
-			} else nextdist = Math.round(nextdist);
 			var flightdist;
 			for (var i = 0, test = true; i < waypoints.route.length; i++) {
 				if (!waypoints.route[i][1]) test = false;
@@ -35,6 +32,7 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 			}
 
 			lib.print(flightdist, nextdist, times);
+			lib.printNextWaypointInfo(waypoints.nextWaypoint, lat1, lon1);
 		}
 	};
 });

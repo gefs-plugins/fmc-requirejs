@@ -7,10 +7,12 @@ define([
 
 	/* ---- UI actions binding ---- */
 
-	// Modal actions: open/close
+	// Modal actions: open/close, save data
 	var modal = document.getElementsByClassName('fmc-modal')[0];
 	$(modal).on('click', '.close', function () {
 		modal.close();
+	}).on('click', '.save', function () {
+		waypoints.saveData();
 	}).parent().find('.gefs-ui-bottom').on('click', '.fmc-btn', function () {
 		if (!modal.open) modal.showModal();
 		else modal.close();
@@ -30,12 +32,14 @@ define([
 	});
 	// ----
 
-	// Waypoint list actions: add/remove/move up or down
+	// Waypoint list actions: activate/add/remove/move up or down
 	// FIXME potential item index confusion/mess up
 	$('.fmc-wpt-add-container').on('click', 'button[action="add-wpt"]', function () {
 		waypoints.addWaypoint();
-		componentHandler.upgradeDom();
-	}).prev().on('click', 'button[action="remove-wpt"]', function () {
+	}).prev().on('click', 'button[action="activate-wpt"]', function () {
+		var index = $(this).parents().eq(1).index() - 1;
+		lib.activateLeg(index);
+	}).on('click', 'button[action="remove-wpt"]', function () {
 		var index = $(this).parents().eq(1).index() - 1;
 		waypoints.removeWaypoint(index);
 	}).on('click', 'button[action="move-wpt-up"]', function () {
@@ -48,28 +52,47 @@ define([
 
 	// Waypoint list input actions: update `route` array
 	$('.fmc-wpt-list-container').on('change', 'input.wpt', function () {
-		var wpt = $(this).val();
-		var coords = waypoints.getCoords(wpt);
-		var index = $(this).parents().eq(2).index() - 1;
-		if (!coords) {
-			waypoints.route[index][0] = wpt;
-			waypoints.route[index][4] = false;
-		} else {
-			$(this).parents().eq(2).find('.lat').val(coords[0]);
-			$(this).parents().eq(2).find('.lon').val(coords[0]);
-			waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
+		if (!$(this).parent().hasClass('is-invalid')) {
+			var wpt = $(this).val();
+			var coords = waypoints.getCoords(wpt);
+			var index = $(this).parents().eq(2).index() - 1;
+			if (!coords) {
+				waypoints.route[index][0] = wpt;
+				waypoints.route[index][4] = false;
+			} else {
+				$(this).parents().eq(2).find('.lat').val(coords[0]);
+				$(this).parents().eq(2).find('.lon').val(coords[0]);
+				waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
+				lib.printNextWaypointInfo(index);
+			}
 		}
 	}).on('change', 'input.lat', function () {
-		var index = $(this).parents().eq(2).index() - 1;
-		waypoints.route[index][1] = waypoints.formatCoords($(this).val());
-		waypoints.route[index][4] = false;
+		if (!$(this).parent().hasClass('is-invalid')) {
+			var index = $(this).parents().eq(2).index() - 1;
+			if (!$(this).val() || $(this).val() === '') {
+				waypoints.route[index][1] = undefined;
+			} else {
+				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
+			}
+			waypoints.route[index][4] = false;
+			lib.printNextWaypointInfo(index);
+		}
 	}).on('change', 'input.lon', function () {
-		var index = $(this).parents().eq(2).index() - 1;
-		waypoints.route[index][2] = waypoints.formatCoords($(this).val());
-		waypoints.route[index][4] = false;
+		if (!$(this).parent().hasClass('is-invalid')) {
+			var index = $(this).parents().eq(2).index() - 1;
+			if (!$(this).val() || $(this).val() === '') {
+				waypoints.route[index][2] = undefined;
+			} else {
+				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
+			}
+			waypoints.route[index][4] = false;
+			lib.printNextWaypointInfo(index);
+		}
 	}).on('change', 'input.alt', function () {
-		var index = $(this).parents().eq(2).index() - 1;
-		waypoints.route[index][3] = Number($(this).val());
+		if (!$(this).parent().hasClass('is-invalid')) {
+			var index = $(this).parents().eq(2).index() - 1;
+			waypoints.route[index][3] = Number($(this).val());
+		}
 	});
 
 	/* ---- All Initializations ---- */
@@ -108,7 +131,7 @@ define([
 		event.stopImmediatePropagation();
 	}
 
-	$('.fmc-modal')
+	$('.fmc-modal input')
 		.keyup(stopPropagation)
 		.keydown(stopPropagation)
 		.keypress(stopPropagation);
