@@ -1,6 +1,6 @@
 "use strict";
 
-define(['lib'], function (lib) {
+define(['flight'], function (flight) {
 
 	return {
 		mainTimer: null, // = setInterval(updateLog, 120000);
@@ -24,7 +24,7 @@ define(['lib'], function (lib) {
 				var date = new Date();
 				var h = date.getUTCHours();
 				var m = date.getUTCMinutes();
-				var time = lib.formatTime(lib.timeCheck(h, m));
+				var time = flight.formatTime(flight.timeCheck(h, m));
 				other = other || "none";
 				$('<tr>')
 					.addClass('data')

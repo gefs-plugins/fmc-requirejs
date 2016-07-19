@@ -1,19 +1,20 @@
 "use strict";
 
-define(['lib', 'math', 'waypoints'], function (lib, math, waypoints) {
+define(['flight', 'math'], function (flight, math) {
 
 	return {
 		/**
 		 * Computes the full route distance with waypoints until index
 		 *
+		 * @param {Object} waypoints FMC waypoints object
 		 * @param {Number} end The index of the end of the route to be calculated
 		 * @returns {Number} The route distance
 		 */
-		route: function (end) {
+		route: function (waypoints, end) {
 			var loc = gefs.aircraft.llaLocation || [0, 0, 0];
 			var start = waypoints.nextWaypoint || 0;
 			var route = waypoints.route;
-			var arrival = lib.arrival;
+			var arrival = flight.arrival;
 			var total;
 			if (route.length === 0 || !waypoints.nextWaypoint) {
 				total = math.getDistance(loc[0], loc[1], arrival[1], arrival[2]);

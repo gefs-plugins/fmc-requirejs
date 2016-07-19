@@ -1,17 +1,17 @@
 "use strict";
 
-define(['lib', 'nav/VNAV'], function (lib, vnav) {
+define(['flight', 'nav/VNAV'], function (flight, vnav) {
 	return {
 		/**
 		 * Enables VNAV if not activated, disables if activated
 		 */
 		vnav: function () {
-			if (lib.VNAV) {
-				lib.VNAV = false;
+			if (flight.VNAV) {
+				flight.VNAV = false;
 				$('#vnavButton').removeClass('btn btn-warning').addClass('btn');
 				clearInterval(vnav.timer);
-			} else if (lib.cruise) {
-				lib.VNAV = true;
+			} else if (flight.cruise) {
+				flight.VNAV = true;
 				$('#vnavButton').removeClass('btn').addClass('btn btn-warning');
 				vnav.timer = setInterval(vnav.update, 5000);
 			} else alert('Please enter a cruising altitude.');

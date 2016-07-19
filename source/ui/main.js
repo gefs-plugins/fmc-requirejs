@@ -1,9 +1,9 @@
 "use strict"; // jshint unused:false
 
 define([
-	'consts', 'distance', 'lib', 'log', 'math', 'toggles', 'waypoints',
+	'consts', 'distance', 'flight', 'log', 'math', 'toggles', 'waypoints',
 	'nav/LNAV', 'nav/progress', 'nav/VNAV', 'redefine'
-], function (consts, distance, lib, log, math, toggles, waypoints, lnav, progress, vnav) {
+], function (consts, distance, flight, log, math, toggles, waypoints, lnav, progress, vnav) {
 
 	/* ---- UI actions binding ---- */
 
@@ -38,7 +38,7 @@ define([
 		waypoints.addWaypoint();
 	}).prev().on('click', 'button[action="activate-wpt"]', function () {
 		var index = $(this).parents().eq(1).index() - 1;
-		lib.activateLeg(index);
+		waypoints.activateLeg(index);
 	}).on('click', 'button[action="remove-wpt"]', function () {
 		var index = $(this).parents().eq(1).index() - 1;
 		waypoints.removeWaypoint(index);
@@ -63,7 +63,7 @@ define([
 				$(this).parents().eq(2).find('.lat').val(coords[0]);
 				$(this).parents().eq(2).find('.lon').val(coords[0]);
 				waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
-				lib.printNextWaypointInfo(index);
+				progress.printNextWaypointInfo(waypoints, index);
 			}
 		}
 	}).on('change', 'input.lat', function () {
@@ -75,7 +75,7 @@ define([
 				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
 			}
 			waypoints.route[index][4] = false;
-			lib.printNextWaypointInfo(index);
+			progress.printNextWaypointInfo(waypoints, index);
 		}
 	}).on('change', 'input.lon', function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
@@ -86,7 +86,7 @@ define([
 				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
 			}
 			waypoints.route[index][4] = false;
-			lib.printNextWaypointInfo(index);
+			progress.printNextWaypointInfo(waypoints, index);
 		}
 	}).on('change', 'input.alt', function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
@@ -104,7 +104,7 @@ define([
 	}, 5000);
 
 	progress.timer = setInterval(function () {
-		progress.update();
+		progress.update(waypoints);
 	}, 5000);
 
 	log.mainTimer = setInterval(function () {

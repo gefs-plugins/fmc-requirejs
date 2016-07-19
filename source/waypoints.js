@@ -1,6 +1,8 @@
 "use strict";
 
-define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputField) {
+define([
+	'math', 'flight', 'bugfix/input', 'nav/progress', 'text!ui/tab-contents/waypoints.html'
+], function (math, flight, fixInput, progress, wptInputField) {
 	return {
 		input: "",
 		route: [],
@@ -164,6 +166,77 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 		},
 
 		/**
+		 * Activates a waypoint or deactivates if the waypoint is already activated
+		 *
+		 * @param {Number} n The index to be activated or deactivated
+		 * FIXME Potential index confusion
+		 * Should: start with 0; Instead: started with 1
+		 */
+		activateLeg: function (n) {
+
+			/**
+			 * @private
+			 * Toggles activated buttons
+			 *
+			 * @param {Boolean} toggleOn Whether the action is to toggle on
+			 */
+			var toggle = function (toggleOn) {
+				if (toggleOn) {
+					$('.fmc-wpt-list-container button[action="activate-wpt"]')
+						.eq(n).removeClass('mdl-button--colored')
+						.addClass('mdl-button--accent')
+						.children().text('check_circle');
+				} else {
+					$('.fmc-wpt-list-container button.mdl-button--accent[action="activate-wpt"]')
+						.removeClass('mdl-button--accent')
+						.addClass('mdl-button--colored')
+						.children().text('check');
+				}
+			};
+
+			if (this.nextWaypoint != n) {
+				if (n < this.route.length) {
+					this.nextWaypoint = n;
+					var wpt = this.route[this.nextWaypoint];
+					// TODO When AP++ implements fix for duplicate waypoints, improve this algorithm
+					// FIXME also...
+					if (wpt[4]) {
+						$('#Qantas94Heavy-ap-icao > input').val(wpt[0]).change();
+					} else {
+						$('#Qantas94Heavy-ap-gc-lat > input').val(wpt[1]).change();
+						$('#Qantas94Heavy-ap-gc-lon > input').val(wpt[2]).change();
+					}
+					toggle(false);
+					toggle(true);
+
+					progress.update(this); // Updates progress: prints general progress info and next waypoint info
+					console.log('Waypoint # ' + n + 1 + ' activated | index: ' + n);
+				} else {
+					$('#Qantas94Heavy-ap-icao > input').val(flight.arrival[0]).change();
+					toggle(false);
+				}
+			} else {
+				toggle(false);
+				this.nextWaypoint = undefined;
+				$('#Qantas94Heavy-ap-icao > input').val('').change();
+			}
+		},
+
+		/**
+		 * Gets the next waypoint that has an altitude restriction
+		 *
+		 * @returns The index of the waypoint if eligible,
+		 * 		   -1 if not eligible
+		 * FIXME Potential index confusion: same as the function above
+		 */
+		getNextWaypointWithAltRestriction: function () {
+			for (var i = this.nextWaypoint; i < this.route.length; i++) {
+				if (this.route[i][3]) return i;
+			}
+			return -1;
+		},
+
+		/**
 		 * Saves the waypoints data into localStorage
 		 */
 		saveData: function () {
@@ -209,23 +282,23 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 					if (!wpt[3] || wpt[3] === null || wpt[3] === 0) wpt[3] = undefined;
 				});
 
-				if (arr[0]) lib.fixInput($('.fmc-dep-arr-table-container input.dep').val(arr[0]).change());
-				if (arr[1]) lib.fixInput($('.fmc-dep-arr-table-container input.arr').val(arr[1]).change());
-				if (arr[2]) lib.fixInput($('.fmc-dep-arr-table-container input.fn').val(arr[2]).change());
+				if (arr[0]) fixInput($('.fmc-dep-arr-table-container input.dep').val(arr[0]).change());
+				if (arr[1]) fixInput($('.fmc-dep-arr-table-container input.arr').val(arr[1]).change());
+				if (arr[2]) fixInput($('.fmc-dep-arr-table-container input.fn').val(arr[2]).change());
 
 				for (var i = 0; i < route.length; i++) {
 					this.addWaypoint();
 					// Puts in the waypoint
-					lib.fixInput($('.fmc-wpt-list-container input.wpt').eq(i).val(route[i][0]).change());
+					fixInput($('.fmc-wpt-list-container input.wpt').eq(i).val(route[i][0]).change());
 
 					// If the waypoint is not eligible or a duplicate
 					if (!route[i][4] || !$('.fmc-wpt-list-container input.lat').eq(i).val()) {
-						lib.fixInput($('.fmc-wpt-list-container input.lat').eq(i).val(route[i][1]).change()); // Puts in the lat.
-						lib.fixInput($('.fmc-wpt-list-container input.lon').eq(i).val(route[i][2]).change()); // Puts in the lon.
+						fixInput($('.fmc-wpt-list-container input.lat').eq(i).val(route[i][1]).change()); // Puts in the lat.
+						fixInput($('.fmc-wpt-list-container input.lon').eq(i).val(route[i][2]).change()); // Puts in the lon.
 					}
 
 					if (route[i][3]) // If there is an altitude restriction
-						lib.fixInput($('.fmc-wpt-list-container input.alt').eq(i).val(route[i][3]).change());
+						fixInput($('.fmc-wpt-list-container input.alt').eq(i).val(route[i][3]).change());
 				}
 				// Auto-saves the data once again
 				this.saveData();
@@ -252,9 +325,8 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 					} else if (this.nextWaypoint == n) {
 						this.nextWaypoint = n + 2;
 					}
-					console.log(lib);
-					lib.printNextWaypointInfo(n);
-					lib.printNextWaypointInfo(n - 1);
+					progress.printNextWaypointInfo(this, n);
+					progress.printNextWaypointInfo(this, n - 1);
 				} else {
 					this.route.move(n, n + 1);
 					r.insertAfter(r.next());
@@ -263,8 +335,8 @@ define(['lib', 'text!ui/tab-contents/waypoints.html'], function (lib, wptInputFi
 					} else if (this.nextWaypoint == n + 2) {
 						this.nextWaypoint = n;
 					}
-					lib.printNextWaypointInfo(n + 1);
-					lib.printNextWaypointInfo(n);
+					progress.printNextWaypointInfo(this, n + 1);
+					progress.printNextWaypointInfo(this, n);
 				}
 			}
 		}

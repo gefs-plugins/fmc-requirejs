@@ -1,6 +1,6 @@
 "use strict";
 
-define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, waypoints) {
+define(['distance', 'flight', 'math', 'waypoints'], function (distance, flight, math, waypoints) {
 	return {
 		timer: null,
 
@@ -10,16 +10,16 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 		update: function () {
 			var route = waypoints.route;
 
-			var params = lib.flightParams();
+			var params = flight.flightParams();
 
-			var next = lib.nextWptAltRes();
+			var next = flight.nextWptAltRes();
 			var hasRestriction = next !== -1;
 
-			var tod = lib.tod;
-			var cruise = lib.cruise;
-			var fieldElev = lib.fieldElev;
-			var phase = lib.phase;
-			var todCalc = lib.todCalc;
+			var tod = flight.tod;
+			var cruise = flight.cruise;
+			var fieldElev = flight.fieldElev;
+			var phase = flight.phase;
+			var todCalc = flight.todCalc;
 
 			var currentAlt = gefs.aircraft.animationValue.altitude;
 			var targetAlt, deltaAlt, nextDist, targetDist;
@@ -103,7 +103,7 @@ define(['distance', 'lib', 'math', 'waypoints'], function (distance, lib, math, 
 			if (alt) $('#Qantas94Heavy-ap-alt > input').val('' + alt).change();
 
 			// Updates flight phase
-			lib.updatePhase();
+			flight.updatePhase();
 		}
 	};
 });
