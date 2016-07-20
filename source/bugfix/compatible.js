@@ -7,9 +7,8 @@ define(['bugfix/bowser'], function (bowser) {
      * @description Compatible Browsers:
      * - Chrome: >= 37.0
      * - Opera: >= 24.0
+     * FIXME: Find out why bowser.check does not produce the result
      */
-    return bowser.check({
-        chrome: '37',
-        opera: '24'
-    });
+    return bowser.name === 'Chrome' && bowser.chrome && Number(bowser.version) >= 37
+        || bowser.name === 'Opera' && bowser.opera && Number(bowser.version) >= 24;
 });

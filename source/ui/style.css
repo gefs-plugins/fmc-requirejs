@@ -29,7 +29,7 @@ a.fmc-btn__fade {
 				font-weight 0.3s ease-in-out,
 				color 0.3s ease-in-out;
 	-webkit-transition: font-size 0.3s ease-in-out,
-				font-weight 0.3s ease-in-out,,
+				font-weight 0.3s ease-in-out,
 				color 0.3s ease-in-out;
 }
 
@@ -50,6 +50,10 @@ dialog.fmc-modal {
 	width: 700px;
 	border: none;
 	border-radius: 7px;
+}
+
+dialog.fmc-modal + .backdrop {
+    background: none; /* Dialog polyfill fix */
 }
 
 dialog.fmc-modal::backdrop {

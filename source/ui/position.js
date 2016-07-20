@@ -13,6 +13,12 @@ define([
 	// Inits Modal dialog
 	$(modal).appendTo('body');
 
+	// Compatibility check
+	if (!compatible) {
+		dialogPolyfill.registerDialog(document.querySelector('dialog'));
+		$('<style>').text(dialogPolyfillCSS).appendTo('head');
+	}
+
 	// Inits tab contents
 	$(E.container.modalContent).append(
 		$(route).addClass('is-active'),
@@ -22,12 +28,6 @@ define([
 		$(loadRoute),
 		$(log)
 	);
-
-	// Compatibility check
-	if (!compatible) {
-		dialogPolyfill.registerDialog(E.modal);
-		$('<style>').text(dialogPolyfillCSS).appendTo('head');
-	}
 
 	// Main FMC stylesheet
 	$('<style>').text(css).appendTo('head');
