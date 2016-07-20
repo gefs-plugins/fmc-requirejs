@@ -45,9 +45,9 @@ a.fmc-btn__fade.is-active {
 }
 
 dialog.fmc-modal {
-	height: 570px; /* Must define a set pixel */
-	/* FIXME Find out why this height is stretched in game */
+	height: 570px;
 	width: 700px;
+    padding: 14px 14px;
 	border: none;
 	border-radius: 7px;
 }
@@ -74,6 +74,8 @@ dialog.fmc-modal h4 {
 dialog.fmc-modal .fmc-modal__no-shadow {
 	box-shadow: none !important;
 	background: white !important;
+    min-height: inherit;
+    height: inherit;
 }
 
 @media screen and (max-width: 1024px) {
@@ -128,7 +130,7 @@ div.fmc-wpt-add-container {
 div.fmc-wpt-list-container {
 	margin-top: -23px;
 	height: 320px;
-	overflow: scroll;
+	overflow: auto;
 }
 
 div.fmc-wpt-list-container table {
