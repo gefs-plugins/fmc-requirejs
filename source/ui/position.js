@@ -3,7 +3,7 @@
 define([
 	'ui/elements', 'bugfix/compatible', 'polyfill/dialog-polyfill', 'text!polyfill/dialog-polyfill.css',
 	'text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html',
-	'text!ui/ui.css', 'text!ui/tab-contents/route.html', 'text!ui/tab-contents/dep-arr.html',
+	'text!ui/style.css', 'text!ui/tab-contents/route.html', 'text!ui/tab-contents/dep-arr.html',
 	'text!ui/tab-contents/vnav.html', 'text!ui/tab-contents/progress.html',
 	'text!ui/tab-contents/load-route.html', 'text!ui/tab-contents/log.html', 'polyfill/license'
 ], function (
