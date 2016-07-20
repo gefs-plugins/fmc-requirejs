@@ -2,56 +2,64 @@
 
 define([
 	'consts', 'distance', 'flight', 'log', 'math', 'toggles', 'waypoints',
-	'nav/LNAV', 'nav/progress', 'nav/VNAV', 'redefine'
-], function (consts, distance, flight, log, math, toggles, waypoints, lnav, progress, vnav) {
+	'nav/LNAV', 'nav/progress', 'nav/VNAV', 'ui/elements', 'redefine'
+], function (consts, distance, flight, log, math, toggles, waypoints, lnav, progress, vnav, E) {
+
+	var modal = document.getElementsByClassName('fmc-modal')[0],
+		container = E.container,
+		btn = E.btn,
+		input = E.input;
+
+	// Adds one input field on start
+	waypoints.addWaypoint();
 
 	/* ---- UI actions binding ---- */
 
+
 	// Modal actions: open/close, save data
-	var modal = document.getElementsByClassName('fmc-modal')[0];
-	$(modal).on('click', '.close', function () {
+	$(modal).on('click', btn.close, function () {
 		modal.close();
-	}).on('click', '.save', function () {
+	}).on('click', btn.save, function () {
 		waypoints.saveData();
-	}).parent().find('.gefs-ui-bottom').on('click', '.fmc-btn', function () {
+	}).parent().on('click', btn.fmcBtn, function () {
 		if (!modal.open) modal.showModal();
 		else modal.close();
 	});
 
 	// Modal tab contents: toggle
-	$('.fmc-modal__tab-bar').on('click', 'a', function (event) {
+	$(container.tabBar).on('click', 'a', function (event) {
 		event.preventDefault();
 		var c = 'is-active',
-			_this = $(this),
-			_that = $('.fmc-modal__tab-bar .' + c);
+			$this = $(this),
+			$that = $(container.tabBar).find('.' + c);
 
-		$(_that.attr('panel')).removeClass(c);
-		$(_this.attr('panel')).addClass(c);
-		_that.removeClass(c);
-		_this.addClass(c);
+		$(container.modalContent).find($that.attr('panel')).removeClass(c);
+		$(container.modalContent).find($this.attr('panel')).addClass(c);
+		$that.removeClass(c);
+		$this.addClass(c);
 	});
 	// ----
 
 	// Waypoint list actions: activate/add/remove/move up or down
 	// FIXME potential item index confusion/mess up
-	$('.fmc-wpt-add-container').on('click', 'button[action="add-wpt"]', function () {
+	$(container.addWpt).on('click', btn.addWpt, function () {
 		waypoints.addWaypoint();
-	}).prev().on('click', 'button[action="activate-wpt"]', function () {
+	}).prev().on('click', btn.activateWpt, function () {
 		var index = $(this).parents().eq(1).index() - 1;
 		waypoints.activateLeg(index);
-	}).on('click', 'button[action="remove-wpt"]', function () {
+	}).on('click', btn.removeWpt, function () {
 		var index = $(this).parents().eq(1).index() - 1;
 		waypoints.removeWaypoint(index);
-	}).on('click', 'button[action="move-wpt-up"]', function () {
+	}).on('click', btn.moveWptUp, function () {
 		var row = $(this).parents().eq(1);
 		waypoints.shiftWaypoint(row, row.index() - 1, 'up');
-	}).on('click', 'button[action="move-wpt-down"]', function () {
+	}).on('click', btn.moveWptDown, function () {
 		var row = $(this).parents().eq(1);
 		waypoints.shiftWaypoint(row, row.index() - 1, 'down');
 	});
 
 	// Waypoint list input actions: update `route` array
-	$('.fmc-wpt-list-container').on('change', 'input.wpt', function () {
+	$(container.wptList).on('change', input.wpt, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
 			var wpt = $(this).val();
 			var coords = waypoints.getCoords(wpt);
@@ -60,13 +68,13 @@ define([
 				waypoints.route[index][0] = wpt;
 				waypoints.route[index][4] = false;
 			} else {
-				$(this).parents().eq(2).find('.lat').val(coords[0]);
-				$(this).parents().eq(2).find('.lon').val(coords[0]);
+				$(this).parents().eq(2).find(input.lat).val(coords[0]);
+				$(this).parents().eq(2).find(input.lon).val(coords[0]);
 				waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
 				progress.printNextWaypointInfo(waypoints, index);
 			}
 		}
-	}).on('change', 'input.lat', function () {
+	}).on('change', input.lat, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
 			var index = $(this).parents().eq(2).index() - 1;
 			if (!$(this).val() || $(this).val() === '') {
@@ -77,7 +85,7 @@ define([
 			waypoints.route[index][4] = false;
 			progress.printNextWaypointInfo(waypoints, index);
 		}
-	}).on('change', 'input.lon', function () {
+	}).on('change', input.lon, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
 			var index = $(this).parents().eq(2).index() - 1;
 			if (!$(this).val() || $(this).val() === '') {
@@ -88,7 +96,7 @@ define([
 			waypoints.route[index][4] = false;
 			progress.printNextWaypointInfo(waypoints, index);
 		}
-	}).on('change', 'input.alt', function () {
+	}).on('change', input.alt, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
 			var index = $(this).parents().eq(2).index() - 1;
 			waypoints.route[index][3] = Number($(this).val());
@@ -123,15 +131,12 @@ define([
 		log.speed();
 	}, 15000);*/
 
-	// Adds one input field on start
-	waypoints.addWaypoint();
-
 	// Stops key event propagation
 	function stopPropagation (event) {
 		event.stopImmediatePropagation();
 	}
 
-	$('.fmc-modal input')
+	$(modal).find('input')
 		.keyup(stopPropagation)
 		.keydown(stopPropagation)
 		.keypress(stopPropagation);

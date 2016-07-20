@@ -1,8 +1,13 @@
 "use strict";
 
 define([
-	'math', 'flight', 'bugfix/input', 'nav/progress', 'text!ui/tab-contents/waypoints.html'
-], function (math, flight, fixInput, progress, wptInputField) {
+	'math', 'flight', 'bugfix/input', 'nav/progress', 'ui/elements', 'text!ui/tab-contents/waypoints.html'
+], function (math, flight, fixInput, progress, E, wptInputField) {
+
+	var container = E.container,
+		btn = E.btn,
+		input = E.input;
+
 	return {
 		input: "",
 		route: [],
@@ -32,7 +37,7 @@ define([
 		 * @returns {String} All waypoints, each seperated by a space
 		 */
 		toFixesString: function () {
-			return this.makeFixesArray().join(" ");
+			return this.makeFixesArray().join(' ');
 		},
 
 		/**
@@ -42,11 +47,10 @@ define([
 		 * 					using <code>JSON.stringify</code> method
 		 */
 		toRouteString: function () {
-			var _this = $('.fmc-dep-arr-table-container');
 			return JSON.stringify ([
-				_this.find('input.dep').val(),
-				_this.find('input.arr').val(),
-				_this.find('input.fn').val(),
+				$(input.dep).val(),
+				$(input.arr).val(),
+				$(input.fn).val(),
 				this.route
 			]);
 		},
@@ -138,7 +142,7 @@ define([
 						$('#arrivalInput').val(wpt).change();
 					}
 				} else {
-					alert("Invalid Waypoints Input");
+					alert('Invalid Waypoints Input');
 				}
 			} else this.loadFromSave(s);
 		},
@@ -148,8 +152,8 @@ define([
 		 */
 		addWaypoint: function () {
 			this.route.push([]);
-			$('.fmc-wpt-list-container tbody').append(wptInputField);
-			if (componentHandler) componentHandler.upgradeDom();
+			$(container.wptList).find('tbody').append(wptInputField);
+			if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		},
 
 		/**
@@ -158,7 +162,7 @@ define([
 		 * @param {Number} n The index of which will be removed
 		 */
 		removeWaypoint: function (n) {
-			$('.fmc-wpt-list-container .wpt-row').eq(n).remove();
+			$(container.wptRow).eq(n).remove();
 			this.route.splice((n - 1), 1);
 			if (this.nextWaypoint == n) {
 				this.nextWaypoint = null;
@@ -182,12 +186,12 @@ define([
 			 */
 			var toggle = function (toggleOn) {
 				if (toggleOn) {
-					$('.fmc-wpt-list-container button[action="activate-wpt"]')
+					$(btn.activateWpt)
 						.eq(n).removeClass('mdl-button--colored')
 						.addClass('mdl-button--accent')
 						.children().text('check_circle');
 				} else {
-					$('.fmc-wpt-list-container button.mdl-button--accent[action="activate-wpt"]')
+					$(btn.activateWpt)
 						.removeClass('mdl-button--accent')
 						.addClass('mdl-button--colored')
 						.children().text('check');
@@ -273,7 +277,7 @@ define([
 			if (arr) {
 				// Clears all
 				this.route = [];
-				$('.fmc-wpt-list-container .wpt-row').remove();
+				$(container.wptRow).remove();
 
 				var route = arr[3];
 
@@ -282,23 +286,23 @@ define([
 					if (!wpt[3] || wpt[3] === null || wpt[3] === 0) wpt[3] = undefined;
 				});
 
-				if (arr[0]) fixInput($('.fmc-dep-arr-table-container input.dep').val(arr[0]).change());
-				if (arr[1]) fixInput($('.fmc-dep-arr-table-container input.arr').val(arr[1]).change());
-				if (arr[2]) fixInput($('.fmc-dep-arr-table-container input.fn').val(arr[2]).change());
+				if (arr[0]) fixInput($(input.dep).val(arr[0]).change());
+				if (arr[1]) fixInput($(input.arr).val(arr[1]).change());
+				if (arr[2]) fixInput($(input.fn).val(arr[2]).change());
 
 				for (var i = 0; i < route.length; i++) {
 					this.addWaypoint();
 					// Puts in the waypoint
-					fixInput($('.fmc-wpt-list-container input.wpt').eq(i).val(route[i][0]).change());
+					fixInput($(input.wpt).eq(i).val(route[i][0]).change());
 
 					// If the waypoint is not eligible or a duplicate
-					if (!route[i][4] || !$('.fmc-wpt-list-container input.lat').eq(i).val()) {
-						fixInput($('.fmc-wpt-list-container input.lat').eq(i).val(route[i][1]).change()); // Puts in the lat.
-						fixInput($('.fmc-wpt-list-container input.lon').eq(i).val(route[i][2]).change()); // Puts in the lon.
+					if (!route[i][4] || !$(input.lat).eq(i).val()) {
+						fixInput($(input.lat).eq(i).val(route[i][1]).change()); // Puts in the lat.
+						fixInput($(input.lon).eq(i).val(route[i][2]).change()); // Puts in the lon.
 					}
 
 					if (route[i][3]) // If there is an altitude restriction
-						fixInput($('.fmc-wpt-list-container input.alt').eq(i).val(route[i][3]).change());
+						fixInput($(input.alt).eq(i).val(route[i][3]).change());
 				}
 				// Auto-saves the data once again
 				this.saveData();

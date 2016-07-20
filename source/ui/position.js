@@ -1,18 +1,20 @@
 "use strict"; // jshint unused:false
 
 define([
-	'bugfix/compatible', 'polyfill/dialog-polyfill', 'text!polyfill/dialog-polyfill.css',
+	'ui/elements', 'bugfix/compatible', 'polyfill/dialog-polyfill', 'text!polyfill/dialog-polyfill.css',
 	'text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html',
 	'text!ui/ui.css', 'text!ui/tab-contents/route.html', 'text!ui/tab-contents/dep-arr.html',
 	'text!ui/tab-contents/vnav.html', 'text!ui/tab-contents/progress.html',
 	'text!ui/tab-contents/load-route.html', 'text!ui/tab-contents/log.html', 'polyfill/license'
 ], function (
-	compatible, dialogPolyfill, dialogPolyfillCSS, button,
+	E, compatible, dialogPolyfill, dialogPolyfillCSS, button,
 	externalDist, modal, css, route, depArr, vnav, progress, loadRoute, log
 ) {
-	// Modal dialog
+	// Inits Modal dialog
 	$(modal).appendTo('body');
-	$('.fmc-modal__content main').append(
+
+	// Inits tab contents
+	$(E.container.modalContent).append(
 		$(route).addClass('is-active'),
 		$(depArr),
 		$(vnav),
@@ -23,7 +25,7 @@ define([
 
 	// Compatibility check
 	if (!compatible) {
-		dialogPolyfill.registerDialog(document.querySelector('dialog'));
+		dialogPolyfill.registerDialog(E.modal);
 		$('<style>').text(dialogPolyfillCSS).appendTo('head');
 	}
 

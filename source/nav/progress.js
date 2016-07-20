@@ -1,6 +1,10 @@
 "use strict";
 
-define(['distance', 'flight', 'math'], function (distance, flight, math) {
+define(['distance', 'flight', 'math', 'ui/elements'], function (distance, flight, math, E) {
+
+	var container = E.container,
+		input = E.input;
+
 	/**
 	 * @private
 	 * Formats bearing: turns into heading 360
@@ -125,9 +129,9 @@ define(['distance', 'flight', 'math'], function (distance, flight, math) {
 		 * TODO Implement arrival airport distance/bearing field
 		 */
 		printNextWaypointInfo: function (waypoints, n, lat, lon) {
-			var containers = $('.fmc-wpt-list-container .fmc-wpt-info');
-			var arrivalAirport = $('.fmc-dep-arr-table-container input.arr').val().trim();
-			var departureAirport = $('.fmc-dep-arr-table-container input.dep').val().trim();
+			var containers = $(container.wptInfo);
+			var departureAirport = $(input.dep).val().trim();
+			var arrivalAirport = $(input.arr).val().trim();
 			var route = waypoints.route;
 
 			if (arguments.length !== 4) { // Function called by `change` in jQuery events or this.shiftWaypoint (no current coords)
@@ -195,7 +199,7 @@ define(['distance', 'flight', 'math'], function (distance, flight, math) {
 						containers.eq(i).text('');
 					}
 				} else { // If there is not a next waypoint
-					for (var i = 0; i < route.length; i++) this.printNextWaypointInfo(i);
+					for (var i = 0; i < route.length; i++) this.printNextWaypointInfo(waypoints, i);
 				}
 			}
 		}
