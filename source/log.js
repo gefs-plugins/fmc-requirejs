@@ -14,7 +14,7 @@ define(['flight'], function (flight) {
 		 * @param [optional]{String} other Updates the log with other as extra info
 		 */
 		update: function (other) {
-			if (!gefs.pause && !flight.recorder.playing && !flight.recorder.paused) {
+			if (!gefs.pause && !window.flight.recorder.playing && !window.flight.recorder.paused) {
 				var spd = Math.round(gefs.aircraft.animationValue.ktas);
 				var hdg = Math.round(gefs.aircraft.animationValue.heading360);
 				var alt = Math.round(gefs.aircraft.animationValue.altitude);

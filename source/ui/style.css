@@ -103,13 +103,14 @@ div.fmc-modal__tab-bar {
 }
 
 div.fmc-modal__divider {
-	height: 3px;
+	height: 2px;
 	margin-top: -2px;
 	background: rgba(66, 66, 66, 0.2);
 }
 
 div.fmc-modal__content {
-	height: inherit;
+	position: absolute;
+	height: 421.5px;
 	padding-top: 15px;
 }
 
@@ -189,9 +190,13 @@ tr.wpt-row .fmc-wpt-info {
 
 tr.wpt-row button {
 	float: left;
-	min-width: 24px !important;
-	width: 24px;
-	height: 24px;
+	/*min-width: 24px !important;*/
+	/*width: 24px;*/
+	/*height: 24px;*/
+}
+
+tr.wpt-row button[action="activate-wpt"] {
+	display: none; /* Future implementation needed */
 }
 
 /* dep-arr.html */
