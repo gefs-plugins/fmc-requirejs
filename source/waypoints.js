@@ -1,7 +1,7 @@
 "use strict";
 
 define([
-	'math', 'flight', 'bugfix/input', 'nav/progress', 'ui/elements', 'text!ui/tab-contents/waypoints.html'
+	'math', 'flight', 'input-fix', 'nav/progress', 'ui/elements', 'minify!ui/tab-contents/waypoints.html'
 ], function (math, flight, fixInput, progress, E, wptInputField) {
 
 	var container = E.container,

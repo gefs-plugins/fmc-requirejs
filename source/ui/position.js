@@ -1,23 +1,28 @@
 "use strict"; // jshint unused:false
 
 define([
-	'ui/elements', 'bugfix/compatible', 'polyfill/dialog-polyfill', 'text!polyfill/dialog-polyfill.css',
-	'text!ui/button.html', 'text!ui/externaldist.html', 'text!ui/modal.html',
-	'text!ui/style.css', 'text!ui/tab-contents/route.html', 'text!ui/tab-contents/dep-arr.html',
-	'text!ui/tab-contents/vnav.html', 'text!ui/tab-contents/progress.html',
-	'text!ui/tab-contents/load-route.html', 'text!ui/tab-contents/log.html', 'polyfill/license'
+	'ui/elements', 'polyfill/dialog-polyfill', 'minify!polyfill/dialog-polyfill.css',
+	'minify!ui/button.html', 'minify!ui/externaldist.html', 'minify!ui/modal.html',
+	'minify!ui/style.css', 'minify!ui/tab-contents/route.html', 'minify!ui/tab-contents/dep-arr.html',
+	'minify!ui/tab-contents/vnav.html', 'minify!ui/tab-contents/progress.html',
+	'minify!ui/tab-contents/load-route.html', 'minify!ui/tab-contents/log.html', 'polyfill/license'
 ], function (
-	E, compatible, dialogPolyfill, dialogPolyfillCSS, button,
-	externalDist, modal, css, route, depArr, vnav, progress, loadRoute, log
+	E, dialogPolyfill, dialogPolyfillCSS, button, externalDist,
+	modal, css, route, depArr, vnav, progress, loadRoute, log
 ) {
+	// Main FMC stylesheet
+	$('<style>').text(css).appendTo('head');
+
 	// Inits Modal dialog
 	$(modal).appendTo('body');
 
 	// Compatibility check
-	if (!compatible) {
-		dialogPolyfill.registerDialog(document.querySelector('dialog'));
-		$('<style>').text(dialogPolyfillCSS).appendTo('head');
-	}
+	(function (element) {
+		if (!element.showModal) {
+			$('<style>').text(dialogPolyfillCSS).appendTo('head');
+			dialogPolyfill.registerDialog(element);
+		}
+	})(document.querySelector('.fmc-modal'));
 
 	// Inits tab contents
 	$(E.container.modalContent).append(
@@ -28,9 +33,6 @@ define([
 		$(loadRoute),
 		$(log)
 	);
-
-	// Main FMC stylesheet
-	$('<style>').text(css).appendTo('head');
 
 	// FMC toggle button
 	$(button).insertAfter('button.gefs-f-standard-ui[data-panel=".gefs-map-list"]');

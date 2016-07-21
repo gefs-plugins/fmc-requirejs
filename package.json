@@ -7,9 +7,11 @@
 		"robohydra": "^0.6.4"
 	},
 	"devDependencies": {
+		"almond": "latest",
 		"requirejs": "latest",
 		"dialog-polyfill": "latest",
-		"bowser": "latest"
+		"text": "requirejs/text",
+		"minify": "harryxue1999/minify"
 	},
 	"scripts": {
 		"start": "robohydra -I ./ -n -P testing -q"

@@ -7,7 +7,7 @@
 "use strict";
 
 // make sure code is run after GEFS is ready
-(function (initFMC, initUI) {
+(function (initUI, initFMC) {
 	// Places ui elements
 	initUI();
 
@@ -28,7 +28,7 @@
 		}, 4);
 	}
 })(function () {
-	require(['ui/main']);
-}, function () {
 	require(['ui/position']);
+}, function () {
+	require(['ui/main']);
 });
