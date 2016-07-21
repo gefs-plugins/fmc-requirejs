@@ -1,6 +1,6 @@
 "use strict";
 
-define(['math', 'text!vnav-profile.json'], function (math, vnavProfile) {
+define(['math', 'vnav-profile'], function (math, vnavProfile) {
 
 	var tod;
 	var VNAV = false;
@@ -144,8 +144,8 @@ define(['math', 'text!vnav-profile.json'], function (math, vnavProfile) {
 	 */
 	function getVNAVProfile () {
 		return gefs.aircraft.setup.fmc
-			|| JSON.parse(vnavProfile)[gefs.aircraft.name]
-			|| JSON.parse(vnavProfile).DEFAULT;
+			|| vnavProfile[gefs.aircraft.name]
+			|| vnavProfile.DEFAULT;
 	}
 
 	return {
