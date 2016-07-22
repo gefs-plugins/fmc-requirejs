@@ -119,8 +119,14 @@ div.fmc-dep-arr-table-container {
 	margin-top: -10px;
 }
 
+div.fmc-dep-arr-table-container i {
+	position: relative;
+	top: 5px;
+	margin-right: 5px;
+}
+
 div.fmc-dep-arr-table-container div {
-	width: 200px;
+	width: 195px;
 }
 
 div.fmc-wpt-add-container {
