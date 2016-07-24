@@ -46,7 +46,7 @@ define([
 		waypoints.addWaypoint();
 	}).prev().on('click', btn.activateWpt, function () {
 		var index = $(this).parents().eq(1).index() - 1;
-		waypoints.activateLeg(index);
+		waypoints.activateWaypoint(index);
 	}).on('click', btn.removeWpt, function () {
 		var index = $(this).parents().eq(1).index() - 1;
 		waypoints.removeWaypoint(index);
@@ -71,7 +71,7 @@ define([
 				$(this).parents().eq(2).find(input.lat).val(coords[0]);
 				$(this).parents().eq(2).find(input.lon).val(coords[0]);
 				waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
-				progress.printNextWaypointInfo(waypoints, index);
+				progress.printNextWaypointInfo(index);
 			}
 		}
 	}).on('change', input.lat, function () {
@@ -83,7 +83,7 @@ define([
 				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
 			}
 			waypoints.route[index][4] = false;
-			progress.printNextWaypointInfo(waypoints, index);
+			progress.printNextWaypointInfo(index);
 		}
 	}).on('change', input.lon, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
@@ -94,7 +94,7 @@ define([
 				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
 			}
 			waypoints.route[index][4] = false;
-			progress.printNextWaypointInfo(waypoints, index);
+			progress.printNextWaypointInfo(index);
 		}
 	}).on('change', input.alt, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {

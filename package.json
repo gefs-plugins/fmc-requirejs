@@ -7,7 +7,6 @@
 		"robohydra": "^0.6.4"
 	},
 	"devDependencies": {
-		"almond": "latest",
 		"requirejs": "latest",
 		"dialog-polyfill": "latest",
 		"text": "requirejs/text",

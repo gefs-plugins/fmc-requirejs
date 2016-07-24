@@ -1,6 +1,6 @@
 "use strict";
 
-define(['math', 'vnav-profile'], function (math, vnavProfile) {
+define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 
 	var tod;
 	var VNAV = false;
@@ -148,21 +148,21 @@ define(['math', 'vnav-profile'], function (math, vnavProfile) {
 			|| vnavProfile.DEFAULT;
 	}
 
-	return {
-		// Variables
-		tod: tod,
-		VNAV: VNAV,
-		arrival: arrival,
-		cruise: cruise,
-		phase: phase,
-		todCalc: todCalc,
-		fieldElev: fieldElev,
-		// Functions
-		flightParams: getFlightParameters,
-		formatTime: formatTime,
-		checkZeros: checkZeros,
-		timeCheck: timeCheck,
-		getETE: getETE,
-		getETA: getETA
-	};
+	// Variables
+	exports.tod = tod;
+	exports.VNAV = VNAV;
+	exports.arrival = arrival;
+	exports.cruise = cruise;
+	exports.phase = phase;
+	exports.todCalc = todCalc;
+	exports.fieldElev = fieldElev;
+
+	// Functions
+	exports.flightParams = getFlightParameters;
+	exports.formatTime = formatTime;
+	exports.checkZeros = checkZeros;
+	exports.timeCheck = timeCheck;
+	exports.getETE = getETE;
+	exports.getETA = getETA;
+
 });
