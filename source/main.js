@@ -6,6 +6,16 @@
 
 "use strict";
 
+require.config({
+	urlArgs: '_=' + Date.now(),
+	baseURL: '.',
+	paths: {
+		text: '../node_modules/text/text',
+		minify: '../node_modules/minify/minify',
+		polyfill: '../node_modules/dialog-polyfill'
+	}
+});
+
 // make sure code is run after GEFS is ready
 (function (initUI, initFMC) {
 	// Places ui elements

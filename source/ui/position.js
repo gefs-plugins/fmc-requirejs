@@ -5,7 +5,7 @@ define([
 	'minify!ui/button.html', 'minify!ui/externaldist.html', 'minify!ui/modal.html',
 	'minify!ui/style.css', 'minify!ui/tab-contents/route.html', 'minify!ui/tab-contents/dep-arr.html',
 	'minify!ui/tab-contents/vnav.html', 'minify!ui/tab-contents/progress.html',
-	'minify!ui/tab-contents/load-route.html', 'minify!ui/tab-contents/log.html', 'polyfill/license'
+	'minify!ui/tab-contents/load-route.html', 'minify!ui/tab-contents/log.html', 'polyfill-license'
 ], function (
 	E, dialogPolyfill, dialogPolyfillCSS, button, externalDist,
 	modal, css, route, depArr, vnav, progress, loadRoute, log
