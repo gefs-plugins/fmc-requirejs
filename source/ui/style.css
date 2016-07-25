@@ -109,8 +109,6 @@ div.fmc-modal__divider {
 }
 
 div.fmc-modal__content {
-	position: absolute;
-	height: 421.5px;
 	padding-top: 15px;
 }
 
