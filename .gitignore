@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
+build
+package
 *.pem
 ._*
-package
 .idea
 *.log

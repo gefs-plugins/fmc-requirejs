@@ -7,6 +7,5 @@ LICENSE
 *.css
 *.log
 node_modules/*
-source/text.js
-source/polyfill/dialog-polyfill.js
-source/bugfix/bowser.js
+build/*
+package/*

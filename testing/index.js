@@ -6,7 +6,8 @@ var RoboHydraHeadFilesystem = heads.RoboHydraHeadFilesystem;
 var RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
 var RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
 var path = require('path');
-var script = '<script data-main="/fmc/source/main" src="/fmc/node_modules/requirejs/require.js"></script></head>';
+var script = '<script data-main="/fmc/source/main" src="/fmc/node_modules/requirejs/require.js"></script>\
+	<script src="fmc/source/config.js"></script></head>';
 
 exports.getBodyParts = function (conf) { //jshint unused:false
 	return {
