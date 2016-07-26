@@ -131,6 +131,14 @@ div.fmc-wpt-add-container {
 	float: right;
 }
 
+div.fmc-modal__actions .interactive {
+	display: none;
+}
+
+div.fmc-modal__actions .interactive.is-active {
+	display: inline-block;
+}
+
 /* waypoints.html */
 div.fmc-wpt-list-container {
 	margin-top: -23px;
@@ -207,4 +215,59 @@ tr.wpt-row button[action="activate-wpt"] {
 /* vnav.html */
 /* progress.html */
 /* load-route.html */
+
 /* log.html */
+div.fmc-log-container {
+	height: 405px;
+	overflow: auto;
+}
+
+div.fmc-log-container table {
+	border: none;
+}
+
+div.fmc-log-container tr:hover {
+	background-color: initial !important;
+}
+
+div.fmc-log-container th {
+	text-align: left;
+}
+
+div.fmc-log-container td {
+	text-align: left;
+	border: none;
+	padding: 0 18px;
+	height: 22px;
+}
+
+div.fmc-log-container .log-data {
+	height: 22px;
+}
+
+div.fmc-log-container .time-col,
+div.fmc-log-container .spd-col {
+	width: 80px;
+}
+
+div.fmc-log-container .hdg-col,
+div.fmc-log-container .alt-col {
+	width: 85px;
+}
+
+div.fmc-log-container .lat-col,
+div.fmc-log-container .lon-col {
+	width: 90px;
+}
+
+div.fmc-log-container .fps-col {
+	width: 60px
+}
+
+div.fmc-log-container .oth-col {
+	width: 130px;
+}
+
+div.fmc-log-clear-container {
+	float: right;
+}

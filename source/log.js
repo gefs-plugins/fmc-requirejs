@@ -27,26 +27,17 @@ define(['flight'], function (flight) {
 				var time = flight.formatTime(flight.timeCheck(h, m));
 				other = other || "none";
 				$('<tr>')
-					.addClass('data')
+					.addClass('log-data')
 					.append(
-						$('<td>' + time + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + spd + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + hdg + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + alt + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + lat + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + lon + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + fps + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					,	$('<td>' + other + '</td>')
-							.css('padding', '0px 10px 0px 10px')
-					)
-					.appendTo('#logData');
+						$('<td>' + time + '</td>'),
+						$('<td>' + spd + '</td>'),
+						$('<td>' + hdg + '</td>'),
+						$('<td>' + alt + '</td>'),
+						$('<td>' + lat + '</td>'),
+						$('<td>' + lon + '</td>'),
+						$('<td>' + fps + '</td>'),
+						$('<td>' + other + '</td>')
+					).appendTo('.fmc-log-container tbody');
 			}
 			clearInterval(this.mainTimer);
 			if (gefs.aircraft.animationValue.altitude > 18000) {
@@ -94,7 +85,7 @@ define(['flight'], function (flight) {
 		 * Clears the log
 		 */
 		removeData: function () {
-			$('#logData tr').remove('.data');
+			$('.log-data').remove();
 		}
 	};
 });
