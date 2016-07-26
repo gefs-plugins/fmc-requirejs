@@ -102,6 +102,9 @@ define(['distance', 'flight', 'math', 'waypoints'], function (distance, flight, 
 			if (vs) $('#Qantas94Heavy-ap-vs > input').val('' + vs).change();
 			if (alt) $('#Qantas94Heavy-ap-alt > input').val('' + alt).change();
 
+			// Updates tod
+			flight.tod = tod;
+
 			// Updates flight phase
 			flight.updatePhase();
 		}
