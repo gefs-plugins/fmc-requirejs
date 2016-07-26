@@ -98,6 +98,10 @@ div.fmc-modal__header {
 	height: 48px;
 }
 
+div.fmc-modal__header a {
+	cursor: pointer;
+}
+
 div.fmc-modal__tab-bar {
 	background: inherit !important;
 }
@@ -266,8 +270,4 @@ div.fmc-log-container .fps-col {
 
 div.fmc-log-container .oth-col {
 	width: 130px;
-}
-
-div.fmc-log-clear-container {
-	float: right;
 }
