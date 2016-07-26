@@ -13,8 +13,10 @@ define({
     },
     btn: {
         fmcBtn: '.fmc-btn',
+        interactive: '.interactive',
+        saveWptData: '.save-wpt-data',
+        removeLogData: '.remove-log-data',
         close: '.close',
-        save: '.save',
         addWpt: 'button[action="add-wpt"]',
         activateWpt: 'button[action="activate-wpt"]',
         removeWpt: 'button[action="remove-wpt"]',

@@ -17,12 +17,12 @@
             <div class="fmc-modal__header">
                 <header class="mdl-layout__header fmc-modal__no-shadow">
                     <div class="mdl-layout__tab-bar fmc-modal__tab-bar">
-                        <a href="#" panel="#rte" class="mdl-layout__tab fmc-btn__fade is-active">RTE</a>
+                        <a href="#" panel="#rte" interactive=".save-wpt-data" class="mdl-layout__tab fmc-btn__fade is-active">RTE</a>
                         <a href="#" panel="#dep" class="mdl-layout__tab fmc-btn__fade">DEP/ARR</a>
                         <a href="#" panel="#vnav" class="mdl-layout__tab fmc-btn__fade">VNAV</a>
                         <a href="#" panel="#prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
                         <a href="#" panel="#load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
-                        <a href="#" panel="#log" class="mdl-layout__tab fmc-btn__fade">LOG</a>
+                        <a href="#" panel="#log" interactive=".remove-log-data" class="mdl-layout__tab fmc-btn__fade">LOG</a>
                     </div>
                 </header>
             </div>
@@ -46,7 +46,8 @@
 
     <!-- Modal actions: close -->
     <div class="fmc-modal__actions">
-		<button class="actions mdl-button save">Save Changes</button>
-		<button class="actions mdl-button close">Close</button>
+        <button class="mdl-button close">Close</button>
+		<button class="mdl-button interactive save-wpt-data is-active">Save Waypoints</button>
+        <button class="mdl-button interactive remove-log-data">Remove Log Data</button>
     </div>
 </dialog>

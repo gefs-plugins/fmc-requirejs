@@ -19,8 +19,10 @@ define([
 	// Modal actions: open/close, save data
 	$(modal).on('click', btn.close, function () {
 		modal.close();
-	}).on('click', btn.save, function () {
+	}).on('click', btn.saveWptData, function () {
 		waypoints.saveData();
+	}).on('click', btn.removeLogData, function () {
+		log.removeData();
 	}).parent().on('click', btn.fmcBtn, function () {
 		if (!modal.open) modal.showModal();
 		else modal.close();
@@ -29,9 +31,14 @@ define([
 	// Modal tab contents: toggle
 	$(container.tabBar).on('click', 'a', function (event) {
 		event.preventDefault();
-		var c = 'is-active',
-			$this = $(this),
-			$that = $(container.tabBar).find('.' + c);
+		var c = 'is-active';
+		var $this = $(this);
+		var $that = $(container.tabBar).find('.' + c);
+		var interactive = $this.attr('interactive');
+
+		// Interactive actions button
+		$(btn.interactive).removeClass(c);
+		if (interactive) $(interactive).addClass(c);
 
 		$(container.modalContent).find($that.attr('panel')).removeClass(c);
 		$(container.modalContent).find($this.attr('panel')).addClass(c);
