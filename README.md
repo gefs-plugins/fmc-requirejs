@@ -21,6 +21,6 @@ First, make sure that you have run `npm install`.
 
 If so, open a terminal/command prompt in this directory, then do
 ```
-node node_modules/.bin/r.js -o build-config.js
+node node_modules/requirejs/bin/r.js -o build-config.js
 ```
 Then you will be able to see the optimized file in *build* as **fmc.min.js**

@@ -11,6 +11,7 @@
   }
 , "laxcomma": true
 , "laxbreak": true
+, "multistr": true
 , "eqnull": true
 , "smarttabs": true
 , "globalstrict": true
@@ -23,7 +24,6 @@
 , "funcscope": true
 , "unused": true
 , "bitwise": true
-, "boss": true
 , "-W079": false
 , "-W058": false
 , "-W002": false
