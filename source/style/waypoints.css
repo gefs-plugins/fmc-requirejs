@@ -1,0 +1,79 @@
+div.fmc-wpt-list-container {
+	margin-top: -23px;
+	height: 335px;
+	overflow: auto;
+}
+
+div.fmc-wpt-list-container table {
+	border: none;
+}
+
+div.fmc-wpt-list-container tr:hover {
+	background-color: initial !important;
+}
+
+div.fmc-wpt-list-container th {
+	text-align: left;
+}
+
+div.fmc-wpt-list-container td {
+	border: none;
+}
+
+div.fmc-wpt-list-container .wpt-col {
+	width: 11%;
+}
+
+div.fmc-wpt-list-container .lat-col {
+	width: 11.5%;
+}
+
+div.fmc-wpt-list-container .lon-col {
+	width: 11.8%;
+}
+
+div.fmc-wpt-list-container .alt-col {
+	width: 5%;
+}
+
+div.fmc-wpt-list-container .actions-col {
+	width: 10%;
+}
+
+tr.wpt-row td {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+tr.wpt-row .mdl-textfield {
+	width: initial;
+	padding: 14px 0;
+}
+
+tr.wpt-row .mdl-textfield__label {
+	top: 18px;
+}
+
+tr.wpt-row .mdl-textfield__label::after {
+	bottom: 14px;
+}
+
+tr.wpt-row .fmc-wpt-info {
+	color: rgb(83, 109, 254);
+	position: absolute;
+	font-size: 12px;
+	margin-top: 3px;
+	visibility: visible;
+	display: block;
+}
+
+tr.wpt-row button {
+	float: left;
+	/*min-width: 24px !important;*/
+	/*width: 24px;*/
+	/*height: 24px;*/
+}
+
+tr.wpt-row button[action="activate-wpt"] {
+	display: none; /* Future implementation needed */
+}

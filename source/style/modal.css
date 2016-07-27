@@ -1,0 +1,107 @@
+/* modal.html */
+a.fmc-btn__fade {
+	transition: font-size 0.3s ease-in-out,
+				font-weight 0.3s ease-in-out,
+				color 0.3s ease-in-out;
+	-moz-transition: font-size 0.3s ease-in-out,
+				font-weight 0.3s ease-in-out,
+				color 0.3s ease-in-out;
+	-webkit-transition: font-size 0.3s ease-in-out,
+				font-weight 0.3s ease-in-out,
+				color 0.3s ease-in-out;
+}
+
+a.fmc-btn__fade:hover:not(.is-active) {
+	font-weight: bold;
+	color: black;
+}
+
+a.fmc-btn__fade.is-active {
+	font-size: 15px;
+	font-weight: bold;
+	color: rgb(83, 109, 254) !important;
+}
+
+dialog.fmc-modal {
+	height: 570px;
+	width: 700px;
+    padding: 14px 14px;
+	border: none;
+	border-radius: 7px;
+}
+
+dialog.fmc-modal + .backdrop {
+    background: none; /* Dialog polyfill fix */
+}
+
+dialog.fmc-modal::backdrop {
+	background: none;
+}
+
+dialog.fmc-modal .fmc-modal__close {
+	height: 25px;
+	margin: -13px 0;
+	float: right;
+}
+
+dialog.fmc-modal h4 {
+	text-align: center;
+	margin-top: 10px !important;
+}
+
+dialog.fmc-modal .fmc-modal__no-shadow {
+	box-shadow: none !important;
+	background: white !important;
+    min-height: inherit;
+    height: inherit;
+}
+
+@media screen and (max-width: 1024px) {
+	/* MDL's small screen hides modal header */
+	dialog.fmc-modal .fmc-modal__no-shadow {
+		display: block !important;
+	}
+}
+
+div.fmc-modal__layout-container {
+	position: relative;
+	height: 85%;
+}
+
+div.fmc-modal__layout {
+	width: 700px;
+}
+
+div.fmc-modal__header {
+	height: 48px;
+}
+
+div.fmc-modal__header a {
+	cursor: pointer;
+}
+
+div.fmc-modal__tab-bar {
+	background: inherit !important;
+}
+
+div.fmc-modal__divider {
+	height: 2px;
+	margin-top: -2px;
+	background: rgba(66, 66, 66, 0.2);
+}
+
+div.fmc-modal__content {
+	padding-top: 15px;
+}
+
+div.fmc-modal__actions .close {
+	display: none; /* TODO reposition */
+}
+
+div.fmc-modal__actions .interactive {
+	display: none;
+}
+
+div.fmc-modal__actions .interactive.is-active {
+	display: inline-block;
+}

@@ -1,0 +1,17 @@
+button.fmc-btn,
+button.fmc-btn:hover,
+button.fmc-btn:active,
+button.fmc-btn:focus:not(:active) {
+	color: white;
+	background: green;
+}
+
+button.fmc-btn__fade {
+	transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-webkit-transition: opacity 0.2s ease-in-out;
+}
+
+button.fmc-btn__fade:hover {
+	opacity: 0.8;
+}

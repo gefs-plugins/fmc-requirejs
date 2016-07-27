@@ -1,0 +1,22 @@
+div.fmc-dep-arr-table-container {
+	margin-top: -10px;
+}
+
+div.fmc-dep-arr-table-container i {
+	position: relative;
+	top: 5px;
+	margin-right: 5px;
+}
+
+div.fmc-dep-arr-table-container div {
+	width: 195px;
+}
+
+div.fmc-wpt-add-container {
+	float: right;
+}
+
+div.fmc-wpt-add-container button {
+	min-width: 41px;
+	width: 41px; height: 41px;
+}
