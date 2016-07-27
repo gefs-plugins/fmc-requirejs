@@ -135,6 +135,10 @@ div.fmc-wpt-add-container {
 	float: right;
 }
 
+div.fmc-modal__actions .close {
+	display: none; /* TODO reposition */
+}
+
 div.fmc-modal__actions .interactive {
 	display: none;
 }

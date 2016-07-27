@@ -15,6 +15,7 @@ define({
         fmcBtn: '.fmc-btn',
         interactive: '.interactive',
         saveWptData: '.save-wpt-data',
+        retrieveWpt: '.retrieve-wpt',
         removeLogData: '.remove-log-data',
         close: '.close',
         addWpt: 'button[action="add-wpt"]',

@@ -21,6 +21,8 @@ define([
 		modal.close();
 	}).on('click', btn.saveWptData, function () {
 		waypoints.saveData();
+	}).on('click', btn.retrieveWpt, function () {
+		waypoints.loadFromSave();
 	}).on('click', btn.removeLogData, function () {
 		log.removeData();
 	}).parent().on('click', btn.fmcBtn, function () {
