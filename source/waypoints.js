@@ -8,8 +8,8 @@ define([
 		btn = E.btn,
 		input = E.input;
 
-	var route = [];
-	var nextWaypoint;
+	exports.route = [];
+	exports.nextWaypoint;
 
 	/**
 	 * Turns the waypoints into an array
@@ -49,7 +49,7 @@ define([
 			$(input.dep).val(),
 			$(input.arr).val(),
 			$(input.fn).val(),
-			route
+			exports.route
 		]);
 	}
 
@@ -120,7 +120,7 @@ define([
 				for (var i = 0; i < n; i++) {
 					removeWaypoint(1);
 				}
-				route = [];
+				exports.route = [];
 
 				if (departure) {
 					var wpt = str[0];
@@ -149,7 +149,7 @@ define([
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
 	function addWaypoint () {
-		route.push([]);
+		exports.route.push([]);
 		$(container.wptList).find('tbody').append(wptInputField);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 	}
@@ -161,9 +161,9 @@ define([
 	 */
 	function removeWaypoint (n) {
 		$(container.wptRow).eq(n).remove();
-		route.splice((n - 1), 1);
-		if (nextWaypoint == n) {
-			nextWaypoint = null;
+		exports.route.splice((n - 1), 1);
+		if (exports.nextWaypoint == n) {
+			exports.nextWaypoint = null;
 		}
 	}
 
@@ -196,10 +196,10 @@ define([
 			}
 		};
 
-		if (nextWaypoint != n) {
-			if (n < route.length) {
-				nextWaypoint = n;
-				var wpt = route[nextWaypoint];
+		if (exports.nextWaypoint != n) {
+			if (n < exports.route.length) {
+				exports.nextWaypoint = n;
+				var wpt = exports.route[exports.nextWaypoint];
 				// TODO When AP++ implements fix for duplicate waypoints, improve this algorithm
 				// FIXME also...
 				if (wpt[4]) {
@@ -219,7 +219,7 @@ define([
 			}
 		} else {
 			toggle(false);
-			nextWaypoint = undefined;
+			exports.nextWaypoint = undefined;
 			$('#Qantas94Heavy-ap-icao > input').val('').change();
 		}
 	}
@@ -232,8 +232,8 @@ define([
 	 * FIXME Potential index confusion: same as the function above
 	 */
 	function getNextWaypointWithAltRestriction () {
-		for (var i = nextWaypoint; i < route.length; i++) {
-			if (route[i][3]) return i;
+		for (var i = exports.nextWaypoint; i < exports.route.length; i++) {
+			if (exports.route[i][3]) return i;
 		}
 		return -1;
 	}
@@ -242,7 +242,7 @@ define([
 	 * Saves the waypoints data into localStorage
 	 */
 	function saveData () {
-		if (route.length < 1 || !route[0][0]) {
+		if (exports.route.length < 1 || !exports.route[0][0]) {
 			alert ("There is no route to save");
 		} else {
 			localStorage.removeItem('fmcWaypoints');
@@ -274,13 +274,13 @@ define([
 
 		if (arr) {
 			// Clears all
-			route = [];
+			exports.route = [];
 			$(container.wptRow).remove();
 
-			var route = arr[3];
+			var rte = arr[3];
 
 			// JSON.stringify turns undefined into null; this loop turns it back
-			route.forEach(function (wpt) {
+			rte.forEach(function (wpt) {
 				if (!wpt[3] || wpt[3] === null || wpt[3] === 0) wpt[3] = undefined;
 			});
 
@@ -288,19 +288,19 @@ define([
 			if (arr[1]) fixInput($(input.arr).val(arr[1]).change());
 			if (arr[2]) fixInput($(input.fn).val(arr[2]).change());
 
-			for (var i = 0; i < route.length; i++) {
+			for (var i = 0; i < rte.length; i++) {
 				addWaypoint();
 				// Puts in the waypoint
-				fixInput($(input.wpt).eq(i).val(route[i][0]).change());
+				if (rte[i][0]) fixInput($(input.wpt).eq(i).val(rte[i][0]).change());
 
 				// If the waypoint is not eligible or a duplicate
-				if (!route[i][4] || !$(input.lat).eq(i).val()) {
-					fixInput($(input.lat).eq(i).val(route[i][1]).change()); // Puts in the lat.
-					fixInput($(input.lon).eq(i).val(route[i][2]).change()); // Puts in the lon.
+				if (!rte[i][4] || !$(input.lat).eq(i).val()) {
+					if (rte[i][1]) fixInput($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
+					if (rte[i][1]) fixInput($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
 				}
 
-				if (route[i][3]) // If there is an altitude restriction
-					fixInput($(input.alt).eq(i).val(route[i][3]).change());
+				if (rte[i][3]) // If there is an altitude restriction
+					fixInput($(input.alt).eq(i).val(rte[i][3]).change());
 			}
 			// Auto-saves the data once again
 			saveData();
@@ -318,34 +318,30 @@ define([
 	 */
 	function shiftWaypoint (r, n, d) {
 		console.log("Waypoint #" + (n + 1) + "(index=" + n + ") moved " + d);
-		if (!(d === "up" && n === 0 || d === "down" && n === route.length - 1)) {
+		if (!(d === "up" && n === 0 || d === "down" && n === exports.route.length - 1)) {
 			if (d === "up") {
-				route.move(n, n - 1);
+				exports.route.move(n, n - 1);
 				r.insertBefore(r.prev());
-				if (nextWaypoint == n + 1) {
-					nextWaypoint = n;
-				} else if (nextWaypoint == n) {
-					nextWaypoint = n + 2;
+				if (exports.nextWaypoint == n + 1) {
+					exports.nextWaypoint = n;
+				} else if (exports.nextWaypoint == n) {
+					exports.nextWaypoint = n + 2;
 				}
 				progress.printNextWaypointInfo(n);
 				progress.printNextWaypointInfo(n - 1);
 			} else {
-				route.move(n, n + 1);
+				exports.route.move(n, n + 1);
 				r.insertAfter(r.next());
-				if (nextWaypoint == n + 1) {
-					nextWaypoint = n + 2;
-				} else if (nextWaypoint == n + 2) {
-					nextWaypoint = n;
+				if (exports.nextWaypoint == n + 1) {
+					exports.nextWaypoint = n + 2;
+				} else if (exports.nextWaypoint == n + 2) {
+					exports.nextWaypoint = n;
 				}
 				progress.printNextWaypointInfo(n + 1);
 				progress.printNextWaypointInfo(n);
 			}
 		}
 	}
-
-	// Variables
-	exports.route = route;
-	exports.nextWaypoint = nextWaypoint;
 
 	// Functions
 	exports.makeFixesArray = makeFixesArray;
