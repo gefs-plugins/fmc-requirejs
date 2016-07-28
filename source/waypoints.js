@@ -161,9 +161,15 @@ define([
 	 */
 	function removeWaypoint (n) {
 		$(container.wptRow).eq(n).remove();
-		exports.route.splice((n - 1), 1);
+		exports.route.splice(n, 1);
 		if (exports.nextWaypoint == n) {
 			exports.nextWaypoint = null;
+		}
+
+		if (n === exports.route.length) {
+			progress.printNextWaypointInfo(n - 1);
+		} else {
+			progress.printNextWaypointInfo(n);
 		}
 	}
 

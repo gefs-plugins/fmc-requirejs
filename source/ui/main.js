@@ -92,7 +92,7 @@ define([
 				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
 			}
 			waypoints.route[index][4] = false;
-			progress.printNextWaypointInfo(index);
+			if (waypoints.route[index][2]) progress.printNextWaypointInfo(index);
 		}
 	}).on('change', input.lon, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
@@ -103,7 +103,7 @@ define([
 				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
 			}
 			waypoints.route[index][4] = false;
-			progress.printNextWaypointInfo(index);
+			if (waypoints.route[index][1]) progress.printNextWaypointInfo(index);
 		}
 	}).on('change', input.alt, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {

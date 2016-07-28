@@ -5,40 +5,26 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	var container = E.container,
 		input = E.input;
 
-	/**
-	 * @private
-	 * Formats bearing: turns into heading 360
-	 *
-	 * @param {Number} brng The bearing to be converted
-	 * @returns {Number} Bearing in terms of 360 degrees
-	 */
-	function formatBearing (brng) {
-		if (brng <= 0) return Number(360 + brng);
-		else return Number(brng);
-	}
-
 	var timer = null; // setInterval(updateProgress, 5000);
 
 	/**
 	 * Updates the plane's progress during flying, set on a timer
-	 *
-	 * @param {Object} waypoints FMC waypoints object
-	 * @param {Number} nextWaypoint FMC waypoints.nextWaypoint
 	 */
 	function update () {
 		var route = waypoints.route;
 		var nextWaypoint = waypoints.nextWaypoint;
-		var lat1 = gefs.aircraft.llaLocation[0] || 0;
-		var lon1 = gefs.aircraft.llaLocation[1] || 0;
-		var lat2 = flight.arrival[1] || 0;
-		var lon2 = flight.arrival[2] || 0;
+		var lat1 = gefs.aircraft.llaLocation[0] || null;
+		var lon1 = gefs.aircraft.llaLocation[1] || null;
+		var lat2 = flight.arrival[1] || null;
+		var lon2 = flight.arrival[2] || null;
 		var times = [[], [], [], [], []]; // flightete, flighteta, todete, todeta, nextete
-		var nextdist = distance.route(waypoints, nextWaypoint);
+		var nextdist = distance.route(waypoints, nextWaypoint) || '--';
 		var flightdist;
-		for (var i = 0, test = true; i < route.length; i++) {
-			if (!route[i][1]) test = false;
+		// Checks if the whole route is complete
+		for (var i = 0, valid = true; i < route.length; i++) {
+			if (!route[i][1] || !route[i][2]) valid = false;
 		}
-		if (test) flightdist = distance.route(waypoints, route.length + 1);
+		if (valid) flightdist = distance.route(waypoints, route.length + 1);
 		else flightdist = math.getDistance(lat1, lon1, lat2, lon2);
 
 		if (!gefs.aircraft.groundContact && flight.arrival) {
@@ -52,7 +38,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		}
 
 		print(flightdist, nextdist, times);
-		printNextWaypointInfo(nextWaypoint, lat1, lon1);
+		printNextWaypointInfo(nextWaypoint, [lat1, lon1]);
 	}
 
 	/**
@@ -120,87 +106,152 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	/**
 	 * Prints the distance and bearing of the next waypoint under current one
 	 *
-	 * @param {Object} waypoints FMC waypoints object
-	 * @param {Number} n The index of the current waypoint
-	 * @param [optional]{Number} lat The current latitude
-	 * @param [optional]{Number} lon The current longitude
+	 * @param {Number} n The index of the nextWaypoint (current)
+	 * @param {Array} [currentCoords] Current plane coordinates
 	 *
 	 * TODO Implement arrival airport distance/bearing field
 	 */
-	function printNextWaypointInfo (n, lat, lon) {
-		var containers = $(container.wptInfo);
-		var departureAirport = $(input.dep).val().trim();
-		var arrivalAirport = $(input.arr).val().trim();
+	function printNextWaypointInfo (n, currentCoords) {
+
+		var infoContainer = $(container.wptInfo);
+		var depAirport = $(input.dep).val().trim();
+		var arrAirport = $(input.arr).val().trim();
 		var route = waypoints.route;
 
-		if (arguments.length !== 3) { // Function called by `change` in jQuery events or waypoints.shiftWaypoint (no current coords)
-			// If this waypoint is not the last nor the first in the list
-			if (n < route.length - 1 && n !== 0) {
-				// Print in terms of the previous waypoint
-				var dist = Math.round(math.getDistance(route[n-1][1], route[n-1][2], route[n][1], route[n][2]) * 10) / 10;
-				var brng = Math.round(math.getBearing(route[n-1][1], route[n-1][2], route[n][1], route[n][2]) * 10) / 10;
-				console.log('Prev --> current: ' + dist + ' NM / ' + formatBearing(brng) + '°');
-				if (!!dist && !!brng) containers.eq(n).text(dist + ' NM / ' + formatBearing(brng) + '°');
-				else containers.eq(n).text('');
+		// Function call by progress.update;
+		// This means that there might be current coordinates, therefore
+		// the waypoint `n` should show distance to next waypoint.
+		if (currentCoords) {
+			// If aircraft does not have an activated waypoint,
+			// do not execute the function
+			if (!n || !currentCoords[0] || !currentCoords[1]) return;
 
-				// Print in terms of the next waypoint
-				dist = Math.round(math.getDistance(route[n][1], route[n][2], route[n+1][1], route[n+1][2]) * 10) / 10;
-				brng = Math.round(math.getBearing(route[n][1], route[n][2], route[n+1][1], route[n+1][2]) * 10) / 10;
-				console.log('Current --> next: ' + dist + ' NM / ' + formatBearing(brng) + '°');
-				if (!!dist && !!brng) containers.eq(n+1).text(dist + ' NM / ' + formatBearing(brng) + '°');
-				else containers.eq(n).text('');
-			} else {
-				if (n === 0) { // If the waypoint is the first in the list
-					if (departureAirport) { // If departure airport is defined
-						var coords;
-						try {
-							coords = autopilot_pp.require('icaoairports')[departureAirport];
-						} catch (e) {
-							coords = undefined;
-						}
+			var nextWptCoords = [route[n][1], route[n][2]];
 
-						if (coords) {
-							var dist = Math.round(math.getDistance(coords[0], coords[1], route[n][1], route[n][2]) * 10) / 10;
-							var brng = Math.round(math.getBearing(coords[0], coords[1], route[n][1], route[n][2]) * 10) / 10;
-							console.log('Dep --> current ' + dist + ' NM / ' + formatBearing(brng) + '°');
-							if (!!dist && !!brng) containers.eq(n).text(dist + ' NM / ' + formatBearing(brng) + '°');
-							else containers.eq(n).text('');
-						}
-					} else { // If no departure airport is present
-						containers.eq(n).text('Test: no departure airport');
-					}
-				} else { // If the waypoint is the last in the list
-					// Prints previous --> current information regardless
-					var dist = Math.round(math.getDistance(route[n-1][1], route[n-1][2], route[n][1], route[n][2]) * 10) / 10;
-					var brng = Math.round(math.getBearing(route[n-1][1], route[n-1][2], route[n][1], route[n][2]) * 10) / 10;
-					console.log('Last waypoint! Prev --> current: ' + dist + ' NM / ' + formatBearing(brng) + '°');
-					if (!!dist && !!brng) containers.eq(n).text(dist + ' NM / ' + formatBearing(brng) + '°');
-					else containers.eq(n).text('');
+			// Removes progress info from previous waypoints (including this one)
+			for (var i = n; i >= 0; i--) infoContainer.eq(i).text('');
+			var dist = calc(math.getDistance, currentCoords, nextWptCoords);
+			var brng = calc(math.getBearing, currentCoords, nextWptCoords);
 
-					if (arrivalAirport) { // If arrival airport is defined
-						// TODO
-					} else { // If no arrival airport is present
-						// containers.eq(n).text('Test: no arrival airport');
-						// TODO
-					}
+			writeProgress(infoContainer.eq(n), dist, formatBrng(brng));
+		}
+
+		// Function called when waypoint inputs have physically changed
+		// Or called by waypoints.shiftWaypoint
+		else {
+
+			// If nextWaypoint is the first one in the list
+			// Needs to consider distance from departure airport to waypoint
+			if (n === 0) {
+
+				// If there is a next waypoint following
+				if (route.length > 1) {
+					var cur = [route[0][1], route[0][2]];
+					var next = [route[1][1], route[1][2]];
+
+					var dist = calc(math.getDistance, cur, next);
+					var brng = calc(math.getBearing, cur, next);
+					writeProgress(inforContainer.eq(0), dist, formatBrng(brng));
 				}
+
+				// If there is no dep airport or its coordinates don't exist
+				// Exit function call. Removes any information
+				if (!depAirport || !waypoints.getCoords(depAirport)) {
+					writeProgress(infoContainer.eq(0), false);
+					return;
+				}
+
+				var airportCoords = waypoints.getCoords(depAirport);
+				var nextWptCoords = [route[n][1], route[n][2]];
+
+				var dist = calc(math.getDistance, airportCoords, nextWptCoords);
+				var brng = calc(math.getBearing, airportCoords, nextWptCoords);
+				writeProgress(infoContainer.eq(0), dist, formatBrng(brng));
 			}
-		} else { // When function is called by progress.update (with current coords)
-			if (n) { // If there is a next waypoint as defined in waypoints.nextWaypoint
-				var dist = Math.round(math.getDistance(lat, lon, route[n][1], route[n][2]) * 10) / 10;
-				var brng = Math.round(math.getBearing(lat, lon, route[n][1], route[n][2]) * 10) / 10;
-				console.log('Current pos --> current waypoint ' + dist + ' NM / ' + formatBearing(brng) + '°');
-				if (!!dist && !!brng) containers.eq(n).text(dist + ' NM / ' + formatBearing(brng) + '°');
-				else containers.eq(n).text('');
 
-				// Removes next waypoint info from all previous waypoints
-				for (var i = 0; i < n; i++) {
-					containers.eq(i).text('');
+			// If nextWaypoint is the last one in the list
+			// Needs to consider prev to current
+			// Needs to consider distance from waypoint to arrival airport
+			else if (n === route.length - 1) {
+				// TODO Find a place to put the distance info
+				// jshint unused:false
+
+				if (!arrAirport || !waypoints.getCoords(arrAirport)) {
+					// TODO Prints empty string to info section, TBD
 				}
-			} else { // If there is not a next waypoint
-				for (var i = 0; i < route.length; i++) printNextWaypointInfo(i);
+
+				var prevWptCoords = [route[n-1][1], route[n-1][2]];
+				var nextWptCoords = [route[n][1], route[n][2]];
+				// var airportCoords = waypoints.getCoords(arrAirport);
+
+				var dist = calc(math.getDistance, prevWptCoords, nextWptCoords);
+				var brng = calc(math.getBearing, prevWptCoords, nextWptCoords);
+				writeProgress(infoContainer.eq(n), dist, formatBrng(brng));
+
+				// TODO current to arrival airport
+			}
+
+			// If waypoint is in the middle of the list
+			// Needs to consider progress from previous to current
+			// and progress from current to next
+			else {
+				var prev = [route[n-1][1], route[n-1][2]];
+				var cur = [route[n][1], route[n][2]];
+				var next = [route[n+1][1], route[n+1][2]];
+
+				var prevToCurDist = calc(math.getDistance, prev, cur);
+				var prevToCurBrng = calc(math.getBearing, prev, cur);
+				writeProgress(infoContainer.eq(n), prevToCurDist, formatBrng(prevToCurBrng));
+
+				var curToNextDist = calc(math.getDistance, cur, next);
+				var curToNextBrng = calc(math.getBearing, cur, next);
+				writeProgress(infoContainer.eq(n+1), curToNextDist, formatBrng(curToNextBrng));
 			}
 		}
+	}
+
+	/**
+	 * @private
+	 * Formats bearing: turns into heading 360
+	 *
+	 * @param {Number} brng The bearing to be converted
+	 * @returns {Number} Bearing in terms of 360 degrees
+	 */
+	function formatBrng (brng) {
+		if (brng <= 0) return Number(360 + brng);
+		else return Number(brng);
+	}
+
+	/**
+	 * @private
+	 * Calculates coordinates data specified `method`, rounded to one decimal point
+	 *
+	 * @param {Function} method The function to use to Calculates
+	 * @param {Array} coords1 First set of coordinates
+	 * @param {Array} coords2 Second set of coordinates
+	 * @returns {Number} Calculated result
+	 */
+	function calc (method, coords1, coords2) {
+		return Math.round(method(coords1[0], coords1[1], coords2[0], coords2[1]) * 10) / 10;
+	}
+
+	/**
+	 * @private
+	 * Writes progress to a specific element
+	 *
+	 * @param {jQuery} element The element to be written
+	 * @param {Number} dist Distance to the next waypoint
+	 * @param {Number} brng Bearing to the next waypoint
+	 * @param {Boolean} [empty] If empty progress should be written
+	 */
+	function writeProgress (element, dist, brng, empty) {
+		if (arguments.length === 2 && typeof arguments[1] === 'boolean') {
+			empty = !arguments[1];
+			dist = brng = undefined;
+		}
+
+		if (empty) element.text('');
+		else element.text(dist + ' NM / ' + brng + '°');
 	}
 
 	// Variables
