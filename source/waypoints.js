@@ -9,7 +9,7 @@ define([
 		input = E.input;
 
 	exports.route = [];
-	exports.nextWaypoint;
+	exports.nextWaypoint = null;
 
 	/**
 	 * Turns the waypoints into an array
@@ -219,7 +219,7 @@ define([
 			}
 		} else {
 			toggle(false);
-			exports.nextWaypoint = undefined;
+			exports.nextWaypoint = null;
 			$('#Qantas94Heavy-ap-icao > input').val('').change();
 		}
 	}

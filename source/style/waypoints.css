@@ -61,10 +61,8 @@ tr.wpt-row .mdl-textfield__label::after {
 tr.wpt-row .fmc-wpt-info {
 	color: rgb(83, 109, 254);
 	position: absolute;
+	top: -4px;
 	font-size: 12px;
-	margin-top: 3px;
-	visibility: visible;
-	display: block;
 }
 
 tr.wpt-row button {
