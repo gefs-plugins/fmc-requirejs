@@ -151,7 +151,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 
 					var dist = calc(math.getDistance, cur, next);
 					var brng = calc(math.getBearing, cur, next);
-					writeProgress(inforContainer.eq(0), dist, formatBrng(brng));
+					writeProgress(infoContainer.eq(0), dist, formatBrng(brng));
 				}
 
 				// If there is no dep airport or its coordinates don't exist
