@@ -1,9 +1,9 @@
 "use strict"; // jshint unused:false
 
 define([
-	'ui/elements', 'polyfill/dialog-polyfill', 'minify!polyfill/dialog-polyfill.css',
-	'minify!static/button.html', 'minify!static/externaldist.html', 'minify!static/modal.html',
-	'static/tab-contents/main', 'style/main', 'ui/polyfill-license'
+	'./elements', 'polyfill/dialog-polyfill', 'minify!polyfill/dialog-polyfill.css',
+	'minify!html/static/button.html', 'minify!html/static/externaldist.html',
+	'minify!html/static/modal.html', 'html/static/tab-contents/main', 'style/main'
 ], function (
 	E, dialogPolyfill, dialogPolyfillCSS, button,
 	externalDist, modal, tabContents, mainCSS

@@ -7,6 +7,12 @@
     		text: '../node_modules/text/text',
     		minify: '../node_modules/minify/minify',
     		polyfill: '../node_modules/dialog-polyfill'
-    	}
+    	},
+        shim: {
+            // Requires license info
+            'polyfill/dialog-polyfill': {
+                deps: ['ui/polyfill-license']
+            }
+        }
     });
 })();

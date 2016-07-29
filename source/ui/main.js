@@ -2,7 +2,7 @@
 
 define([
 	'consts', 'distance', 'flight', 'log', 'math', 'toggles', 'waypoints',
-	'nav/LNAV', 'nav/progress', 'nav/VNAV', 'ui/elements', 'redefine'
+	'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine'
 ], function (consts, distance, flight, log, math, toggles, waypoints, lnav, progress, vnav, E) {
 
 	var modal = document.getElementsByClassName('fmc-modal')[0],
