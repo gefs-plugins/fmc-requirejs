@@ -166,10 +166,14 @@ define([
 			exports.nextWaypoint = null;
 		}
 
-		if (n === exports.route.length) {
-			progress.printNextWaypointInfo(n - 1);
-		} else {
-			progress.printNextWaypointInfo(n);
+		if (exports.route.length !== 0) {
+			if (n === exports.route.length ) {
+				if (exports.route[n - 1])
+					progress.printNextWaypointInfo(n - 1);
+			} else {
+				if (exports.route[n])
+					progress.printNextWaypointInfo(n);
+			}
 		}
 	}
 

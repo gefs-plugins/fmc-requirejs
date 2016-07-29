@@ -14,17 +14,23 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 		var arrival = flight.arrival;
 		var start = waypoints.nextWaypoint || 0;
 		var route = waypoints.route;
-
-		if (gefs.aircraft.llaLocation) {
-			var pos = gefs.aircraft.llaLocation;
-		} else return 0;
+		var pos = gefs.aircraft.llaLocation;
 
 		// If there is no route
 		if (route.length === 0) return 0;
 
 		// If there is not an activated waypoint
 		else if (!waypoints.nextWaypoint) {
-			return math.getDistance(pos[0], pos[1], arrival[1], arrival[2]);
+			// If arrival airport is present and current coords are defined
+			if (arrival[0] && pos)
+				return math.getDistance(pos[0], pos[1], arrival[1], arrival[2]);
+
+			// If there are only current coords
+			else if (pos)
+				return math.getDistance(pos[0], pos[1], route[route.length - 1][1], route[route.length - 1][2]);
+
+			// If neither is present
+			else return math.getDistance(route[0][1], route[0][2], route[route.length - 1][1], route[route.length - 1][2]);
 		}
 
 		// If there is a waypoint activated
