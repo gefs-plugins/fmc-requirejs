@@ -67,6 +67,16 @@ define([
 		waypoints.shiftWaypoint(row, row.index() - 1, 'down');
 	});
 
+	// Arrival airport input
+	$(container.depArr).on('change', input.arr, function () {
+		var wpt = $(this).val().trim();
+		if (wpt) {
+			var coords = waypoints.getCoords(wpt);
+			if (coords) flight.arrival = [wpt, coords[0], coords[1]];
+			else flight.arrival = [];
+		} else flight.arrival = [];
+	});
+
 	// Waypoint list input actions: update `route` array
 	$(container.wptList).on('change', input.wpt, function () {
 		if (!$(this).parent().hasClass('is-invalid')) {
