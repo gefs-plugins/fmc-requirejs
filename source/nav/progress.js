@@ -18,13 +18,13 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		var lat2 = flight.arrival[1] || null;
 		var lon2 = flight.arrival[2] || null;
 		var times = [[], [], [], [], []]; // flightete, flighteta, todete, todeta, nextete
-		var nextdist = distance.route(waypoints, nextWaypoint) || '--';
+		var nextdist = distance.route(nextWaypoint + 1) || '--';
 		var flightdist;
 		// Checks if the whole route is complete
 		for (var i = 0, valid = true; i < route.length; i++) {
 			if (!route[i][1] || !route[i][2]) valid = false;
 		}
-		if (valid) flightdist = distance.route(waypoints, route.length + 1);
+		if (valid) flightdist = distance.route(route.length);
 		else flightdist = math.getDistance(lat1, lon1, lat2, lon2);
 
 		if (!gefs.aircraft.groundContact && flight.arrival) {
@@ -45,7 +45,6 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	 * Updates plane's phase of flying: climb, cruise, or descent
 	 *
 	 * @description Phase contains "climb," "cruise," and "descent"
-	 * @param {Object} waypoints FMC waypoints object
 	 * @TODO add a better logic, especially near the cruise phase
 	 */
 	function updatePhase () {
@@ -53,7 +52,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		if (flight.phase === "climb" && currentAlt === Number(flight.cruise)) {
 			$('#phaseBtn').click();
 		} else if (flight.phase === "cruise") {
-			var dist = distance.route(waypoints, waypoints.route.length + 1);
+			var dist = distance.route(waypoints.route.length);
 			if (currentAlt !== Number(flight.cruise)) {
 				$('#phaseBtn').click();
 			} else if (dist <= flight.tod) {
