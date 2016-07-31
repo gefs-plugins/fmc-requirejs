@@ -17,12 +17,12 @@
             <div class="fmc-modal__header">
                 <header class="mdl-layout__header fmc-modal__no-shadow">
                     <div class="mdl-layout__tab-bar fmc-modal__tab-bar">
-                        <a panel="#rte" class="mdl-layout__tab fmc-btn__fade is-active" interactive=".save-wpt-data, .retrieve-wpt">RTE</a>
-                        <a panel="#dep" class="mdl-layout__tab fmc-btn__fade">DEP/ARR</a>
-                        <a panel="#vnav" class="mdl-layout__tab fmc-btn__fade">VNAV</a>
-                        <a panel="#prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
-                        <a panel="#load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
-                        <a panel="#log" class="mdl-layout__tab fmc-btn__fade" interactive=".remove-log-data">LOG</a>
+                        <a to=".fmc-rte" class="mdl-layout__tab fmc-btn__fade is-active" interactive=".wpt-tab-btn">RTE</a>
+                        <a to=".fmc-dep" class="mdl-layout__tab fmc-btn__fade">DEP/ARR</a>
+                        <a to=".fmc-vnav" class="mdl-layout__tab fmc-btn__fade">VNAV</a>
+                        <a to=".fmc-prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
+                        <a to=".fmc-load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
+                        <a to=".fmc-log" class="mdl-layout__tab fmc-btn__fade" interactive=".log-tab-btn">LOG</a>
                     </div>
                 </header>
             </div>
@@ -47,8 +47,8 @@
     <!-- Modal actions: close -->
     <div class="fmc-modal__actions">
         <button class="mdl-button close">Close</button>
-		<button class="mdl-button interactive save-wpt-data is-active">Save Waypoints</button>
-        <button class="mdl-button interactive retrieve-wpt is-active">Retrieve Waypoints</button>
-        <button class="mdl-button interactive remove-log-data">Remove Log Data</button>
+		<button class="mdl-button interactive save-wpt-data wpt-tab-btn is-active">Save Waypoints</button>
+        <button class="mdl-button interactive retrieve-wpt wpt-tab-btn is-active">Retrieve Waypoints</button>
+        <button class="mdl-button interactive remove-log-data log-tab-btn">Remove Log Data</button>
     </div>
 </dialog>

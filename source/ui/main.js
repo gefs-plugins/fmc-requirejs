@@ -42,8 +42,8 @@ define([
 		$(btn.interactive).removeClass(c);
 		if (interactive) $(interactive).addClass(c);
 
-		$(container.modalContent).find($that.attr('panel')).removeClass(c);
-		$(container.modalContent).find($this.attr('panel')).addClass(c);
+		$(container.modalContent).find($that.attr('to')).removeClass(c);
+		$(container.modalContent).find($this.attr('to')).addClass(c);
 		$that.removeClass(c);
 		$this.addClass(c);
 	});
