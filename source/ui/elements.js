@@ -1,6 +1,7 @@
 "use strict";
 
 define({
+    modal: '.fmc-modal',
     container: {
         uiBottom: '.gefs-ui-bottom',
         tabBar: '.fmc-modal .fmc-modal__tab-bar',
@@ -9,7 +10,10 @@ define({
         wptList: '.fmc-modal .fmc-wpt-list-container',
         addWpt: '.fmc-modal .fmc-wpt-add-container',
         wptRow: '.fmc-modal .fmc-wpt-list-container .wpt-row',
-        wptInfo: '.fmc-modal .fmc-wpt-list-container .wpt-row .fmc-wpt-info'
+        wptInfo: '.fmc-modal .fmc-wpt-list-container .wpt-row .fmc-wpt-info',
+        logTable: '.fmc-modal .fmc-log-container',
+        logData: '.fmc-modal .fmc-log-container .log-data',
+        map: '.fmc-modal .fmc-map-container'
     },
     btn: {
         fmcBtn: '.fmc-btn',

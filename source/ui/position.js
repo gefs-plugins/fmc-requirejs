@@ -20,7 +20,7 @@ define([
 			$('<style>').text(dialogPolyfillCSS).appendTo('head');
 			dialogPolyfill.registerDialog(element);
 		}
-	})(document.querySelector('.fmc-modal'));
+	})(document.querySelector(E.modal));
 
 	// Inits tab contents
 	$(tabContents).appendTo(E.container.modalContent);

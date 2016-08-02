@@ -1,11 +1,11 @@
 "use strict"; // jshint unused:false
 
 define([
-	'consts', 'distance', 'flight', 'log', 'math', 'toggles', 'waypoints',
-	'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine'
+	'consts', 'distance', 'flight', 'log', 'math', 'toggles',
+	'waypoints', 'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine'
 ], function (consts, distance, flight, log, math, toggles, waypoints, lnav, progress, vnav, E) {
 
-	var modal = document.getElementsByClassName('fmc-modal')[0],
+	var modal = document.querySelector(E.modal),
 		container = E.container,
 		btn = E.btn,
 		input = E.input;
