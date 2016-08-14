@@ -1,14 +1,18 @@
 "use strict"; // jshint unused:false
 
 define([
-	'consts', 'distance', 'flight', 'log', 'math', 'toggles',
+	'consts', 'distance', 'flight', 'log', 'map', 'math', 'toggles',
 	'waypoints', 'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine'
-], function (consts, distance, flight, log, math, toggles, waypoints, lnav, progress, vnav, E) {
+], function (consts, distance, flight, log, map, math, toggles, waypoints, lnav, progress, vnav, E) {
 
 	var modal = document.querySelector(E.modal),
 		container = E.container,
 		btn = E.btn,
 		input = E.input;
+
+	// Inits Map
+	map.container = document.querySelector(container.map);
+	map.map = new google.maps.Map(map.container, map.options);
 
 	// Adds one input field on start
 	waypoints.addWaypoint();

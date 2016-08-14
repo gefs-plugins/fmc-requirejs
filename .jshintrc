@@ -5,6 +5,7 @@
   , "autopilot_pp": true
   , "Aircraft": true
   , "componentHandler": true
+  , "google": true
   , "define": true
   , "require": true
   , "requirejs": true

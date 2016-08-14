@@ -11,11 +11,18 @@
 	// Places ui elements
 	initUI();
 
+	var timer = setInterval(function () {
+		if ($('.fmc-btn')[0]) {
+			clearInterval(timer);
+			console.log('UI Loading complete!');
+		}
+	}, 4);
+
 	// Check if gefs.init has already been called
 	if (window.gefs && gefs.canvas) initFMC();
 	else {
 		var oldInit = gefs.init;
-		var timer = setInterval(function () {
+		timer = setInterval(function () {
 			if (!window.gefs || !gefs.init) return;
 
 			clearInterval(timer);
