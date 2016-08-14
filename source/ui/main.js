@@ -10,10 +10,6 @@ define([
 		btn = E.btn,
 		input = E.input;
 
-	// Inits Map
-	map.container = document.querySelector(container.map);
-	map.map = new google.maps.Map(map.container, map.options);
-
 	// Adds one input field on start
 	waypoints.addWaypoint();
 

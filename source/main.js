@@ -6,23 +6,26 @@
 
 "use strict";
 
-// make sure code is run after GEFS is ready
-(function (initUI, initFMC) {
+(function (initUI, initFMC, setup) {
 	// Places ui elements
 	initUI();
 
 	var timer = setInterval(function () {
-		if ($('.fmc-btn')[0]) {
+		if ($('.fmc-modal')[0] && $('.fmc-btn')) {
 			clearInterval(timer);
-			console.log('UI Loading complete!');
+			setup(initFMC);
 		}
 	}, 4);
-
+})(function () {
+	require(['ui/position']);
+}, function () {
+	require(['ui/main']);
+}, function (initFMC) {
 	// Check if gefs.init has already been called
 	if (window.gefs && gefs.canvas) initFMC();
 	else {
 		var oldInit = gefs.init;
-		timer = setInterval(function () {
+		var timer = setInterval(function () {
 			if (!window.gefs || !gefs.init) return;
 
 			clearInterval(timer);
@@ -34,8 +37,4 @@
 			};
 		}, 4);
 	}
-})(function () {
-	require(['ui/position']);
-}, function () {
-	require(['ui/main']);
 });
