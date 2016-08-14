@@ -1,6 +1,6 @@
 "use strict";
 
-define(['flight'], function (flight) {
+define(['ui/elements', 'flight'], function (E, flight) {
 
 	return {
 		mainTimer: null, // = setInterval(updateLog, 120000);
@@ -11,7 +11,7 @@ define(['flight'], function (flight) {
 		/**
 		 * Updates plane's flight log, set on a timer
 		 *
-		 * @param [optional]{String} other Updates the log with other as extra info
+		 * @param {String} [other] Updates the log with other as extra info
 		 */
 		update: function (other) {
 			if (!gefs.pause && !window.flight.recorder.playing && !window.flight.recorder.paused) {
@@ -37,7 +37,7 @@ define(['flight'], function (flight) {
 						$('<td>' + lon + '</td>'),
 						$('<td>' + fps + '</td>'),
 						$('<td>' + other + '</td>')
-					).appendTo('.fmc-log-container tbody');
+					).appendTo($(E.container.logTable).find('tbody'));
 			}
 			clearInterval(this.mainTimer);
 			if (gefs.aircraft.animationValue.altitude > 18000) {
@@ -85,7 +85,7 @@ define(['flight'], function (flight) {
 		 * Clears the log
 		 */
 		removeData: function () {
-			$('.log-data').remove();
+			$(E.container.logData).remove();
 		}
 	};
 });

@@ -40,17 +40,4 @@ define(['log'], function (log) {
 		}
 	};
 
-	// ============== FMC Modal debug ================
-	/*
-	// Hides backdrop for the modal
-	$('#fmcModal').modal({
-		backdrop: false,
-		show: false
-	});
-
-	// Stops immediate keyup actions in the FMC Modal
-	$('#fmcModal').keyup(function (event) {
-		event.stopImmediatePropagation();
-	});
-	*/
 });

@@ -42,7 +42,7 @@ define([
 	 * Makes a sharable route
 	 *
 	 * @returns {String} A sharable route with airports and waypoints,
-	 * 					using <code>JSON.stringify</code> method
+	 * 					using `JSON.stringify` method
 	 */
 	function toRouteString () {
 		return JSON.stringify ([
@@ -99,7 +99,7 @@ define([
 	/**
 	 * Turns a normal waypoints input or shared waypoints string into waypoints
 	 *
-	 * @param {String} an input of waypoints or a shared/generated route
+	 * @param {String} s Input of waypoints or a shared/generated route
 	 */
 	function toRoute (s) {
 		if (s.indexOf('["') !== 0) {
@@ -321,9 +321,9 @@ define([
 	/**
 	 * Shifts a waypoint up or down one step
 	 *
-	 * @param {jQuery element} r The element to be moved in the UI
+	 * @param {jQuery} r The element to be moved in the UI
 	 * @param {Number} n Index of this waypoint
-	 * @param <restricted>{String} d Direction of shifting, "up" or "down"
+	 * @param {String} d Direction of shifting, "up" or "down"
 	 * FIXME Potential index confusion
 	 */
 	function shiftWaypoint (r, n, d) {
