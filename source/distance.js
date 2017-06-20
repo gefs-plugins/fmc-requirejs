@@ -14,7 +14,7 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 		var arrival = flight.arrival;
 		var start = waypoints.nextWaypoint || 0;
 		var route = waypoints.route;
-		var pos = gefs.aircraft.llaLocation;
+		var pos = geofs.aircraft.instance.llaLocation;
 
 		// If there is no route
 		if (route.length === 0) return 0;
@@ -75,7 +75,7 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 	 * @returns {Number} The turning distance
 	 */
 	exports.turn = function (angle) {
-		var v = gefs.aircraft.animationValue.kcas;
+		var v = geofs.aircraft.instance.animationValue.kcas;
 		var r = 0.107917 * Math.pow(Math.E, 0.0128693 * v);
 		var a = math.toRadians(angle);
 		return r * Math.tan(a / 2) + 0.20;

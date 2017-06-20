@@ -28,8 +28,8 @@ define(['consts', 'exports'], function (consts, exports) {
 		 * @returns {Number} The ground speed of the aircraft
 		 */
 		exports.getGroundSpeed = function () {
-			var tas = gefs.aircraft.animationValue.ktas;
-			var vs = (60 * gefs.aircraft.animationValue.climbrate) * consts.feetToNM;
+			var tas = geofs.aircraft.instance.animationValue.ktas;
+			var vs = (60 * geofs.aircraft.instance.animationValue.climbrate) * consts.feetToNM;
 			console.log("tas: " + tas + ", vs: " + vs);
 			return Math.sqrt(tas * tas - vs * vs);
 		};

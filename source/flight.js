@@ -30,8 +30,8 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 */
 	function getFlightParameters () {
 		var spd, vs;
-		// var gndElev = gefs.groundElevation * metersToFeet;
-		var a = gefs.aircraft.animationValue.altitude;
+		// var gndElev = geofs.groundElevation * metersToFeet;
+		var a = geofs.aircraft.instance.animationValue.altitude;
 		var isMach = $('#Qantas94Heavy-ap-spd span:last-child').text().trim() === 'M.';
 		var switchMode = function() {
 			$('#Qantas94Heavy-ap-spd span:last-child').click();
@@ -126,10 +126,10 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 * @returns {Array} The time after <code>timeCheck(h, m)</code>
 	 */
 	function getETE (d, a) {
-		var hours = d / gefs.aircraft.animationValue.ktas;
+		var hours = d / geofs.aircraft.instance.animationValue.ktas;
 		var h = parseInt(hours);
 		var m = Math.round(60 * (hours - h));
-		if (a) m += Math.round(gefs.aircraft.animationValue.altitude / 4000);
+		if (a) m += Math.round(geofs.aircraft.instance.animationValue.altitude / 4000);
 		return timeCheck(h, m);
 	}
 
@@ -156,8 +156,8 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 * @returns {Object} The profile needed by VNAV
 	 */
 	function getVNAVProfile () {
-		return gefs.aircraft.setup.fmc
-			|| vnavProfile[gefs.aircraft.name]
+		return geofs.aircraft.instance.setup.fmc
+			|| vnavProfile[geofs.aircraft.instance.id]
 			|| vnavProfile.DEFAULT;
 	}
 

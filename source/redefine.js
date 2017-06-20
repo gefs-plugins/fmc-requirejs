@@ -20,22 +20,22 @@ define(['log'], function (log) {
 	};
 
 	// Adds a confirm window to prevent accidental reset
-	gefs.resetFlight = function () {
+	geofs.resetFlight = function () {
 		if (window.confirm('Reset Flight?')) {
-			if (gefs.lastFlightCoordinates) {
-				gefs.flyTo(gefs.lastFlightCoordinates, true);
+			if (geofs.lastFlightCoordinates) {
+				geofs.flyTo(geofs.lastFlightCoordinates, true);
 				log.update('Flight reset');
 			}
 		}
 	};
 
 	// Tracks pause event to log
-	gefs.togglePause = function () {
-		if (!gefs.pause) {
+	geofs.togglePause = function () {
+		if (!geofs.pause) {
 			log.update('Flight paused');
-			gefs.doPause();
+			geofs.doPause();
 		} else {
-			gefs.undoPause();
+			geofs.undoPause();
 			log.update('Flight resumed');
 		}
 	};

@@ -13,7 +13,7 @@ define(['distance', 'waypoints'], function (distance, waypoints) {
 				waypoints.activateWaypoint(waypoints.nextWaypoint + 1);
 			}
 			clearInterval(this.timer);
-			if (d < gefs.aircraft.animationValue.kias / 60) this.timer = setInterval(this.update, 500);
+			if (d < geofs.aircraft.instance.animationValue.kias / 60) this.timer = setInterval(this.update, 500);
 			else this.timer = setInterval(this.update, 30000);
 		}
 	};

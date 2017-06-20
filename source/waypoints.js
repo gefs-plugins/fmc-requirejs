@@ -1,4 +1,4 @@
-"use strict";
+"use strict"; // A big FIXME right here
 
 define([
 	'math', 'flight', 'input-fix', 'nav/progress', 'ui/elements', 'minify!html/waypoints.html', 'exports'

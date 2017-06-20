@@ -6,10 +6,10 @@ var RoboHydraHeadFilesystem = heads.RoboHydraHeadFilesystem;
 var RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
 var RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
 var path = require('path');
-var script = '<script data-main="/fmc/source/main" src="/fmc/node_modules/requirejs/require.js"></script>\
+var script = '<script data-main="fmc/source/init" src="/fmc/node_modules/requirejs/require.js"></script>\
 	<script src="fmc/source/config.js"></script></head>';
 
-exports.getBodyParts = function (conf) { //jshint unused:false
+exports.getBodyParts = function () {
 	return {
 		heads: [
 			new RoboHydraHeadFilesystem({
@@ -18,7 +18,7 @@ exports.getBodyParts = function (conf) { //jshint unused:false
 			}),
 
 			new RoboHydraHeadFilter({
-				path: '/gefs.php*',
+				path: '/geofs.php*',
 				filter: function (buffer) {
 					return buffer.toString().replace('</head>', script);
 				}
@@ -26,12 +26,12 @@ exports.getBodyParts = function (conf) { //jshint unused:false
 
 			new RoboHydraHeadProxy({
 				mountPath: '/',
-				proxyTo: 'http://www.gefs-online.com',
+				proxyTo: 'http://www.geo-fs.com',
 				setHostHeader: true
 			})
 		]
 	};
 };
 
-console.log('Please go to http://127.0.0.1:3000/gefs.php to start Cesium-GEFS.');
+console.log('Please go to http://127.0.0.1:3000/geofs.php to start GeoFS.');
 console.log('To exit, press Ctrl+C or close this window.');

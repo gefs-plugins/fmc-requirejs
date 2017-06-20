@@ -67,11 +67,7 @@ tr.wpt-row .fmc-wpt-info {
 
 tr.wpt-row button {
 	float: left;
-	/*min-width: 24px !important;*/
-	/*width: 24px;*/
-	/*height: 24px;*/
-}
-
-tr.wpt-row button[action="activate-wpt"] {
-	display: none; /* Future implementation needed */
+	min-width: 24px !important;
+	width: 24px !important;
+	height: 24px !important;
 }

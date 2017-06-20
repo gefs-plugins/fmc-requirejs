@@ -21,7 +21,7 @@ define(['distance', 'flight', 'math', 'waypoints'], function (distance, flight, 
 			var phase = flight.phase;
 			var todCalc = flight.todCalc;
 
-			var currentAlt = gefs.aircraft.animationValue.altitude;
+			var currentAlt = geofs.aircraft.instance.animationValue.altitude;
 			var targetAlt, deltaAlt, nextDist, targetDist;
 			if (hasRestriction) {
 				targetAlt = route[next - 1][3];

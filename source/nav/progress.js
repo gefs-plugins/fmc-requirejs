@@ -13,8 +13,8 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	function update () {
 		var route = waypoints.route;
 		var nextWaypoint = waypoints.nextWaypoint;
-		var lat1 = gefs.aircraft.llaLocation[0] || null;
-		var lon1 = gefs.aircraft.llaLocation[1] || null;
+		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
+		var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
 		var lat2 = flight.arrival[1] || null;
 		var lon2 = flight.arrival[2] || null;
 		var times = [[], [], [], [], []]; // flightete, flighteta, todete, todeta, nextete
@@ -27,7 +27,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		if (valid) flightdist = distance.route(route.length);
 		else flightdist = math.getDistance(lat1, lon1, lat2, lon2);
 
-		if (!gefs.aircraft.groundContact && flight.arrival) {
+		if (!geofs.aircraft.instance.groundContact && flight.arrival) {
 			times[0] = flight.getETE(flightdist, true);
 			times[1] = flight.getETA(times[0][0], times[0][1]);
 			times[4] = flight.getETE(nextdist, false);
@@ -48,7 +48,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	 * @TODO add a better logic, especially near the cruise phase
 	 */
 	function updatePhase () {
-		var currentAlt = 100 * Math.round(gefs.aircraft.animationValue.altitude / 100);
+		var currentAlt = 100 * Math.round(geofs.aircraft.instance.animationValue.altitude / 100);
 		if (flight.phase === "climb" && currentAlt === Number(flight.cruise)) {
 			$('#phaseBtn').click();
 		} else if (flight.phase === "cruise") {
