@@ -73,10 +73,6 @@ div.fmc-modal__layout-container .mdl-layout__container {
 	position: relative !important;
 }
 
-div.fmc-modal__layout {
-	/*width: 700px;*/
-}
-
 div.fmc-modal__header {
 	height: 48px;
 }

@@ -10,6 +10,10 @@ define({
         wptList: '.fmc-modal .fmc-wpt-list-container',
         wptRow: '.fmc-modal .fmc-wpt-list-container .wpt-row',
         wptInfo: '.fmc-modal .fmc-wpt-list-container .wpt-row .fmc-wpt-info',
+        depPage: '.fmc-modal .fmc-dep-container',
+        vnavPage: '.fmc-modal .fmc-vnav-container',
+        progPage: '.fmc-modal .fmc-prog-container',
+        loadPage: '.fmc-modal .fmc-load-container',
         logTable: '.fmc-modal .fmc-log-container',
         logData: '.fmc-modal .fmc-log-container .log-data',
         map: '.fmc-modal .fmc-map-container'
@@ -35,6 +39,5 @@ define({
         lat: 'input.lat',
         lon: 'input.lon',
         alt: 'input.alt'
-
     }
 });
