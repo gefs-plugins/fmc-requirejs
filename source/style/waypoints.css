@@ -1,6 +1,7 @@
 div.fmc-wpt-list-container {
+	padding-bottom: 9px;
 	margin-top: -23px;
-	height: 335px;
+	max-height: 277px;
 	overflow: auto;
 }
 
@@ -67,7 +68,11 @@ tr.wpt-row .fmc-wpt-info {
 
 tr.wpt-row button {
 	float: left;
-	min-width: 24px !important;
-	width: 24px !important;
-	height: 24px !important;
+	min-width: 22px !important;
+	width: 22px !important;
+	height: 22px !important;
+}
+
+button[action="activate-wpt"] .material-icons {
+	color: blue;
 }

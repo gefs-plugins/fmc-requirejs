@@ -8,7 +8,6 @@ define({
         modalContent: '.fmc-modal .fmc-modal__content main',
         depArr: '.fmc-modal .fmc-dep-arr-table-container',
         wptList: '.fmc-modal .fmc-wpt-list-container',
-        addWpt: '.fmc-modal .fmc-wpt-add-container',
         wptRow: '.fmc-modal .fmc-wpt-list-container .wpt-row',
         wptInfo: '.fmc-modal .fmc-wpt-list-container .wpt-row .fmc-wpt-info',
         logTable: '.fmc-modal .fmc-log-container',

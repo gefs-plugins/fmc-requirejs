@@ -53,9 +53,9 @@ define([
 
 		// Waypoint list actions: activate/add/remove/move up or down
 		// FIXME potential item index confusion/mess up
-		$(container.addWpt).on('click', btn.addWpt, function () {
+		$(modal).on('click', btn.addWpt, function () {
 			waypoints.addWaypoint();
-		}).prev().on('click', btn.activateWpt, function () {
+		}).on('click', btn.activateWpt, function () {
 			var index = $(this).parents().eq(1).index() - 1;
 			waypoints.activateWaypoint(index);
 		}).on('click', btn.removeWpt, function () {

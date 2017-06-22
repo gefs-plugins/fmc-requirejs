@@ -2,6 +2,10 @@ div.fmc-dep-arr-table-container {
 	margin-top: -10px;
 }
 
+div.fmc-dep-arr-table-container table {
+	width: 100%;
+}
+
 div.fmc-dep-arr-table-container i {
 	position: relative;
 	top: 5px;
@@ -9,14 +13,15 @@ div.fmc-dep-arr-table-container i {
 }
 
 div.fmc-dep-arr-table-container div {
-	width: 195px;
+	width: 80%;
 }
 
 div.fmc-wpt-add-container {
 	float: right;
 }
 
-div.fmc-wpt-add-container button {
-	min-width: 41px;
-	width: 41px; height: 41px;
+div.fmc-modal__actions button[action="add-wpt"] {
+	min-width: 35px;
+	width: 35px; height: 35px;
+	float: right;
 }

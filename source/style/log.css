@@ -1,5 +1,5 @@
 div.fmc-log-container {
-	height: 405px;
+	max-height: 265px;
 	overflow: auto;
 }
 
