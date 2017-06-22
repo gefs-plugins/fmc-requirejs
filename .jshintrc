@@ -1,9 +1,8 @@
 { "globals":
-  { "gefs": true
+  { "geofs": true
   , "flight": true
-  , "metersToFeet": true
+  , "METERS_TO_FEET": true
   , "autopilot_pp": true
-  , "Aircraft": true
   , "componentHandler": true
   , "google": true
   , "define": true

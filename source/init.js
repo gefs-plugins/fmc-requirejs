@@ -17,23 +17,9 @@
 // }, 4);
 
 (function () {
-	// Inits FMC ui and main functions
-	function initFMC () {
-		require(['ui/position', 'ui/main'], function (loadUI, loadMain) {
-			loadUI();
-
-			var timer = setInterval(function () {
-				if ($('.fmc-modal')[0] && $('.fmc-btn')) {
-					clearInterval(timer);
-					loadMain();
-				}
-			}, 4);
-		});
-	}
-
 	// Check if geofs.init has already been called
 	if (window.geofs && geofs.canvas) {
-		initFMC();
+		require(['ui/main']);
 		return;
 	}
 
@@ -41,14 +27,14 @@
 		if (!window.geofs || !geofs.init) return;
 		clearInterval(timer);
 
-		if (geofs.canvas) initFMC();
+		if (geofs.canvas) require(['ui/main']);
 		else {
 			var oldInit = geofs.init;
 
 			geofs.init = function () {
 				oldInit();
-				initFMC();
-			}
+				require(['ui/main']);
+			};
 		}
 	}, 4);
 

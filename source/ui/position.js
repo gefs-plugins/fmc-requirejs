@@ -8,30 +8,25 @@ define([
 	E, dialogPolyfill, dialogPolyfillCSS, button,
 	externalDist, modal, tabContents, mainCSS
 ) {
+	// Main FMC stylesheet
+	$('<style>').text(mainCSS).appendTo('head');
 
-	// Returns FMC ui init function
-	return function () {
-		// Main FMC stylesheet
-		$('<style>').text(mainCSS).appendTo('head');
+	// Inits Modal dialog
+	$(modal).appendTo('body');
 
-		// Inits Modal dialog
-		$(modal).appendTo('body');
+	// Compatibility check
+	(function (element) {
+		if (!element.showModal) {
+			$('<style>').text(dialogPolyfillCSS).appendTo('head');
+			dialogPolyfill.registerDialog(element);
+		}
+	})(document.querySelector(E.modal));
 
-		// Compatibility check
-		(function (element) {
-			if (!element.showModal) {
-				$('<style>').text(dialogPolyfillCSS).appendTo('head');
-				dialogPolyfill.registerDialog(element);
-			}
-		})(document.querySelector(E.modal));
+	// Inits tab contents
+	$(tabContents).appendTo(E.container.modalContent);
 
-		// Inits tab contents
-		$(tabContents).appendTo(E.container.modalContent);
+	// FMC toggle button
+	$(button).insertAfter('button.geofs-f-standard-ui[data-toggle-panel=".geofs-map-list"]');
 
-		// FMC toggle button
-		$(button).insertAfter('button.geofs-f-standard-ui[data-toggle-panel=".geofs-map-list"]');
-
-		// TODO externalDist
-	};
-
+	// TODO externalDist
 });

@@ -2,11 +2,19 @@
 
 define([
 	'consts', 'distance', 'flight', 'log', 'map', 'math', 'toggles',
-	'waypoints', 'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine'
+	'waypoints', 'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine', './position'
 ], function (consts, distance, flight, log, map, math, toggles, waypoints, lnav, progress, vnav, E) {
 
-	// Returns FMC actions init function
-	return function () {
+	// Checks if UI has been properly placed
+	var timer = setInterval(function () {
+		if ($('.fmc-modal')[0] && $('.fmc-btn')) {
+			clearInterval(timer);
+			loadFMC();
+		}
+	}, 4);
+
+	// FMC actions init function
+	function loadFMC () {
 		var modal = document.querySelector(E.modal),
 			container = E.container,
 			btn = E.btn,
@@ -17,16 +25,13 @@ define([
 
 		/* ---- UI actions binding ---- */
 
+		// -----------------------------------------
+		// ------------- General Modal -------------
+		// -----------------------------------------
 
-		// Modal actions: open/close, save data
+		// Modal actions: open/close
 		$(modal).on('click', btn.close, function () {
 			modal.close();
-		}).on('click', btn.saveWptData, function () {
-			waypoints.saveData();
-		}).on('click', btn.retrieveWpt, function () {
-			waypoints.loadFromSave();
-		}).on('click', btn.removeLogData, function () {
-			log.removeData();
 		}).parent().on('click', btn.fmcBtn, function () {
 			if (!modal.open) modal.showModal();
 			else modal.close();
@@ -49,7 +54,17 @@ define([
 			$that.removeClass(c);
 			$this.addClass(c);
 		});
-		// ----
+
+		// ---------------------------------------
+		// -------------- ROUTE TAB --------------
+		// ---------------------------------------
+
+		// Save/retrieve waypoints data
+		$(modal).on('click', btn.saveWptData, function () {
+			waypoints.saveData();
+		}).on('click', btn.retrieveWpt, function () {
+			waypoints.loadFromSave();
+		});
 
 		// Waypoint list actions: activate/add/remove/move up or down
 		// FIXME potential item index confusion/mess up
@@ -124,6 +139,30 @@ define([
 			}
 		});
 
+		// -----------------------------------------
+		// -------------- DEP/ARR TAB --------------
+		// -----------------------------------------
+
+		// ----------------------------------------
+		// --------------- VNAV TAB ---------------
+		// ----------------------------------------
+
+		// ----------------------------------------
+		// --------------- PROG TAB ---------------
+		// ----------------------------------------
+
+		// ----------------------------------------
+		// --------------- LOAD TAB ---------------
+		// ----------------------------------------
+
+		// -----------------------------------------
+		// ---------------- LOG TAB ----------------
+		// -----------------------------------------
+
+		$(modal).on('click', btn.removeLogData, function () {
+			log.removeData();
+		});
+
 		/* ---- All Initializations ---- */
 
 		// Initializes all timers
@@ -161,12 +200,5 @@ define([
 			.keyup(stopPropagation)
 			.keydown(stopPropagation)
 			.keypress(stopPropagation);
-
-		window.fmc = {
-			version: "",
-			requirejs: requirejs,
-			require: require,
-			define: define
-		};
-	};
+	}
 });
