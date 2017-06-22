@@ -10,7 +10,8 @@ define({
         wptList: '.fmc-modal .fmc-wpt-list-container',
         wptRow: '.fmc-modal .fmc-wpt-list-container .wpt-row',
         wptInfo: '.fmc-modal .fmc-wpt-list-container .wpt-row .fmc-wpt-info',
-        depPage: '.fmc-modal .fmc-dep-container',
+        arrPage: '.fmc-modal .fmc-arr-container',
+        autoTOD: '.fmc-modal .fmc-auto-tod-container',
         vnavPage: '.fmc-modal .fmc-vnav-container',
         progPage: '.fmc-modal .fmc-prog-container',
         loadPage: '.fmc-modal .fmc-load-container',
@@ -29,7 +30,8 @@ define({
         activateWpt: 'button[action="activate-wpt"]',
         removeWpt: 'button[action="remove-wpt"]',
         moveWptUp: 'button[action="move-wpt-up"]',
-        moveWptDown: 'button[action="move-wpt-down"]'
+        moveWptDown: 'button[action="move-wpt-down"]',
+        autoTOD: 'input#auto-tod'
     },
     input: {
         dep: 'input.dep',
@@ -38,6 +40,8 @@ define({
         wpt: 'input.wpt',
         lat: 'input.lat',
         lon: 'input.lon',
-        alt: 'input.alt'
+        alt: 'input.alt',
+        todDist: 'input.tod-dist',
+        fieldElev: 'input.field-elev'
     }
 });

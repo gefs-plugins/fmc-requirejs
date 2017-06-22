@@ -1,0 +1,27 @@
+div.fmc-arr-container .fmc-arr__input-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.26);
+    cursor: default;
+}
+
+div.fmc-arr-container td div {
+    width: 200px;
+    margin-left: 10px;
+    position: relative;
+}
+
+div.fmc-auto-tod-container {
+    position: relative;
+    left: 28%;
+}
+
+div.fmc-auto-tod-container .mdl-switch {
+    width: 280px;
+}
+
+div.fmc-auto-tod-container .mdl-switch__label {
+    color: rgb(255, 193, 7);
+    font-weight: bold;
+    cursor: default !important;
+}

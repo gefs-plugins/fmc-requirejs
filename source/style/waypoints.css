@@ -15,6 +15,7 @@ div.fmc-wpt-list-container tr:hover {
 
 div.fmc-wpt-list-container th {
 	text-align: left;
+	cursor: default;
 }
 
 div.fmc-wpt-list-container td {

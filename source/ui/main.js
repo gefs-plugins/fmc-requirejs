@@ -7,7 +7,7 @@ define([
 
 	// Checks if UI has been properly placed
 	var timer = setInterval(function () {
-		if ($('.fmc-modal')[0] && $('.fmc-btn')) {
+		if ($(E.modal)[0] && $(E.btn.fmcBtn)) {
 			clearInterval(timer);
 			loadFMC();
 		}
@@ -140,8 +140,25 @@ define([
 		});
 
 		// -----------------------------------------
-		// -------------- DEP/ARR TAB --------------
+		// ---------------- ARR TAB ----------------
 		// -----------------------------------------
+
+		// TOD Distance and Field Elevation inputs
+		$(container.arrPage).on('change', input.todDist, function () {
+			flight.tod = Number($(this).val());
+		}).on('change', input.fieldElev, function () {
+			flight.fieldElev = Number($(this).val());
+		});
+
+		// Automatic TOD calculation button
+		$(container.autoTOD).on('click', btn.autoTOD, function () {
+			if ($(this).parent().hasClass('is-checked'))
+				flight.todCalc = false;
+			else flight.todCalc = true;
+
+			// Instantly updates VNAV info
+			vnav.update();
+		});
 
 		// ----------------------------------------
 		// --------------- VNAV TAB ---------------
