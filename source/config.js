@@ -9,10 +9,15 @@
     		polyfill: '../node_modules/dialog-polyfill'
     	},
         shim: {
+            // Adds UserScript
+            'init': {
+                deps: ['userscript']
+            },
+
             // Requires license info
             'polyfill/dialog-polyfill': {
                 deps: ['ui/polyfill-license']
-            }
+            },
         }
     });
 })();

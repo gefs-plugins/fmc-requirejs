@@ -19,7 +19,7 @@
 (function () {
 	// Inits FMC ui and main functions
 	function initFMC () {
-		require(['ui/position'], function (loadUI, loadMain) {
+		require(['ui/position', 'ui/main'], function (loadUI, loadMain) {
 			loadUI();
 
 			var timer = setInterval(function () {
