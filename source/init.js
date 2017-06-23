@@ -6,16 +6,6 @@
 
 "use strict";
 
-// var timer = setInterval(function () {
-// 	if(window.geofs && geofs.aircraft && geofs.aircraft.instance) {
-// 		clearInterval(timer);
-//
-// 		require(['ui/position'], function (load) {
-// 			load();
-// 		});
-// 	}
-// }, 4);
-
 (function () {
 	// Check if geofs.init has already been called
 	if (window.geofs && geofs.canvas) {

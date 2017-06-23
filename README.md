@@ -14,6 +14,8 @@ npm start
 ```
 Then you will be able to access the game at <http://127.0.0.1:3000/geofs.php>
 
+**Quick Update** Due to a jQuery code in-game, please type in `require(['ui/main']);` in the console after game loads.
+
 ----
 #### Quick Optimization
 First, make sure that you have run `npm install`.
