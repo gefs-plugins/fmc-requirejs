@@ -1,0 +1,98 @@
+div.fmc-vnav-toggle-container {
+    margin-left: 60px;
+}
+
+div.fmc-vnav-toggle-container div:first-of-type{
+    float: left;
+    padding: 15px 0 25px;
+}
+/*
+div.fmc-vnav-toggle-container label[for="vnav-toggle"] span {
+    margin-left: -10px;
+}*/
+
+div.fmc-vnav-toggle-container .mdl-switch__track {
+    padding: 0 !important;
+}
+
+div.fmc-vnav-toggle-container .material-icons {
+    vertical-align: bottom;
+    margin-left: -15px;
+    width: 25px;
+}
+
+div.fmc-vnav-toggle-container .mdl-textfield {
+    margin: -5px 0 -30px;
+}
+
+div.fmc-vnav-toggle-container input {
+    width: 133px;
+}
+
+div.fmc-vnav-toggle-container label {
+    width: 133px;
+}
+
+div.fmc-vnav-toggle-container label[for="vnav-toggle"] {
+    width: 110px;
+}
+
+div.fmc-vnav-toggle-container .mdl-textfield--floating-label {
+    width: 140px;
+}
+
+div.fmc-spd-toggle-container {
+    padding: 15px 0 25px;
+    margin-left: 110px;
+    width: 140px;
+}
+
+div.fmc-vnav-phase-container {
+    position: relative;
+    left: 35%;
+    background: rgba(158, 158, 158, .2);
+    padding-bottom: 1px;
+}
+
+div.fmc-vnav-phase-container span {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0 10px;
+}
+
+div.fmc-vnav-phase-container .toggle-phase {
+    background: rgb(83, 109, 254);
+    color: white;
+}
+
+div.fmc-vnav-phase-container .toggle-phase:hover {
+    background: rgb(83, 109, 254);
+}
+
+div.fmc-vnav-phase-container .toggle-phase:active {
+    background: rgba(83, 109, 254, 0.4);
+}
+
+div.fmc-vnav-phase-container .lock-phase {
+    min-width: 36px;
+    width: 36px;
+}
+
+div.fmc-vnav-phase-container .lock-phase .material-icons {
+    margin-left: -10px;
+}
+
+div.fmc-vnav-phase-container .lock-phase.locked {
+    background: red;
+    color: white;
+}
+
+div.fmc-vnav-phase-container .lock-phase.locked:hover {
+    background: red;
+}
+
+div.fmc-vnav-phase-container .lock-phase.locked:active {
+    background: rgba(255, 0, 0, 0.4);
+}

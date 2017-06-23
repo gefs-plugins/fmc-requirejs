@@ -1,6 +1,39 @@
 <!-- VNAV tab contents -->
 <section class="mdl-layout__tab-panel fmc-vnav">
     <div class="page-content">
-        <div class="fmc-vnav-container"></div>
+        <div class="fmc-vnav-container">
+            <table>
+                <tr>
+
+                    <!-- VNAV toggle and cruise altitude-->
+                    <td>
+                        <div class="fmc-vnav-toggle-container">
+                            <div>
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="vnav-toggle">
+                                    <input type="checkbox" id="vnav-toggle" class="mdl-switch__input" disabled>
+                                    <span class="mdl-switch__label">VNAV</span>
+                                </label>
+                                <i class="material-icons">unfold_more_horizontal</i>
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input cruise-alt" pattern="\d*">
+                                <label class="mdl-textfield__label">Cruise Altitude (ft.)</label>
+                                <span class="mdl-textfield__error">Invalid Cruise Altitude</span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Speed control -->
+                    <td>
+                        <div class="fmc-spd-toggle-container">
+                            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="spd-toggle">
+                                <input type="checkbox" id="spd-toggle" class="mdl-switch__input">
+                                <span class="mdl-switch__label">SPD Control</span>
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </section>

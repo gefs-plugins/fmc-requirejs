@@ -19,7 +19,7 @@
                     <div class="mdl-layout__tab-bar fmc-modal__tab-bar">
                         <a to=".fmc-rte" class="mdl-layout__tab fmc-btn__fade is-active" interactive=".wpt-tab">RTE</a>
                         <a to=".fmc-arr" class="mdl-layout__tab fmc-btn__fade" interactive=".arr-tab">ARR</a>
-                        <a to=".fmc-vnav" class="mdl-layout__tab fmc-btn__fade">VNAV</a>
+                        <a to=".fmc-vnav" class="mdl-layout__tab fmc-btn__fade" interactive=".vnav-tab">VNAV</a>
                         <a to=".fmc-prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
                         <a to=".fmc-map" class="mdl-layout__tab fmc-btn__fade" style="display: none;">MAP</a> <!--TODO-->
                         <a to=".fmc-load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <!-- Modal actions: close -->
+    <!-- Modal actions: interactive -->
     <div class="fmc-modal__actions">
         <button class="mdl-button close">Close</button>
 		<button class="mdl-button mdl-js-button mdl-button--raised interactive save-wpt-data wpt-tab is-active">Save Waypoints</button>
@@ -58,6 +58,13 @@
                 <input type="checkbox" id="auto-tod" class="mdl-switch__input">
                 <span class="mdl-switch__label">Automatically Calculate TOD</span>
             </label>
+        </div>
+        <div class="fmc-vnav-phase-container interactive vnav-tab">
+            <span>Phase</span>
+            <button class="mdl-button mdl-js-button mdl-button--raised toggle-phase">Climb</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase">
+                <i class="material-icons">lock</i>
+            </button>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab">Remove Log Data</button>
 
