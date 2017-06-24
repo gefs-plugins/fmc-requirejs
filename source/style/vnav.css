@@ -51,7 +51,7 @@ div.fmc-vnav-phase-container {
     position: relative;
     left: 35%;
     background: rgba(158, 158, 158, .2);
-    padding-bottom: 1px;
+    margin-top: -10px;
 }
 
 div.fmc-vnav-phase-container span {

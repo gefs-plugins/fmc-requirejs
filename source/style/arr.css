@@ -1,4 +1,5 @@
 div.fmc-arr-container .fmc-arr__input-label {
+    margin-left: 50px;
     font-size: 16px;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.26);
@@ -6,9 +7,14 @@ div.fmc-arr-container .fmc-arr__input-label {
 }
 
 div.fmc-arr-container td div {
-    width: 200px;
+    width: 140px;
     margin-left: 10px;
     position: relative;
+}
+
+div.fmc-arr-container .mdl-textfield__input,
+div.fmc-arr-container label {
+    width: 137px;
 }
 
 div.fmc-auto-tod-container {
@@ -21,7 +27,6 @@ div.fmc-auto-tod-container .mdl-switch {
 }
 
 div.fmc-auto-tod-container .mdl-switch__label {
-    color: rgb(255, 193, 7);
     font-weight: bold;
     cursor: default !important;
 }
