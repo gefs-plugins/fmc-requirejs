@@ -3,16 +3,19 @@
 define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 
 	// Top Of Descent distance
-	var tod;
+	var tod = 0;
 
 	// If VNAV is enabled
 	var VNAV = false;
+
+	// Speed control
+	var spdControl = true;
 
 	// Arrival airport name and coords
 	var arrival = [];
 
 	// Cruise altitude
-	var cruise;
+	var cruiseAlt;
 
 	// Flight phase
 	var phase = "climb";
@@ -164,8 +167,9 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	// Variables
 	exports.tod = tod;
 	exports.VNAV = VNAV;
+	exports.spdControl = spdControl;
 	exports.arrival = arrival;
-	exports.cruise = cruise;
+	exports.cruiseAlt = cruiseAlt;
 	exports.phase = phase;
 	exports.todCalc = todCalc;
 	exports.fieldElev = fieldElev;

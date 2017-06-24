@@ -16,7 +16,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			var hasRestriction = next !== -1;
 
 			var tod = flight.tod;
-			var cruise = flight.cruise;
+			var cruiseAlt = flight.cruiseAlt;
 			var fieldElev = flight.fieldElev;
 			var phase = flight.phase;
 			var todCalc = flight.todCalc;
@@ -32,16 +32,14 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			}
 
 			var spd, vs, alt;
-			var tSpd = $('#tSpd')
-				.hasClass('btn-warning');
-			if (tSpd) spd = params[0];
+			if (flight.spdControl) spd = params[0];
 
 			// If the aircraft is climbing
 			if (phase == "climb") {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
-					var totalDist = distance.target(cruise - currentAlt) + distance.target(targetAlt - cruise);
+					var totalDist = distance.target(cruiseAlt - currentAlt) + distance.target(targetAlt - cruiseAlt);
 					console.log("totalDist: " + totalDist);
 
 					// Checks to see if the altitude restriction is on the climbing phase or descent phase
@@ -51,14 +49,14 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 						alt = targetAlt;
 					} else {
 						vs = params[1];
-						alt = cruise;
+						alt = cruiseAlt;
 					}
 				}
 
 				// If there are no altitude restrictions left on the route
 				else {
 					vs = params[1];
-					alt = cruise;
+					alt = cruiseAlt;
 				}
 			}
 
@@ -88,9 +86,9 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			if (phase === "cruise" && (todCalc || !tod)) {
 				if (hasRestriction) {
 					tod = distance.route(route.length) - nextDist;
-					tod += distance.target(targetAlt - cruise);
+					tod += distance.target(targetAlt - cruiseAlt);
 				} else {
-					tod = distance.target(fieldElev - cruise);
+					tod = distance.target(fieldElev - cruiseAlt);
 				}
 				tod = Math.round(tod);
 				$('#todInput').val('' + tod).change();
