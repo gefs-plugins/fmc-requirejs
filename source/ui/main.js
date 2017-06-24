@@ -1,9 +1,9 @@
 "use strict"; // jshint unused:false
 
 define([
-	'consts', 'distance', 'flight', 'log', 'map', 'math', 'toggles',
+	'bugfix', 'consts', 'distance', 'flight', 'log', 'map', 'math', 'toggles',
 	'waypoints', 'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine', './position'
-], function (consts, distance, flight, log, map, math, toggles, waypoints, lnav, progress, vnav, E) {
+], function (bugfix, consts, distance, flight, log, map, math, toggles, waypoints, lnav, progress, vnav, E) {
 
 	// Checks if UI has been properly placed
 	var timer = setInterval(function () {
@@ -208,14 +208,5 @@ define([
 			log.speed();
 		}, 15000);*/
 
-		// Stops key event propagation
-		function stopPropagation (event) {
-			event.stopImmediatePropagation();
-		}
-
-		$(modal).find('input')
-			.keyup(stopPropagation)
-			.keydown(stopPropagation)
-			.keypress(stopPropagation);
 	}
 });

@@ -1,8 +1,8 @@
 "use strict"; // A big FIXME right here
 
 define([
-	'math', 'flight', 'input-fix', 'nav/progress', 'ui/elements', 'minify!html/waypoints.html', 'exports'
-], function (math, flight, fixInput, progress, E, wptInputField, exports) {
+	'bugfix', 'math', 'flight', 'nav/progress', 'ui/elements', 'minify!html/waypoints.html', 'exports'
+], function (bugfix, math, flight, progress, E, wptInputField, exports) {
 
 	var container = E.container,
 		btn = E.btn,
@@ -169,6 +169,7 @@ define([
 		exports.route.push([]);
 		$(container.wptList).find('tbody').append(wptInputField);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
+		bugfix.stopPropagation();
 	}
 
 	/**
@@ -260,7 +261,7 @@ define([
 	 */
 	function getNextWaypointWithAltRestriction () {
 		for (var i = exports.nextWaypoint; i < exports.route.length; i++) {
-			if (exports.route[i][3]) return i;
+			if (exports.route[i] && exports.route[i][3]) return i;
 		}
 		return -1;
 	}
@@ -311,23 +312,23 @@ define([
 				if (!wpt[3] || wpt[3] === null || wpt[3] === 0) wpt[3] = undefined;
 			});
 
-			if (arr[0]) fixInput($(input.dep).val(arr[0]).change());
-			if (arr[1]) fixInput($(input.arr).val(arr[1]).change());
-			if (arr[2]) fixInput($(input.fn).val(arr[2]).change());
+			if (arr[0]) bugfix.input($(input.dep).val(arr[0]).change());
+			if (arr[1]) bugfix.input($(input.arr).val(arr[1]).change());
+			if (arr[2]) bugfix.input($(input.fn).val(arr[2]).change());
 
 			for (var i = 0; i < rte.length; i++) {
 				addWaypoint();
 				// Puts in the waypoint
-				if (rte[i][0]) fixInput($(input.wpt).eq(i).val(rte[i][0]).change());
+				if (rte[i][0]) bugfix.input($(input.wpt).eq(i).val(rte[i][0]).change());
 
 				// If the waypoint is not eligible or a duplicate
 				if (!rte[i][4] || !$(input.lat).eq(i).val()) {
-					if (rte[i][1]) fixInput($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
-					if (rte[i][1]) fixInput($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
+					if (rte[i][1]) bugfix.input($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
+					if (rte[i][1]) bugfix.input($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
 				}
 
 				if (rte[i][3]) // If there is an altitude restriction
-					fixInput($(input.alt).eq(i).val(rte[i][3]).change());
+					bugfix.input($(input.alt).eq(i).val(rte[i][3]).change());
 			}
 			// Auto-saves the data once again
 			saveData();

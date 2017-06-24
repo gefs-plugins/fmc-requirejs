@@ -1,6 +1,6 @@
 "use strict";
 
-define(['distance', 'flight', 'math', 'waypoints'], function (distance, flight, math, waypoints) {
+define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (distance, flight, math, waypoints, progress) {
 	return {
 		timer: null,
 
@@ -12,7 +12,7 @@ define(['distance', 'flight', 'math', 'waypoints'], function (distance, flight, 
 
 			var params = flight.flightParams();
 
-			var next = flight.nextWptAltRes();
+			var next = waypoints.nextWptAltRes();
 			var hasRestriction = next !== -1;
 
 			var tod = flight.tod;
@@ -106,7 +106,7 @@ define(['distance', 'flight', 'math', 'waypoints'], function (distance, flight, 
 			flight.tod = tod;
 
 			// Updates flight phase
-			flight.updatePhase();
+			progress.updatePhase();
 		}
 	};
 });
