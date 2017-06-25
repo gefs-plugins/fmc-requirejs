@@ -1,6 +1,27 @@
 <!-- LOAD tab contents -->
 <section class="mdl-layout__tab-panel fmc-load">
     <div class="page-content">
-        <div class="fmc-load-container"></div>
+        <div class="fmc-load-container">
+
+            <!-- Load Route -->
+            <div class="fmc-load-wpt__label">
+                <span>Waypoints / Route</span>
+                <i class="material-icons">mode_edit</i>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input load-wpt">
+                <label class="mdl-textfield__label">Enter waypoints separated by spaces or a generated route</label>
+                <span class="mdl-textfield__error">Invalid, Please Re-enter</span>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-button--icon load-wpt">
+                <i class="material-icons">keyboard_return</i>
+            </button>
+
+            <!-- Generate Route -->
+            <div class="mdl-textfield mdl-js-textfield fmc-generate-rte-container">
+                <textarea class="mdl-textfield__input generate-rte" rows="6" maxrows="6"></textarea>
+                <label class="mdl-textfield__label">Generated Route</label>
+            </div>
+        </div>
     </div>
 </section>

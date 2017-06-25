@@ -22,7 +22,7 @@
                         <a to=".fmc-vnav" class="mdl-layout__tab fmc-btn__fade" interactive=".vnav-tab">VNAV</a>
                         <a to=".fmc-prog" class="mdl-layout__tab fmc-btn__fade">PROG</a>
                         <a to=".fmc-map" class="mdl-layout__tab fmc-btn__fade" style="display: none;">MAP</a> <!--TODO-->
-                        <a to=".fmc-load" class="mdl-layout__tab fmc-btn__fade">LOAD</a>
+                        <a to=".fmc-load" class="mdl-layout__tab fmc-btn__fade" interactive=".load-tab">LOAD</a>
                         <a to=".fmc-log" class="mdl-layout__tab fmc-btn__fade" interactive=".log-tab">LOG</a>
                     </div>
                 </header>
@@ -66,6 +66,8 @@
                 <i class="material-icons">lock</i>
             </button>
         </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive clear-rte load-tab">Clear</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive generate-rte load-tab">Generate Route</button>
         <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab">Remove Log Data</button>
 
     </div>

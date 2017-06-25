@@ -2,6 +2,12 @@
 
 define(['ui/elements'], function (E) {
 
+    // Stops event propagation
+    function stopPropagation (event) {
+        event.stopImmediatePropagation();
+    }
+
+
      return {
         /**
         * Fixes MDL input changes that use .change() function
@@ -16,11 +22,12 @@ define(['ui/elements'], function (E) {
          * Stops input key propagation
          */
         stopPropagation: function () {
-            function stopPropagation (event) {
-                event.stopImmediatePropagation();
-            }
-
             $(E.modal).find('input')
+                .keyup(stopPropagation)
+                .keydown(stopPropagation)
+                .keypress(stopPropagation);
+
+            $(E.textarea)
                 .keyup(stopPropagation)
                 .keydown(stopPropagation)
                 .keypress(stopPropagation);

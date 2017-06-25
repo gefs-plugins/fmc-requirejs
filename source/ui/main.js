@@ -213,6 +213,18 @@ define([
 		// --------------- LOAD TAB ---------------
 		// ----------------------------------------
 
+		// Loads waypoints separated by spaces or generated route
+		$(container.loadPage).on('click', btn.loadWpt, function () {
+			waypoints.toRoute($(input.loadWpt).val().trim());
+		});
+
+		// Generates an FMC route to the textarea
+		$(modal).on('click', btn.generateRte, function () {
+			bugfix.input($(E.textarea).val(waypoints.toRouteString()).change());
+		}).on('click', btn.clearRte, function () {
+			$(E.textarea).val('').change().parent().removeClass('is-dirty');
+		});
+
 		// -----------------------------------------
 		// ---------------- LOG TAB ----------------
 		// -----------------------------------------

@@ -1,0 +1,32 @@
+div.fmc-load-container .mdl-textfield {
+    width: 420px;
+    overflow: hidden;
+}
+
+div.fmc-load-container .fmc-load-wpt__label {
+    font-size: 16px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    float: left;
+    padding: 21px 10px;
+}
+
+div.fmc-load-container .fmc-load-wpt__label .material-icons {
+    vertical-align: middle;
+}
+
+div.fmc-load-container button.load-wpt {
+    margin-top: -60px;
+}
+
+div.fmc-load-container .fmc-generate-rte-container {
+    margin-left: 10px;
+}
+
+div.fmc-load-container .fmc-generate-rte-container textarea {
+    resize: none;
+    font-family: monospace;
+}
+
+button.interactive.load-tab {
+    float: right;
+}

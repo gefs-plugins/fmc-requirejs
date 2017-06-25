@@ -21,11 +21,11 @@ define({
         map: '.fmc-modal .fmc-map-container'
     },
     btn: {
-        fmcBtn: '.fmc-btn',
+        fmcBtn: 'button.fmc-btn',
         interactive: '.interactive',
-        saveWptData: '.save-wpt-data',
-        retrieveWpt: '.retrieve-wpt',
-        removeLogData: '.remove-log-data',
+        saveWptData: 'button.save-wpt-data',
+        retrieveWpt: 'button.retrieve-wpt',
+        removeLogData: 'button.remove-log-data',
         close: '.close',
         addWpt: 'button[action="add-wpt"]',
         activateWpt: 'button[action="activate-wpt"]',
@@ -35,8 +35,11 @@ define({
         autoTOD: 'input#auto-tod',
         vnavToggle: 'input#vnav-toggle',
         spdToggle: 'input#spd-toggle',
-        togglePhase: '.toggle-phase',
-        lockPhase: '.lock-phase'
+        togglePhase: 'button.toggle-phase',
+        lockPhase: 'button.lock-phase',
+        loadWpt: 'button.load-wpt',
+        generateRte: 'button.generate-rte',
+        clearRte: 'button.clear-rte'
     },
     input: {
         dep: 'input.dep',
@@ -48,6 +51,8 @@ define({
         alt: 'input.alt',
         todDist: 'input.tod-dist',
         fieldElev: 'input.field-elev',
-        cruiseAlt: 'input.cruise-alt'
-    }
+        cruiseAlt: 'input.cruise-alt',
+        loadWpt: 'input.load-wpt'
+    },
+    textarea: 'textarea.generate-rte'
 });

@@ -6,9 +6,8 @@ div.fmc-dep-arr-table-container table {
 	width: 100%;
 }
 
-div.fmc-dep-arr-table-container i {
-	position: relative;
-	top: 5px;
+div.fmc-dep-arr-table-container .material-icons {
+	vertical-align: middle;
 	margin-right: 5px;
 }
 
