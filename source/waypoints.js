@@ -17,15 +17,15 @@ define([
 	 * @param {Number} index1 The start index
 	 * @param {Number} index2 The end/target index
 	 */
-	exports.route.move = function (index1, index2) {
-		if (index2 >= this.length) {
-			var k = index2 - this.length;
+	exports.move = function (index1, index2) {
+		if (index2 >= exports.route.length) {
+			var k = index2 - exports.route.length;
 			while ((k--) + 1) {
-				this.push(undefined);
+				exports.route.push(undefined);
 			}
 		}
-		this.splice(index2, 0, this.splice(index1, 1)[0]);
-		return this;
+		exports.route.splice(index2, 0, exports.route.splice(index1, 1)[0]);
+		return exports.route;
 	};
 
 	/**
@@ -348,7 +348,7 @@ define([
 		console.log("Waypoint #" + (n + 1) + "(index=" + n + ") moved " + d);
 		if (!(d === "up" && n === 0 || d === "down" && n === exports.route.length - 1)) {
 			if (d === "up") {
-				exports.route.move(n, n - 1);
+				exports.move(n, n - 1);
 				r.insertBefore(r.prev());
 				if (exports.nextWaypoint == n + 1) {
 					exports.nextWaypoint = n;
@@ -358,7 +358,7 @@ define([
 				progress.printNextWaypointInfo(n);
 				progress.printNextWaypointInfo(n - 1);
 			} else {
-				exports.route.move(n, n + 1);
+				exports.move(n, n + 1);
 				r.insertAfter(r.next());
 				if (exports.nextWaypoint == n + 1) {
 					exports.nextWaypoint = n + 2;
