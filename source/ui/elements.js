@@ -55,10 +55,13 @@ define({
         loadWpt: 'input.load-wpt'
     },
     textarea: {
+        flightDist: '.fmc-prog-info.dest-info .distance-info span',
         flightETE: '.fmc-prog-info.dest-info .time-info .ete',
         flightETA: '.fmc-prog-info.dest-info .time-info .eta',
+        todDist: '.fmc-prog-info.tod-info .distance-info span',
         todETE: '.fmc-prog-info.tod-info .time-info .ete',
         todETA: '.fmc-prog-info.tod-info .time-info .eta',
+        nextDist: '.fmc-prog-info.next-wpt-info .distance-info span',
         nextETE: '.fmc-prog-info.next-wpt-info .time-info',
         generateRte: 'textarea.generate-rte'
     }

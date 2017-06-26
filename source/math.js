@@ -1,6 +1,6 @@
 "use strict";
 
-define(['consts', 'exports'], function (consts, exports) {
+define(['exports'], function (exports) {
 
 		/**
 		 * Turns degrees to radians
@@ -29,7 +29,7 @@ define(['consts', 'exports'], function (consts, exports) {
 		 */
 		exports.getGroundSpeed = function () {
 			var tas = geofs.aircraft.instance.animationValue.ktas;
-			var vs = (60 * geofs.aircraft.instance.animationValue.climbrate) * consts.feetToNM;
+			var vs = (60 * geofs.aircraft.instance.animationValue.climbrate) * exports.FEET_TO_NM;
 			console.log("tas: " + tas + ", vs: " + vs);
 			return Math.sqrt(tas * tas - vs * vs);
 		};
@@ -50,7 +50,7 @@ define(['consts', 'exports'], function (consts, exports) {
 			lat2 = exports.toRadians(lat2);
 			var a = Math.sin(dlat / 2) * Math.sin(dlat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) * Math.sin(dlon / 2);
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-			return exports.earthRadiusNM * c;
+			return exports.EARTH_RADIUS_NM * c;
 		};
 
 		/**
@@ -82,12 +82,14 @@ define(['consts', 'exports'], function (consts, exports) {
 		 */
 		exports.getClimbrate = function (deltaAlt, nextDist) {
 			var gs = exports.getGroundSpeed();
-			var vs = 100 * Math.round((gs * (deltaAlt / (nextDist * consts.nmToFeet)) * consts.nmToFeet / 60) / 100);
+			var vs = 100 * Math.round((gs * (deltaAlt / (nextDist * exports.NM_TO_FEET)) * exports.NM_TO_FEET / 60) / 100);
 			return vs;
 		};
 
-		/**
-		 * Earth's radius in nautical miles, used to calculate Great Circle Distance
-		 */
-		exports.earthRadiusNM = 3440.06;
+		// Earth's radius in nautical miles, used to calculate Great Circle Distance
+		exports.EARTH_RADIUS_NM = 3440.06;
+
+		// Feet / Nautical Miles conversion
+		exports.FEET_TO_NM = 1 / 6076;
+		exports.NM_TO_FEET = 6076;
 });

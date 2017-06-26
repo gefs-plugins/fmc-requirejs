@@ -1,9 +1,9 @@
 "use strict"; // jshint unused:false
 
 define([
-	'bugfix', 'consts', 'distance', 'flight', 'log', 'map', 'math', 'waypoints',
+	'bugfix', 'distance', 'flight', 'log', 'map', 'math', 'waypoints',
 	'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine', './position'
-], function (bugfix, consts, distance, flight, log, map, math, waypoints, lnav, progress, vnav, E) {
+], function (bugfix, distance, flight, log, map, math, waypoints, lnav, progress, vnav, E) {
 
 	// Checks if UI has been properly placed
 	var timer = setInterval(function () {
@@ -146,7 +146,7 @@ define([
 
 		// TOD Distance and Field Elevation inputs
 		$(container.arrPage).on('change', input.todDist, function () {
-			flight.tod = Number($(this).val());
+			flight.todDist = Number($(this).val());
 		}).on('change', input.fieldElev, function () {
 			flight.fieldElev = Number($(this).val());
 		});
