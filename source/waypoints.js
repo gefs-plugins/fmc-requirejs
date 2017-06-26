@@ -4,6 +4,9 @@ define([
 	'bugfix', 'math', 'flight', 'nav/progress', 'ui/elements', 'minify!html/waypoints.html', 'exports'
 ], function (bugfix, math, flight, progress, E, wptInputField, exports) {
 
+	// Autopilt++ Dependencies
+	var getWaypoint = autopilot_pp.require('getwaypoint');
+
 	var container = E.container,
 		btn = E.btn,
 		input = E.input;
@@ -17,7 +20,7 @@ define([
 	 * @param {Number} index1 The start index
 	 * @param {Number} index2 The end/target index
 	 */
-	exports.move = function (index1, index2) {
+	function move (index1, index2) {
 		if (index2 >= exports.route.length) {
 			var k = index2 - exports.route.length;
 			while ((k--) + 1) {
@@ -26,7 +29,7 @@ define([
 		}
 		exports.route.splice(index2, 0, exports.route.splice(index1, 1)[0]);
 		return exports.route;
-	};
+	}
 
 	/**
 	 * Turns the waypoints into an array
@@ -35,12 +38,15 @@ define([
 	 */
 	function makeFixesArray () {
 		var result = [];
-		var departureVal = $('#departureInput').val();
+
+		var departureVal = $(input.dep).val();
 		if (departureVal) result.push(departureVal);
-		$('.waypoint td:first-child div > input').each(function() {
-			result.push($(this).val());
+
+		exports.route.forEach(function (wpt) {
+			result.push(wpt[0]);
 		});
-		var arrivalVal = $('#arrivalInput').val();
+
+		var arrivalVal = $(input.arr).val();
 		if (arrivalVal) result.push(arrivalVal);
 
 		return result;
@@ -78,21 +84,7 @@ define([
 	 *         {Boolean} false otherwise
 	 */
 	function getCoords (wpt) {
-		// FIXME
-		// autopilot_pp update currently not implemented
-		// autopilot_pp is an important dependency for FMC
-		try {
-			autopilot_pp.require('icaoairports');
-			autopilot_pp.require('waypoints');
-		} catch (e) {
-			return undefined;
-		}
-
-		if (autopilot_pp.require('icaoairports')[wpt]) {
-			return autopilot_pp.require('icaoairports')[wpt];
-		} else if (autopilot_pp.require('waypoints')[wpt]) {
-			return autopilot_pp.require('waypoints')[wpt];
-		} else return undefined;
+		return getWaypoint(wpt);
 	}
 
 	/**
@@ -124,7 +116,7 @@ define([
 			var isWaypoints = true;
 			var departure = $('#wptDeparture')[0].checked;
 			var arrival = $('#wptArrival')[0].checked;
-			var n = $('#waypoints tbody tr').length - 1;
+			var n = exports.route.length - 1; // FIXME index error
 			var a;
 			var str = [];
 
@@ -140,24 +132,22 @@ define([
 				exports.route = [];
 
 				if (departure) {
-					var wpt = str[0];
-					$('#departureInput').val(wpt).change();
+					$(input.dep).val(str[0]).change();
 					a = 1;
 				} else {
 					a = 0;
-					$('#departureInput').val("").change();
+					$(input.dep).val('').change();
 				}
 				for (var i = 0; i + a < str.length; i++) {
 					addWaypoint();
-					var wpt = str[i + a];
-					$('#waypoints input.wpt:eq(' + i + ')').val(wpt).change();
+					$(input.wpt).eq(i).val(str[i+a]).change();
 				}
 				if (arrival) {
 					var wpt = str[str.length - 1];
-					$('#arrivalInput').val(wpt).change();
+					$(input.arr).val(wpt).change();
 				}
 			} else {
-				alert('Invalid Waypoints Input');
+				console.error('Invalid Waypoints Input');
 			}
 		} else loadFromSave(s);
 	}
@@ -198,9 +188,7 @@ define([
 	/**
 	 * Activates a waypoint or deactivates if the waypoint is already activated
 	 *
-	 * @param {Number} n The index to be activated or deactivated
-	 * FIXME Potential index confusion
-	 * Should: start with 0; Instead: started with 1
+	 * @param {Number} n The index (starts with 0) to be activated or deactivated
 	 */
 	function activateWaypoint (n) {
 
@@ -228,8 +216,7 @@ define([
 			if (n < exports.route.length) {
 				exports.nextWaypoint = n;
 				var wpt = exports.route[exports.nextWaypoint];
-				// TODO When AP++ implements fix for duplicate waypoints, improve this algorithm
-				// FIXME also...
+
 				if (wpt[4]) {
 					$('#Qantas94Heavy-ap-icao > input').val(wpt[0]).change();
 				} else {
@@ -348,7 +335,7 @@ define([
 		console.log("Waypoint #" + (n + 1) + "(index=" + n + ") moved " + d);
 		if (!(d === "up" && n === 0 || d === "down" && n === exports.route.length - 1)) {
 			if (d === "up") {
-				exports.move(n, n - 1);
+				move(n, n - 1);
 				r.insertBefore(r.prev());
 				if (exports.nextWaypoint == n + 1) {
 					exports.nextWaypoint = n;
@@ -358,7 +345,7 @@ define([
 				progress.printNextWaypointInfo(n);
 				progress.printNextWaypointInfo(n - 1);
 			} else {
-				exports.move(n, n + 1);
+				move(n, n + 1);
 				r.insertAfter(r.next());
 				if (exports.nextWaypoint == n + 1) {
 					exports.nextWaypoint = n + 2;
@@ -372,6 +359,7 @@ define([
 	}
 
 	// Functions
+	exports.move = move;
 	exports.makeFixesArray = makeFixesArray;
 	exports.toFixesString = toFixesString;
 	exports.toRouteString = toRouteString;

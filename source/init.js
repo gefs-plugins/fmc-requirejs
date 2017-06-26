@@ -7,9 +7,18 @@
 "use strict";
 
 (function () {
+
+	// Error function if FMC is loaded without Autopilot++
+	function error () {
+		console.error('You must have Autopilot++ installed in order to use FMC.');
+	}
+
 	// Check if geofs.init has already been called
 	if (window.geofs && geofs.canvas) {
-		require(['ui/main']);
+		if (window.autopilot_pp)
+			require(['ui/main']);
+		else error();
+
 		return;
 	}
 
@@ -17,7 +26,8 @@
 		if (!window.geofs || !geofs.init) return;
 		clearInterval(timer);
 
-		if (geofs.canvas) require(['ui/main']);
+		if (geofs.canvas && window.autopilot_pp) require(['ui/main']);
+		else if (!window.autopilot_pp) error();
 		else {
 			var oldInit = geofs.init;
 

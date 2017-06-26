@@ -2,8 +2,11 @@
 
 define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 
+	// Autopilot++ Dependencies
+	var apModes = autopilot_pp.require('autopilot').modes;
+
 	// Top Of Descent distance
-	var tod = 0;
+	var todDist = 0;
 
 	// If VNAV is enabled
 	var VNAV = false;
@@ -18,7 +21,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	var cruiseAlt;
 
 	// Flight phase
-	var phase = "climb";
+	var phase = 'climb';
 
 	// Automatic TOD calculation
 	var todCalc = false;
@@ -29,56 +32,49 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	/**
 	 * Gets each plane's flight parameters, for VNAV
 	 *
-	 * @returns {Array} vertical speed and speed
+	 * @returns {Array} [speed, vertical speed]
 	 */
 	function getFlightParameters () {
 		var spd, vs;
-		// var gndElev = geofs.groundElevation * metersToFeet;
 		var a = geofs.aircraft.instance.animationValue.altitude;
-		var isMach = $('#Qantas94Heavy-ap-spd span:last-child').text().trim() === 'M.';
-		var switchMode = function() {
-			$('#Qantas94Heavy-ap-spd span:last-child').click();
-		};
+
+		// Defaults to KIAS mode
+		apModes.speed.isMach(false);
 
 		// CLIMB
-		if (phase == "climb") {
-			if (a < 30000) {
-				if (isMach) switchMode();
-			} else if (a >= 30000) {
-				if (!isMach) switchMode();
-			}
-
+		if (phase == 'climb') {
 			var profile = getVNAVProfile().climb;
-			var index;
-			for (var i=0; i<profile.length; i++) {
+
+			for (var i = 0, index; i < profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
 					break;
 				}
 			}
+
 			spd = profile[index][2];
 			vs = profile[index][3];
+
+			switchIfMach(spd);
 		}
 
 		// DESCENT
-		else if (phase == "descent") {
-			if (a > 30000) {
-				if (!isMach) switchMode();
-			} else {
-				if (isMach) switchMode();
-			}
-
+		else if (phase == 'descent') {
 			var profile = getVNAVProfile().descent;
-			var index;
-			for (var i=0; i<profile.length; i++) {
+
+			for (var i = 0, index; i < profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
 					break;
 				}
 			}
+
 			spd = profile[index][2];
 			vs = profile[index][3];
+
+			switchIfMach(spd);
 		}
+
 		return [spd, vs];
 	}
 
@@ -89,9 +85,9 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 * @returns {String} Formatted time: "hours : minutes"
 	 */
 	function formatTime (time) {
-		if (!time[0] || !time[1]) return '-:-';
+		if (!time[0] || !time[1]) return '--:--';
 		time[1] = checkZeros(time[1]);
-		return time[0] + ":" + time[1];
+		return time[0] + ':' + time[1];
 	}
 
 	/**
@@ -101,7 +97,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 * @returns {String} The original number with 0's added
 	 */
 	function checkZeros (i) {
-		if (i < 10) i = "0" + i;
+		if (i < 10) i = '0' + i;
 		return i;
 	}
 
@@ -164,8 +160,19 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 			|| vnavProfile.DEFAULT;
 	}
 
+
+	/**
+	 * @private
+	 * Checks if the speed input is mach and switches mode
+	 *
+	 * @param {Number} spd The speed to be checked
+	 */
+	function switchIfMach (spd) {
+		if (spd <= 10) apModes.speed.isMach(true);
+	}
+
 	// Variables
-	exports.tod = tod;
+	exports.todDist = todDist;
 	exports.VNAV = VNAV;
 	exports.spdControl = spdControl;
 	exports.arrival = arrival;
