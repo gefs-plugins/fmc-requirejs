@@ -252,14 +252,6 @@ define([
 			log.update();
 		}, 120000);
 
-		log.gearTimer = setInterval(function () {
-			log.gear();
-		}, 12000);
-
-		log.flapsTimer = setInterval(function () {
-			log.flaps();
-		}, 5000);
-
 		log.speedTimer = setInterval(function () {
 			log.speed();
 		}, 15000);*/
