@@ -54,5 +54,12 @@ define({
         cruiseAlt: 'input.cruise-alt',
         loadWpt: 'input.load-wpt'
     },
-    textarea: 'textarea.generate-rte'
+    textarea: {
+        flightETE: '.fmc-prog-info.dest-info .time-info .ete',
+        flightETA: '.fmc-prog-info.dest-info .time-info .eta',
+        todETE: '.fmc-prog-info.tod-info .time-info .ete',
+        todETA: '.fmc-prog-info.tod-info .time-info .eta',
+        nextETE: '.fmc-prog-info.next-wpt-info .time-info',
+        generateRte: 'textarea.generate-rte'
+    }
 });

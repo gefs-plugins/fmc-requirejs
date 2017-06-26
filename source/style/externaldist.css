@@ -1,0 +1,9 @@
+div.fmc-prog-info.geofs-f-standard-ui {
+    position: absolute;
+    margin-left: 5px;
+    margin-top: -2px;
+}
+
+div.fmc-prog-info.geofs-f-standard-ui span.mdl-chip.mdl-chip--contact {
+    padding-right: 12px;
+}

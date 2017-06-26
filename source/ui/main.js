@@ -18,7 +18,8 @@ define([
 		var modal = document.querySelector(E.modal),
 			container = E.container,
 			btn = E.btn,
-			input = E.input;
+			input = E.input,
+			textarea = E.textarea;
 
 		// Adds one input field on start
 		waypoints.addWaypoint();
@@ -206,10 +207,6 @@ define([
 		});
 
 		// ----------------------------------------
-		// --------------- PROG TAB ---------------
-		// ----------------------------------------
-
-		// ----------------------------------------
 		// --------------- LOAD TAB ---------------
 		// ----------------------------------------
 
@@ -219,13 +216,13 @@ define([
 		});
 
 		// Disables editing on the generated route textarea
-		$(E.textarea).prop('disabled', true);
+		$(textarea.generateRte).prop('disabled', true);
 
 		// Generates an FMC route to the textarea
 		$(modal).on('click', btn.generateRte, function () {
-			bugfix.input($(E.textarea).val(waypoints.toRouteString()).change());
+			bugfix.input($(textarea.generateRte).val(waypoints.toRouteString()).change());
 		}).on('click', btn.clearRte, function () {
-			$(E.textarea).val('').change().parent().removeClass('is-dirty');
+			$(textarea.generateRte).val('').change().parent().removeClass('is-dirty');
 		});
 
 		// -----------------------------------------

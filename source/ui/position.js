@@ -1,4 +1,4 @@
-"use strict"; // jshint unused:false
+"use strict";
 
 define([
 	'./elements', 'polyfill/dialog-polyfill', 'minify!polyfill/dialog-polyfill.css',
@@ -28,5 +28,6 @@ define([
 	// FMC toggle button
 	$(button).insertAfter('button.geofs-f-standard-ui[data-toggle-panel=".geofs-map-list"]');
 
-	// TODO externalDist
+	// External Distance indicator
+	$(externalDist).appendTo('.geofs-ui-bottom');
 });

@@ -1,0 +1,58 @@
+div.fmc-prog-info {
+    display: inline-block;
+}
+
+div.fmc-prog-info .material-icons {
+    vertical-align: middle;
+}
+
+div.fmc-prog-container .fmc-prog-info {
+    padding: 8px;
+}
+
+div.fmc-prog-container .fmc-prog-info.dest-info {
+    margin: 0 70px;
+}
+
+div.fmc-prog-info.next-wpt-info {
+    margin-left: 180px;
+}
+
+div.fmc-prog-info span.mdl-chip.mdl-chip--contact {
+    padding: 0;
+    height: auto;
+}
+
+div.fmc-prog-info .distance-info {
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    width: 70px;
+}
+
+div.fmc-prog-info .mdl-chip__contact {
+    font-size: 14px;
+    height: 36px;
+    line-height: 36px;
+    width: auto;
+    padding: 0 8px;
+}
+
+div.fmc-prog-info .time-info {
+    background: tan;
+    margin-left: 8px;
+    margin-right: 0px;
+    text-align: left;
+}
+
+div.fmc-prog-info .time-info div {
+    line-height: 18px;
+    font-size: 12px;
+    width: 55px;
+}
+
+div.fmc-prog-info.next-wpt-info .time-info {
+    width: 50px;
+    text-align: center;
+}
