@@ -218,6 +218,9 @@ define([
 			waypoints.toRoute($(input.loadWpt).val().trim());
 		});
 
+		// Disables editing on the generated route textarea
+		$(E.textarea).prop('disabled', true);
+
 		// Generates an FMC route to the textarea
 		$(modal).on('click', btn.generateRte, function () {
 			bugfix.input($(E.textarea).val(waypoints.toRouteString()).change());

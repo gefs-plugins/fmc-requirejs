@@ -26,11 +26,6 @@ define(['ui/elements'], function (E) {
                 .keyup(stopPropagation)
                 .keydown(stopPropagation)
                 .keypress(stopPropagation);
-
-            $(E.textarea)
-                .keyup(stopPropagation)
-                .keydown(stopPropagation)
-                .keypress(stopPropagation);
         }
     };
 });
