@@ -19,7 +19,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		var lat2 = flight.arrival[1] || null;
 		var lon2 = flight.arrival[2] || null;
 		var times = [[], [], [], [], []]; // flightETE, flightETA, todETE, todETA, nextETE
-		var nextDist = distance.route(nextWaypoint + 1) || '--';
+		var nextDist = nextWaypoint === null ? 0 : math.getDistance(lat1, lon1, route[nextWaypoint][1], route[nextWaypoint][2]);
 		var flightDist;
 
 		// Checks if the whole route is complete

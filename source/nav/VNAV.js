@@ -1,6 +1,10 @@
 "use strict";
 
-define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (distance, flight, math, waypoints, progress) {
+define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/elements'], function (bugfix, distance, flight, math, waypoints, progress, E) {
+
+	// Autopilot++ Dependencies
+	var apModes = autopilot_pp.require('autopilot').modes;
+
 	return {
 		timer: null,
 
@@ -15,7 +19,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			var next = waypoints.nextWptAltRes();
 			var hasRestriction = next !== -1;
 
-			var tod = flight.tod;
+			var todDist = flight.todDist;
 			var cruiseAlt = flight.cruiseAlt;
 			var fieldElev = flight.fieldElev;
 			var phase = flight.phase;
@@ -24,7 +28,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			var currentAlt = geofs.aircraft.instance.animationValue.altitude;
 			var targetAlt, deltaAlt, nextDist, targetDist;
 			if (hasRestriction) {
-				targetAlt = route[next - 1][3];
+				targetAlt = route[next][3];
 				deltaAlt = targetAlt - currentAlt;
 				nextDist = distance.route(next);
 				targetDist = distance.target(deltaAlt);
@@ -35,7 +39,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			if (flight.spdControl) spd = params[0];
 
 			// If the aircraft is climbing
-			if (phase == "climb") {
+			if (phase === 'climb') {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -61,7 +65,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			}
 
 			// If the aircraft is on descent
-			else if (phase == "descent") {
+			else if (phase == 'descent') {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -83,25 +87,25 @@ define(['distance', 'flight', 'math', 'waypoints', 'nav/progress'], function (di
 			}
 
 			// Calculates Top of Descent
-			if (phase === "cruise" && (todCalc || !tod)) {
+			if (phase === 'cruise' && (todCalc || !todDist)) {
 				if (hasRestriction) {
-					tod = distance.route(route.length) - nextDist;
-					tod += distance.target(targetAlt - cruiseAlt);
+					todDist = distance.route(route.length) - nextDist;
+					todDist += distance.target(targetAlt - cruiseAlt);
 				} else {
-					tod = distance.target(fieldElev - cruiseAlt);
+					todDist = distance.target(fieldElev - cruiseAlt);
 				}
-				tod = Math.round(tod);
-				$('#todInput').val('' + tod).change();
-				console.log('TOD changed to ' + tod);
+				todDist = Math.round(todDist);
+				bugfix.input($(E.input.todDist).val(todDist).change());
+				console.log('TOD changed to ' + todDist);
 			}
 
 			// Updates SPD, VS, and ALT in Autopilot++ if new values exist
-			if (spd) $('#Qantas94Heavy-ap-spd > input').val('' + spd).change();
-			if (vs) $('#Qantas94Heavy-ap-vs > input').val('' + vs).change();
-			if (alt) $('#Qantas94Heavy-ap-alt > input').val('' + alt).change();
+			if (spd && waypoints.nextWaypoint) apModes.speed.value(spd);
+			if (vs && waypoints.nextWaypoint) apModes.vs.value(vs);
+			if (alt && waypoints.nextWaypoint) apModes.altitude.value(alt);
 
-			// Updates tod
-			flight.tod = tod;
+			// Updates todDist
+			flight.todDist = todDist;
 
 			// Updates flight phase
 			progress.updatePhase();

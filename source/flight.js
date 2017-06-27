@@ -45,7 +45,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 		if (phase == 'climb') {
 			var profile = getVNAVProfile().climb;
 
-			for (var i = 0, index; i < profile.length; i++) {
+			for (var i = 0, index = 0; i < profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
 					break;
@@ -62,7 +62,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 		else if (phase == 'descent') {
 			var profile = getVNAVProfile().descent;
 
-			for (var i = 0, index; i < profile.length; i++) {
+			for (var i = 0, index = 0; i < profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
 					break;
@@ -85,7 +85,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 * @returns {String} Formatted time: "hours : minutes"
 	 */
 	function formatTime (time) {
-		if (!time[0] || !time[1]) return '--:--';
+		if (typeof time[0] !== 'number' || typeof time[1] !== 'number') return '--:--';
 		time[1] = checkZeros(time[1]);
 		return time[0] + ':' + time[1];
 	}

@@ -4,7 +4,7 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 
 	/**
 	 * Computes the full route distance with waypoints
-	 * Between start (inclusive) and end index (exclusive)
+	 * Between start (inclusive) and end index (inclusive)
 	 *
 	 * @param {Number} end The index of the end of the route to be calculated
 	 * @returns {Number} The route distance
@@ -20,22 +20,25 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 		if (route.length === 0) return 0;
 
 		// If there is not an activated waypoint
-		else if (!waypoints.nextWaypoint) {
+		if (waypoints.nextWaypoint === null) {
 			// If arrival airport is present and current coords are defined
-			if (arrival[0] && pos)
+			if (arrival[0] && pos[0])
 				return math.getDistance(pos[0], pos[1], arrival[1], arrival[2]);
 
 			// If there are only current coords
-			else if (pos)
+			if (pos[0])
 				return math.getDistance(pos[0], pos[1], route[route.length - 1][1], route[route.length - 1][2]);
 
 			// If neither is present
-			else return math.getDistance(route[0][1], route[0][2], route[route.length - 1][1], route[route.length - 1][2]);
+			return math.getDistance(route[0][1], route[0][2], route[route.length - 1][1], route[route.length - 1][2]);
 		}
 
 		// If there is a waypoint activated
 		else {
 			var total = 0;
+
+			// Calculates current location to next waypoint
+			if (pos[0]) total += math.getDistance(pos[0], pos[1], route[start][1], route[start][2]);
 
 			// Loops from start to end to get total distance
 			for (var i = start + 1; i < end && i < route.length; i++) {

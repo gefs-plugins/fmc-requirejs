@@ -15,7 +15,7 @@ define(['ui/elements'], function (E) {
         * @param {jQuery} e jQuery element
         */
         input: function (e) {
-        	e.parent().addClass('is-dirty');
+            e.parent().addClass('is-dirty');
         },
 
         /**

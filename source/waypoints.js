@@ -5,7 +5,10 @@ define([
 ], function (bugfix, math, flight, progress, E, wptInputField, exports) {
 
 	// Autopilt++ Dependencies
-	var getWaypoint = autopilot_pp.require('getwaypoint');
+	var autopilot = autopilot_pp.require('autopilot'),
+		gc = autopilot_pp.require('greatcircle'),
+		getWaypoint = autopilot_pp.require('getwaypoint'),
+		icao = autopilot_pp.require('json!data/icaoairports.json');
 
 	var container = E.container,
 		btn = E.btn,
@@ -111,45 +114,53 @@ define([
 	 * @param {String} s Input of waypoints or a shared/generated route
 	 */
 	function toRoute (s) {
-		if (s.indexOf('["') !== 0) {
-			// var index = s.indexOf('fpl=');  SkyVector disabled
-			var isWaypoints = true;
-			var departure = $('#wptDeparture')[0].checked;
-			var arrival = $('#wptArrival')[0].checked;
-			var n = exports.route.length - 1; // FIXME index error
-			var a;
-			var str = [];
+		// If it is a generated route
+		if (s.indexOf('["') === 0) {
+			loadFromSave(s);
+			return;
+		}
 
-			str = s.trim().toUpperCase().split(" ");
-			for (var i = 0; i < str.length; i++)
-					if (str[i].length > 5 || str[i].length < 1 || !(/^\w+$/.test(str[i])))
-						isWaypoints = false;
+		var isWaypoints = true;
+		var a, str = [];
 
-			if (isWaypoints) {
-				for (var i = 0; i < n; i++) {
-					removeWaypoint(1);
-				}
-				exports.route = [];
+		str = s.trim().toUpperCase().split(' ');
 
-				if (departure) {
-					$(input.dep).val(str[0]).change();
-					a = 1;
-				} else {
-					a = 0;
-					$(input.dep).val('').change();
-				}
-				for (var i = 0; i + a < str.length; i++) {
-					addWaypoint();
-					$(input.wpt).eq(i).val(str[i+a]).change();
-				}
-				if (arrival) {
-					var wpt = str[str.length - 1];
-					$(input.arr).val(wpt).change();
-				}
-			} else {
-				console.error('Invalid Waypoints Input');
-			}
-		} else loadFromSave(s);
+		// Check if inputs are valid
+		for (var i = 0; i < str.length; i++)
+				if (str[i].length > 5 || str[i].length < 1 || !(/^\w+$/.test(str[i])))
+					isWaypoints = false;
+
+		// If the first or last is departure or arrival airport
+		var departure = !!icao[str[0]];
+		var arrival = !!icao[str[str.length - 1]];
+
+		// If input is invalid, exit function call
+		if (!isWaypoints) {
+			console.error('Invalid Waypoints Input');
+			return;
+		}
+
+		// Removes all current waypoints
+		$(E.container.wptRow).remove();
+		exports.route = [];
+
+		if (departure) {
+			bugfix.input($(input.dep).val(str[0]).change());
+			a = 1;
+		} else {
+			a = 0;
+			$(input.dep).val('').change().parent().removeClass('is-dirty');
+		}
+
+		for (var i = 0; i + a < str.length; i++) {
+			addWaypoint();
+			bugfix.input($(input.wpt).eq(i).val(str[i+a]).change());
+		}
+
+		if (arrival) {
+			var wpt = str[str.length - 1];
+			bugfix.input($(input.arr).val(wpt).change());
+		}
 	}
 
 	/**
@@ -217,25 +228,31 @@ define([
 				exports.nextWaypoint = n;
 				var wpt = exports.route[exports.nextWaypoint];
 
-				if (wpt[4]) {
-					$('#Qantas94Heavy-ap-icao > input').val(wpt[0]).change();
-				} else {
-					$('#Qantas94Heavy-ap-gc-lat > input').val(wpt[1]).change();
-					$('#Qantas94Heavy-ap-gc-lon > input').val(wpt[2]).change();
-				}
+				// FIXME once waypoint mode is fixed, convert to waypoint mode
+				gc.latitude(wpt[1]);
+				gc.longitude(wpt[2]);
+				autopilot.currentMode(1); // Switches to Lat/Lon mode
+
 				toggle(false);
 				toggle(true);
 
 				progress.update(); // Updates progress: prints general progress info and next waypoint info
-				console.log('Waypoint # ' + n + 1 + ' activated | index: ' + n);
+				console.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
 			} else {
-				$('#Qantas94Heavy-ap-icao > input').val(flight.arrival[0]).change();
+				// FIXME once waypoint mode is fixed, convert to waypoint mode
+				if (flight.arrival[1]) {
+					gc.latitude(flight.arrival[1]);
+					gc.longitude(flight.arrival[2]);
+				}
+
 				toggle(false);
 			}
 		} else {
 			toggle(false);
 			exports.nextWaypoint = null;
-			$('#Qantas94Heavy-ap-icao > input').val('').change();
+			gc.latitude(undefined);
+			gc.longitude(undefined);
+			autopilot.currentMode(0);
 		}
 	}
 
@@ -261,8 +278,7 @@ define([
 			alert ("There is no route to save");
 		} else {
 			localStorage.removeItem('fmcWaypoints');
-			var arr = toRouteString();
-			localStorage.setItem("fmcWaypoints", arr);
+			localStorage.setItem("fmcWaypoints", toRouteString());
 		}
 	}
 
@@ -305,13 +321,14 @@ define([
 
 			for (var i = 0; i < rte.length; i++) {
 				addWaypoint();
+
 				// Puts in the waypoint
 				if (rte[i][0]) bugfix.input($(input.wpt).eq(i).val(rte[i][0]).change());
 
 				// If the waypoint is not eligible or a duplicate
 				if (!rte[i][4] || !$(input.lat).eq(i).val()) {
 					if (rte[i][1]) bugfix.input($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
-					if (rte[i][1]) bugfix.input($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
+					if (rte[i][2]) bugfix.input($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
 				}
 
 				if (rte[i][3]) // If there is an altitude restriction

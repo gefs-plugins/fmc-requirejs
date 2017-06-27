@@ -97,47 +97,57 @@ define([
 
 		// Waypoint list input actions: update `route` array
 		$(container.wptList).on('change', input.wpt, function () {
+			var index = $(this).parents().eq(2).index() - 1;
+
 			if (!$(this).parent().hasClass('is-invalid')) {
 				var wpt = $(this).val();
 				var coords = waypoints.getCoords(wpt);
-				var index = $(this).parents().eq(2).index() - 1;
 				if (!coords) {
-					waypoints.route[index][0] = wpt;
-					waypoints.route[index][4] = false;
+					var altRes = waypoints.route[index][3];
+					$(this).parents().eq(2).find(input.lat).val('').change().parent().removeClass('is-dirty');
+					$(this).parents().eq(2).find(input.lon).val('').change().parent().removeClass('is-dirty');
+					waypoints.route[index] = [wpt, undefined, undefined, altRes, false];
 				} else {
-					$(this).parents().eq(2).find(input.lat).val(coords[0]);
-					$(this).parents().eq(2).find(input.lon).val(coords[0]);
+					bugfix.input($(this).parents().eq(2).find(input.lat).val(coords[0]).change());
+					bugfix.input($(this).parents().eq(2).find(input.lon).val(coords[1]).change());
 					waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
-					progress.printNextWaypointInfo(index);
 				}
 			}
+
+			progress.printNextWaypointInfo(index);
 		}).on('change', input.lat, function () {
-			if (!$(this).parent().hasClass('is-invalid')) {
-				var index = $(this).parents().eq(2).index() - 1;
-				if (!$(this).val() || $(this).val() === '') {
-					waypoints.route[index][1] = undefined;
-				} else {
-					waypoints.route[index][1] = waypoints.formatCoords($(this).val());
-				}
+			var index = $(this).parents().eq(2).index() - 1;
+
+			// If lat input is invalid
+			if ($(this).parent().hasClass('is-invalid') || !$(this).val() || $(this).val() === '') {
+				waypoints.route[index][1] = undefined;
+			} else {
+				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
 				waypoints.route[index][4] = false;
-				if (waypoints.route[index][2]) progress.printNextWaypointInfo(index);
 			}
+
+			// Prints next waypoint info regardless
+			progress.printNextWaypointInfo(index);
+
 		}).on('change', input.lon, function () {
-			if (!$(this).parent().hasClass('is-invalid')) {
-				var index = $(this).parents().eq(2).index() - 1;
-				if (!$(this).val() || $(this).val() === '') {
-					waypoints.route[index][2] = undefined;
-				} else {
-					waypoints.route[index][2] = waypoints.formatCoords($(this).val());
-				}
+			var index = $(this).parents().eq(2).index() - 1;
+
+			// If lon input is invalid
+			if ($(this).parent().hasClass('is-invalid') || !$(this).val() || $(this).val() === '') {
+				waypoints.route[index][2] = undefined;
+			} else {
+				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
 				waypoints.route[index][4] = false;
-				if (waypoints.route[index][1]) progress.printNextWaypointInfo(index);
 			}
+
+			// Prints next waypoint info regardless
+			progress.printNextWaypointInfo(index);
+
 		}).on('change', input.alt, function () {
-			if (!$(this).parent().hasClass('is-invalid')) {
-				var index = $(this).parents().eq(2).index() - 1;
-				waypoints.route[index][3] = Number($(this).val());
-			}
+			var index = $(this).parents().eq(2).index() - 1;
+
+			if (!$(this).parent().hasClass('is-invalid')) waypoints.route[index][3] = Number($(this).val());
+		 	else waypoints.route[index][3] = undefined;
 		});
 
 		// -----------------------------------------
@@ -146,9 +156,11 @@ define([
 
 		// TOD Distance and Field Elevation inputs
 		$(container.arrPage).on('change', input.todDist, function () {
-			flight.todDist = Number($(this).val());
+			if (!$(this).parent().hasClass('is-invalid')) flight.todDist = Number($(this).val());
+			else flight.todDist = 0;
 		}).on('change', input.fieldElev, function () {
-			flight.fieldElev = Number($(this).val());
+			if (!$(this).parent().hasClass('is-invalid')) flight.fieldElev = Number($(this).val());
+			else flight.fieldElev = undefined;
 		});
 
 		// Automatic TOD calculation button
@@ -165,9 +177,9 @@ define([
 		// --------------- VNAV TAB ---------------
 		// ----------------------------------------
 
-		// VNAV, Speed toggle and cruising altitude input
 		$(btn.vnavToggle).prop('disabled', true).parent().addClass('is-disabled');
 
+		// VNAV, Speed toggle and cruising altitude input
 		$(container.vnavPage).on('click', btn.vnavToggle, function () {
 			if (flight.cruiseAlt) {
 				if ($(this).parent().hasClass('is-checked')) {
@@ -175,7 +187,7 @@ define([
 					clearInterval(vnav.timer);
 				} else {
 					flight.VNAV = true;
-					// vnav.timer = setInterval(vnav.update, 5000);
+					vnav.timer = setInterval(function () { vnav.update(); }, 5000);
 				}
 			}
 		}).on('click', btn.spdToggle, function () {
@@ -236,22 +248,10 @@ define([
 		/* ---- All Initializations ---- */
 
 		// Initializes all timers
-		// FIXME It is annoying when debugging
-		/*lnav.timer = setInterval(function () {
-			lnav.update();
-		}, 5000);
-
-		progress.timer = setInterval(function () {
-			progress.update(waypoints);
-		}, 5000);
-
-		log.mainTimer = setInterval(function () {
-			log.update();
-		}, 120000);
-
-		log.speedTimer = setInterval(function () {
-			log.speed();
-		}, 15000);*/
+		lnav.timer = setInterval(function () { lnav.update(); }, 5000);
+		progress.timer = setInterval(function () { progress.update(); }, 5000);
+		log.mainTimer = setInterval(function () { log.update(); }, 30000);
+		log.speedTimer = setInterval(function () { log.speed(); }, 15000);
 
 	}
 });
