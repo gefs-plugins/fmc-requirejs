@@ -4,6 +4,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 
 	var container = E.container,
 		input = E.input,
+		btn = E.btn,
 		textarea = E.textarea;
 
 	var timer = null;
@@ -48,9 +49,26 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	 * Updates plane's phase of flying: climb, cruise, or descent
 	 *
 	 * @description Phase contains "climb," "cruise," and "descent"
+	 *
+	 * @param {Number} phaseId The ID of the flight phase
 	 */
-	function updatePhase () {
-		// @TODO add a better logic, especially near the cruise phase
+	function updatePhase (phaseId) {
+		// If phase is locked, ignore
+		if ($(container.vnavPhase).find(btn.lockPhase).hasClass('locked')) return;
+
+		var phaseToText = ['climb', 'cruise', 'descent'];
+
+		if (phaseId !== undefined) {
+			flight.phase = phaseToText[phaseId];
+		} else {
+			for (var index = 0; index < phaseToText.length; index++) {
+				if (flight.phase === phaseToText[index]) break;
+			}
+
+			flight.phase = phaseToText[index === phaseToText.length - 1 ? 0 : index + 1];
+		}
+
+		$(btn.togglePhase).text(flight.phase);
 	}
 
 	/**

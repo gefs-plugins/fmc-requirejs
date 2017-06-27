@@ -74,6 +74,7 @@ define([
 		}).on('click', btn.activateWpt, function () {
 			var index = $(this).parents().eq(1).index() - 1;
 			waypoints.activateWaypoint(index);
+			lnav.update();
 		}).on('click', btn.removeWpt, function () {
 			var index = $(this).parents().eq(1).index() - 1;
 			waypoints.removeWaypoint(index);
@@ -93,6 +94,7 @@ define([
 				if (coords) flight.arrival = [wpt, coords[0], coords[1]];
 				else flight.arrival = [];
 			} else flight.arrival = [];
+			lnav.update();
 		});
 
 		// Waypoint list input actions: update `route` array
@@ -212,7 +214,7 @@ define([
 
 		// VNAV phase
 		$(container.vnavPhase).on('click', btn.togglePhase, function () {
-			// TODO implement function
+			progress.updatePhase();
 		}).on('click', btn.lockPhase, function () {
 			if ($(this).hasClass('locked')) $(this).removeClass('locked');
 			else $(this).addClass('locked');
@@ -248,7 +250,6 @@ define([
 		/* ---- All Initializations ---- */
 
 		// Initializes all timers
-		lnav.timer = setInterval(function () { lnav.update(); }, 5000);
 		progress.timer = setInterval(function () { progress.update(); }, 5000);
 		log.mainTimer = setInterval(function () { log.update(); }, 30000);
 		log.speedTimer = setInterval(function () { log.speed(); }, 15000);

@@ -181,8 +181,11 @@ define([
 	function removeWaypoint (n) {
 		$(container.wptRow).eq(n).remove();
 		exports.route.splice(n, 1);
-		if (exports.nextWaypoint == n) {
+		if (exports.nextWaypoint === n) {
 			exports.nextWaypoint = null;
+			gc.latitude(undefined);
+			gc.longitude(undefined);
+			autopilot.currentMode(0);
 		}
 
 		if (exports.route.length !== 0) {
@@ -223,7 +226,7 @@ define([
 			}
 		};
 
-		if (exports.nextWaypoint != n) {
+		if (exports.nextWaypoint !== n) {
 			if (n < exports.route.length) {
 				exports.nextWaypoint = n;
 				var wpt = exports.route[exports.nextWaypoint];

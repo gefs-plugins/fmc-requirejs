@@ -12,6 +12,8 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 		 * Controls VNAV, plane's vertical navigation, set on a timer
 		 */
 		update: function () {
+			if (!flight.VNAV) return;
+
 			var route = waypoints.route;
 
 			var params = flight.flightParams();
@@ -22,7 +24,6 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 			var todDist = flight.todDist;
 			var cruiseAlt = flight.cruiseAlt;
 			var fieldElev = flight.fieldElev;
-			var phase = flight.phase;
 			var todCalc = flight.todCalc;
 
 			var currentAlt = geofs.aircraft.instance.animationValue.altitude;
@@ -36,7 +37,51 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 			}
 
 			var spd, vs, alt;
+
+			/**********************
+			 * Flight Phase Logic *
+			 **********************/
+			var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
+			var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
+			var lat2 = flight.arrival[1] || null;
+			var lon2 = flight.arrival[2] || null;
+			var flightDist;
+
+			// Checks if the whole route is complete
+			for (var i = 0, valid = true; i < route.length; i++) {
+				if (!route[i][1] || !route[i][2]) valid = false;
+			}
+			if (valid) flightDist = distance.route(route.length);
+			else flightDist = math.getDistance(lat1, lon1, lat2, lon2);
+
+			// Invalid distance, phase resets to default = climb
+			if (isNaN(flightDist)) progress.updatePhase(0);
+
+			// Total route dist is less than T/D distance, phase = descent
+			else if (flightDist < todDist) progress.updatePhase(2);
+
+			// If current altitude is close to the cruise altitude, phase = cruise
+			else if (Math.abs(cruiseAlt - currentAlt) <= 100) progress.updatePhase(1);
+
+			// If current altitude is less than cruise altitude, phase = climb
+			else if (currentAlt < cruiseAlt) progress.updatePhase(0);
+
+			// If current altitude is greater than cruise altitude
+			// This means that cruise altitude is lowered during cruise
+			// Phase still is cruise, but assign V/S value
+			else if (currentAlt > cruiseAlt) {
+				progress.updatePhase(1);
+				vs = -1000;
+			}
+
+			// Else, resets to default phase = climb
+			else progress.updatePhase(0);
+
+			// ==============================
+
 			if (flight.spdControl) spd = params[0];
+
+			var phase = flight.phase;
 
 			// If the aircraft is climbing
 			if (phase === 'climb') {
@@ -106,9 +151,6 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 
 			// Updates todDist
 			flight.todDist = todDist;
-
-			// Updates flight phase
-			progress.updatePhase();
 		}
 	};
 });

@@ -1,6 +1,6 @@
 "use strict";
 
-define(['distance', 'waypoints'], function (distance, waypoints) {
+define(['distance', 'flight', 'waypoints'], function (distance, flight, waypoints) {
 	return {
 		timer: null, //setInterval(updateLNAV, 5000);
 
@@ -8,6 +8,11 @@ define(['distance', 'waypoints'], function (distance, waypoints) {
 		 * Controls LNAV, plane's lateral navigation, set on a timer
 		 */
 		update: function () {
+			if (waypoints.nextWaypoint === null || !flight.arrival[1]) {
+				clearInterval(this.timer);
+				return;
+			}
+
 			var d = distance.route(waypoints.nextWaypoint + 1);
 			if (d <= distance.turn(60)) {
 				waypoints.activateWaypoint(waypoints.nextWaypoint + 1);
