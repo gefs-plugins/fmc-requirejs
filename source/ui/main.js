@@ -195,7 +195,10 @@ define([
 		}).on('click', btn.spdToggle, function () {
 			if ($(this).parent().hasClass('is-checked'))
 				flight.spdControl = false;
-			else flight.spdControl = true;
+			else {
+				flight.spdControl = true;
+				vnav.update();
+			}
 		}).on('change', input.cruiseAlt, function () {
 			// If cruise altitude is an error or is empty (0)
 			if ($(this).parent().hasClass('is-invalid') || Number($(this).val().trim()) === 0) {
@@ -204,12 +207,14 @@ define([
 				$(btn.vnavToggle).prop('disabled', true)
 					.parent().removeClass('is-checked').addClass('is-disabled');
 				flight.VNAV = false;
+				clearInterval(vnav.timer);
 				return;
 			}
 
 			// Sets cruise alt and enables vnav toggle button
 			flight.cruiseAlt = Number($(this).val().trim());
 			$(btn.vnavToggle).prop('disabled', false).parent().removeClass('is-disabled');
+			vnav.update();
 		});
 
 		// VNAV phase
