@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name GeoFS Flight Management Computer
-// @description This extension adds an FMC which controls other features included such as VNAV, LNAV, route, progress information, etc.
+// @name Flight Management Computer for GeoFS
+// @description This extension adds an FMC which controls features such as VNAV, LNAV, route, progress information, etc.
 // @namespace GeoFS-Plugins
 // @match http://*/geofs.php*
 // @run-at document-end

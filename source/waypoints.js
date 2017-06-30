@@ -1,4 +1,4 @@
-"use strict"; // A big FIXME right here
+"use strict";
 
 define([
 	'bugfix', 'math', 'flight', 'nav/progress', 'ui/elements', 'minify!html/waypoints.html', 'exports'
