@@ -1,0 +1,62 @@
+<!-- ILS tab contents -->
+<section class="mdl-layout__tab-panel fmc-ils">
+    <div class="page-content">
+        <div class="fmc-ils-container">
+            <table>
+                <tr>
+                    <th>Glideslope</th>
+                    <th>Runway Threshold</th>
+                    <th></th>
+                    <th>Opposite Threshold</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <!-- Glideslope input -->
+                    <td>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input glideslope">
+                            <label class="mdl-textfield__label">Degrees</label>
+                            <span class="mdl-textfield__error">Invalid Glideslope</span>
+                        </div>
+                    </td>
+
+                    <!-- Threshold latitude input -->
+                    <td>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input threshold-lat" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+                            <label class="mdl-textfield__label">Lat.</label>
+                            <span class="mdl-textfield__error">Invalid Latitude</span>
+                        </div>
+                    </td>
+
+                    <!-- Threshold longitude input -->
+                    <td>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input threshold-lon" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+                            <label class="mdl-textfield__label">Lon.</label>
+                            <span class="mdl-textfield__error">Invalid Longitude</span>
+                        </div>
+                    </td>
+
+                    <!-- Opposite latitude input -->
+                    <td>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input opposite-lat" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+                            <label class="mdl-textfield__label">Lat.</label>
+                            <span class="mdl-textfield__error">Invalid Latitude</span>
+                        </div>
+                    </td>
+
+                    <!-- Opposite longitude input -->
+                    <td>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input opposite-lon" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+                            <label class="mdl-textfield__label">Lon.</label>
+                            <span class="mdl-textfield__error">Invalid Longitude</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>

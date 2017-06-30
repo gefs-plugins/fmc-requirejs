@@ -26,17 +26,29 @@ define(['math', 'exports'], function (math, exports) {
      *
      * @returns {Number} The value of glideslope deviation
      */
-    function glideslopeCalc () { // TODO
+    function glideslopeCalc () { // FIXME find the true value for "VALUE"
         var gs = exports.glideslope;
         var threshold = exports.thresholdCoords;
         var current = geofs.aircraft.instance.llaLocation;
 
+        // If either one component is missing, invalid, returns 0
         if (!(threshold[0] && threshold[1] && current[0] && current[1] && current[2])) return 0;
 
-        var distanceToThreshold = math.getDistance(current[0], current[1], threshold[0], threshold[1]);
-        var targetAltitude = Math.atan(math.toRadians(gs)) * distanceToThreshold;
+        var VALUE = 1; // Constant value to multiply ticks off by
 
-        return targetAltitude - current[2]; // FIXME Take ground elevation into account
+        // Landing zone calculations and target altitude
+        var altitudeAtAim = geofs.getGroundAltitude(threshold[0], threshold[1]); // Feet
+        var distanceToAim = math.getDistance(current[0], current[1], threshold[0], threshold[1]) + 500 * math.FEET_TO_NM; // nm
+        var targetAltitude = Math.tan(math.toRadians(gs)) * distanceToAim * math.NM_TO_FEET + altitudeAtAim; // Feet
+
+        // Each tick stands for 1/4 degrees off the intended glideslope
+        var quarterDegree = Math.tan(math.toRadians(0.25)) * distanceToAim * math.NM_TO_FEET;
+        var ticksOff = (targetAltitude - current[2]) / quarterDegree;
+
+        // Maximum of 2 ticks on each side
+        if (Math.abs(ticksOff) <= 2) return ticksOff * VALUE;
+        else if (ticksOff < 0) return -VALUE * 2;
+        else return VALUE * 2;
     }
 
     /**
@@ -44,12 +56,29 @@ define(['math', 'exports'], function (math, exports) {
      *
      * @returns {Number} The value of localizer deviation
      */
-    function localizerCalc () { // TODO
+    function localizerCalc () { // FIXME find the true value for "VALUE" and offset distance threshold
         var threshold = exports.thresholdCoords;
         var opposite = exports.oppositeCoords;
         var current = geofs.aircraft.instance.llaLocation;
 
+        // If either one component is missing, invalid, returns 0
         if (!(threshold[0] && threshold[1] && opposite[0] && opposite[1] && current[0])) return 0;
+
+        var VALUE = 1; // Constant to multiply ticks off by
+
+        // Deviation from centerline calculation, achieved by using the sine of the angle in between
+        var distanceToThreshold = math.getDistance(current[0], current[1], threshold[0], threshold[1]);
+        var runwayBearing = math.getBearing(threshold[0], threshold[1], opposite[0], opposite[1]);
+        var deltaTheta = math.getBearing(current[0], current[1], threshold[0], threshold[1]) - runwayBearing;
+        var offsetDistance = Math.sin(math.toRadians(deltaTheta)) * distanceToThreshold * math.NM_TO_FEET;
+
+        // Each tick stands for 180 feet off the centerline
+        var ticksOff = offsetDistance / 180;
+
+        // Maximum of 1 tick on each side
+        if (Math.abs(ticksOff) <= 1) return ticksOff * VALUE;
+        else if (ticksOff < 0) return -VALUE;
+        else return VALUE;
     }
 
     // Replaces the current "attitudeJet"
