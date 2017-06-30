@@ -22,35 +22,44 @@ a.fmc-btn__fade.is-active {
 	color: rgb(83, 109, 254) !important;
 }
 
-dialog.fmc-modal {
+div.fmc-modal {
+	display: none;
 	width: 665px;
     padding: 14px 14px;
 	border: none;
 	border-radius: 7px;
 	position: fixed;
 	top: 10%;
+	left: 0px;
+	right: 0px;
+	height: fit-content;
+	height: -moz-fit-content;
+	height: -webkit-fit-content;
+	color: black;
+	margin: auto;
+	background: white;
 }
 
-dialog.fmc-modal + .backdrop {
-    background: none; /* Dialog polyfill fix */
+div.fmc-modal.opened {
+	display: block;
 }
 
-dialog.fmc-modal::backdrop {
+div.fmc-modal::backdrop {
 	background: none;
 }
 
-dialog.fmc-modal .fmc-modal__close {
+div.fmc-modal .fmc-modal__close {
 	height: 25px;
 	margin: -13px 0;
 	float: right;
 }
 
-dialog.fmc-modal h4 {
+div.fmc-modal h4 {
 	text-align: center;
 	margin-top: 10px !important;
 }
 
-dialog.fmc-modal .fmc-modal__no-shadow {
+div.fmc-modal .fmc-modal__no-shadow {
 	box-shadow: none !important;
 	background: white !important;
     min-height: inherit;
@@ -59,7 +68,7 @@ dialog.fmc-modal .fmc-modal__no-shadow {
 
 @media screen and (max-width: 1024px) {
 	/* MDL's small screen hides modal header */
-	dialog.fmc-modal .fmc-modal__no-shadow {
+	div.fmc-modal .fmc-modal__no-shadow {
 		display: block !important;
 	}
 }

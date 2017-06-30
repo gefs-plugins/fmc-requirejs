@@ -8,8 +8,6 @@
 	},
 	"devDependencies": {
 		"requirejs": "latest",
-		"dialog-polyfill": "latest",
-		"text": "requirejs/text",
 		"minify": "harryxue1999/minify"
 	},
 	"scripts": {

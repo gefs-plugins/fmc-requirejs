@@ -15,7 +15,7 @@ define([
 
 	// FMC actions init function
 	function loadFMC () {
-		var modal = document.querySelector(E.modal),
+		var modal = E.modal,
 			container = E.container,
 			btn = E.btn,
 			input = E.input,
@@ -32,10 +32,10 @@ define([
 
 		// Modal actions: open/close
 		$(modal).on('click', btn.close, function () {
-			modal.close();
+			$(modal).removeClass('opened');
 		}).parent().on('click', btn.fmcBtn, function () {
-			if (!modal.open) modal.showModal();
-			else modal.close();
+			if ($(modal).hasClass('opened')) $(modal).removeClass('opened');
+			else $(modal).addClass('opened');
 		});
 
 		// Modal tab contents: toggle

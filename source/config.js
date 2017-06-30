@@ -4,20 +4,14 @@
     requirejs.config({
     	urlArgs: '_=' + Date.now(), // Cache bust
     	paths: {
-    		text: '../node_modules/text/text',
-    		minify: '../node_modules/minify/minify',
-    		polyfill: '../node_modules/dialog-polyfill'
+    		text: '../node_modules/minify/node_modules/text/text',
+    		minify: '../node_modules/minify/minify'
     	},
         shim: {
             // Adds UserScript
             'init': {
                 deps: ['userscript']
-            },
-
-            // Requires license info
-            'polyfill/dialog-polyfill': {
-                deps: ['ui/polyfill-license']
-            },
+            }
         }
     });
 })();
