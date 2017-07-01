@@ -72,8 +72,9 @@ define(['math', 'exports'], function (math, exports) {
         var deltaTheta = math.getBearing(current[0], current[1], threshold[0], threshold[1]) - runwayBearing;
         var offsetDistance = Math.sin(math.toRadians(deltaTheta)) * distanceToThreshold * math.NM_TO_FEET;
 
-        // Each tick stands for 180 feet off the centerline
-        var ticksOff = offsetDistance / 180;
+        // Each tick stands for 3 degrees off the centerline (300 feet at threshold)
+        var maxOffsetDistance = Math.sin(math.toRadians(3)) * (distanceToThreshold * math.NM_TO_FEET + 500);
+        var ticksOff = offsetDistance / (300 + maxOffsetDistance);
 
         // Maximum of 1 tick on each side
         if (Math.abs(ticksOff) <= 1) return ticksOff * VALUE;
