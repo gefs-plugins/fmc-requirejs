@@ -4,7 +4,7 @@ define(['ui/elements', 'flight'], function (E, flight) {
 
 	var animationValue = geofs.aircraft.instance.animationValue;
 
-	return {
+	var log = {
 		mainTimer: null, // = setInterval(updateLog, 120000);
 		speedTimer: null, // = setInterval(checkSpeed, 15000);
 
@@ -46,11 +46,11 @@ define(['ui/elements', 'flight'], function (E, flight) {
 		},
 
 		/**
-		 * Checks for overspeed under 10000 feet for log, set on a timer
+		 * Checks for overspeed under 10000 feet AGL for log, set on a timer
 		 */
 		speed: function () {
 			var kcas = animationValue.kcas;
-			var altitude = animationValue.altitude;
+			var altitude = animationValue.altitude + geofs.groundElevation * METERS_TO_FEET;
 			if (kcas > 255 && altitude < 10000) {
 				this.update('Overspeed');
 			}
@@ -66,4 +66,6 @@ define(['ui/elements', 'flight'], function (E, flight) {
 			$(E.container.logData).remove();
 		}
 	};
+
+	return log;
 });
