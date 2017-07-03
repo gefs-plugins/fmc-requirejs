@@ -36,6 +36,9 @@ define([
 		}).parent().on('click', btn.fmcBtn, function () {
 			if ($(modal).hasClass('opened')) $(modal).removeClass('opened');
 			else $(modal).addClass('opened');
+		}).keydown(function (event) { // Sets escape button to close FMC
+			if ((event.which === 27 || event.keyCode === 27) && $(this).is(':visible'))
+				$(modal).removeClass('opened');
 		});
 
 		// Modal tab contents: toggle
