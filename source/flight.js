@@ -85,7 +85,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 	 * @returns {String} Formatted time: "hours : minutes"
 	 */
 	function formatTime (time) {
-		if (typeof time[0] !== 'number' || typeof time[1] !== 'number') return '--:--';
+		if (isNaN(time[0]) || isNaN(time[1])) return '--:--';
 		time[1] = checkZeros(time[1]);
 		return time[0] + ':' + time[1];
 	}
