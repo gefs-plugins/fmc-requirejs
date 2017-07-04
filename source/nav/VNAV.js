@@ -145,9 +145,9 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 			}
 
 			// Updates SPD, VS, and ALT in Autopilot++ if new values exist
-			if (spd && waypoints.nextWaypoint) apModes.speed.value(spd);
-			if (vs && waypoints.nextWaypoint) apModes.vs.value(vs);
-			if (alt && waypoints.nextWaypoint) apModes.altitude.value(alt);
+			if (spd) apModes.speed.value(spd);
+			if (vs) apModes.vs.value(vs);
+			if (alt) apModes.altitude.value(alt);
 
 			// Updates todDist
 			flight.todDist = todDist;
