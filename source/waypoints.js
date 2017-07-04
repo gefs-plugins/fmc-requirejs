@@ -144,6 +144,7 @@ define([
 		$(E.container.wptRow).remove();
 		exports.route = [];
 
+		// Departure airport input/clear
 		if (departure) {
 			bugfix.input($(input.dep).val(str[0]).change());
 			a = 1;
@@ -152,15 +153,17 @@ define([
 			$(input.dep).val('').change().parent().removeClass('is-dirty');
 		}
 
+		// Adds all waypoints into waypoint input area
 		for (var i = 0; i + a < str.length; i++) {
 			addWaypoint();
 			bugfix.input($(input.wpt).eq(i).val(str[i+a]).change());
 		}
 
+		// Arrival airpot input/clear
 		if (arrival) {
 			var wpt = str[str.length - 1];
 			bugfix.input($(input.arr).val(wpt).change());
-		}
+		} else $(input.arr).val('').change().parent().removeClass('is-dirty');
 	}
 
 	/**
@@ -186,16 +189,6 @@ define([
 			gc.latitude(undefined);
 			gc.longitude(undefined);
 			autopilot.currentMode(0);
-		}
-
-		if (exports.route.length !== 0) {
-			if (n === exports.route.length ) {
-				if (exports.route[n - 1])
-					progress.printNextWaypointInfo(n - 1);
-			} else {
-				if (exports.route[n])
-					progress.printNextWaypointInfo(n);
-			}
 		}
 	}
 
@@ -262,9 +255,8 @@ define([
 	/**
 	 * Gets the next waypoint that has an altitude restriction
 	 *
-	 * @returns The index of the waypoint if eligible,
+	 * @returns {Number} The index of the waypoint if eligible,
 	 * 		   -1 if not eligible
-	 * FIXME Potential index confusion: same as the function above
 	 */
 	function getNextWaypointWithAltRestriction () {
 		for (var i = exports.nextWaypoint; i < exports.route.length; i++) {
@@ -296,10 +288,12 @@ define([
 	 * The argument passed in [optional] or the localStorage is a
 	 * 3D array in String format. arr is the array after JSON.parse
 	 *
-	 * @param {String} arr[0] Departure input
-	 * @param {String} arr[1] Arrival Input
-	 * @param {String} arr[2] Flight Number
-	 * @param {Array} arr[3] 2D array, the route
+	 * @param {String} arg Parses into {Array} arr
+	 *
+	 * 			{String} arr[0] Departure input,
+	 *  		{String} arr[1] Arrival Input,
+	 *  		{String} arr[2] Flight Number,
+	 *  		{Array} arr[3] 2D array, the route
 	 */
 
 		arg = arg || localStorage.getItem('fmcWaypoints');
@@ -362,8 +356,6 @@ define([
 				} else if (exports.nextWaypoint == n) {
 					exports.nextWaypoint = n + 2;
 				}
-				progress.printNextWaypointInfo(n);
-				progress.printNextWaypointInfo(n - 1);
 			} else {
 				move(n, n + 1);
 				r.insertAfter(r.next());
@@ -372,8 +364,6 @@ define([
 				} else if (exports.nextWaypoint == n + 2) {
 					exports.nextWaypoint = n;
 				}
-				progress.printNextWaypointInfo(n + 1);
-				progress.printNextWaypointInfo(n);
 			}
 		}
 	}

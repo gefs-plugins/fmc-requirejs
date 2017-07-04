@@ -105,21 +105,20 @@ define([
 			var index = $(this).parents().eq(2).index() - 1;
 
 			if (!$(this).parent().hasClass('is-invalid')) {
-				var wpt = $(this).val();
+				var wpt = $(this).val().trim().toUpperCase();
 				var coords = waypoints.getCoords(wpt);
 				if (!coords) {
-					var altRes = waypoints.route[index][3];
 					$(this).parents().eq(2).find(input.lat).val('').change().parent().removeClass('is-dirty');
 					$(this).parents().eq(2).find(input.lon).val('').change().parent().removeClass('is-dirty');
-					waypoints.route[index] = [wpt, undefined, undefined, altRes, false];
+					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
+					waypoints.route[index] = [wpt, undefined, undefined, undefined, false];
 				} else {
 					bugfix.input($(this).parents().eq(2).find(input.lat).val(coords[0]).change());
 					bugfix.input($(this).parents().eq(2).find(input.lon).val(coords[1]).change());
+					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
 					waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
 				}
 			}
-
-			progress.printNextWaypointInfo(index);
 		}).on('change', input.lat, function () {
 			var index = $(this).parents().eq(2).index() - 1;
 
@@ -130,10 +129,6 @@ define([
 				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
 				waypoints.route[index][4] = false;
 			}
-
-			// Prints next waypoint info regardless
-			progress.printNextWaypointInfo(index);
-
 		}).on('change', input.lon, function () {
 			var index = $(this).parents().eq(2).index() - 1;
 
@@ -144,10 +139,6 @@ define([
 				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
 				waypoints.route[index][4] = false;
 			}
-
-			// Prints next waypoint info regardless
-			progress.printNextWaypointInfo(index);
-
 		}).on('change', input.alt, function () {
 			var index = $(this).parents().eq(2).index() - 1;
 
@@ -165,7 +156,7 @@ define([
 			else flight.todDist = 0;
 		}).on('change', input.fieldElev, function () {
 			if (!$(this).parent().hasClass('is-invalid')) flight.fieldElev = Number($(this).val());
-			else flight.fieldElev = undefined;
+			else flight.fieldElev = 0;
 		});
 
 		// Automatic TOD calculation button
