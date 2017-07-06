@@ -5,7 +5,7 @@ define([
 	'minify!html/static/modal.html', 'html/static/tab-contents/main', 'style/main'
 ], function (E, button, externalDist, modal, tabContents, mainCSS) {
 	// Main FMC stylesheet
-	$('<style>').text(mainCSS).appendTo('head');
+	$('<style>').addClass('fmc-stylesheet').text(mainCSS).appendTo('head');
 
 	// Inits Modal dialog
 	$(modal).appendTo('body');

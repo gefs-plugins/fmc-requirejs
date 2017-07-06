@@ -27,13 +27,10 @@ div.fmc-log-container .log-data {
 }
 
 div.fmc-log-container .time-col,
-div.fmc-log-container .spd-col {
-	width: 80px;
-}
-
+div.fmc-log-container .spd-col,
 div.fmc-log-container .hdg-col,
 div.fmc-log-container .alt-col {
-	width: 85px;
+	width: 75px;
 }
 
 div.fmc-log-container .lat-col,
