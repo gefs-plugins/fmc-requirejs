@@ -1,0 +1,4 @@
+{ "globals":
+    { "module": true },
+    "node": true
+}

@@ -8,7 +8,9 @@
 	},
 	"devDependencies": {
 		"requirejs": "latest",
-		"minify": "harryxue1999/minify"
+		"minify": "harryxue1999/minify",
+		"csv-parser": "^1.11.0",
+		"bluebird": "^3.5.0"
 	},
 	"scripts": {
 		"start": "robohydra -I ./ -n -P testing -q"
