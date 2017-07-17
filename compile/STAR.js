@@ -23,7 +23,7 @@ fileList.forEach(function (file) {
 function readDir (dir) {
     var list = [];
     fs.readdirSync(dir).forEach(function (file) {
-        if (file !== '.DS_Store') list.push(file);
+        if (/\.txt/.test(file)) list.push(file);
     });
 
     return list;
