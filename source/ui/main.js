@@ -83,10 +83,10 @@ define([
 			waypoints.removeWaypoint(index);
 		}).on('click', btn.moveWptUp, function () {
 			var row = $(this).parents().eq(1);
-			waypoints.shiftWaypoint(row, row.index() - 1, 'up');
+			waypoints.shiftWaypoint(row, row.index() - 1, -1);
 		}).on('click', btn.moveWptDown, function () {
 			var row = $(this).parents().eq(1);
-			waypoints.shiftWaypoint(row, row.index() - 1, 'down');
+			waypoints.shiftWaypoint(row, row.index() - 1, 1);
 		});
 
 		// Arrival airport input

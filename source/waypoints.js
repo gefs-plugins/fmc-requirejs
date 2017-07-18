@@ -357,32 +357,44 @@ define([
 	/**
 	 * Shifts a waypoint up or down one step
 	 *
-	 * @param {jQuery} r The element to be moved in the UI
-	 * @param {Number} n Index of this waypoint
-	 * @param {String} d Direction of shifting, "up" or "down"
+	 * @param {jQuery} $j The element to be moved in the UI
+	 * @param {Number} oldIndex Index of this waypoint
+	 * @param {Number} value Direction (+/-) and quantity moved
 	 * FIXME Potential index confusion
 	 */
-	function shiftWaypoint (r, n, d) {
-		console.log("Waypoint #" + (n + 1) + "(index=" + n + ") moved " + d);
-		if (!(d === "up" && n === 0 || d === "down" && n === exports.route.length - 1)) {
-			if (d === "up") {
-				move(n, n - 1);
-				r.insertBefore(r.prev());
-				if (exports.nextWaypoint == n + 1) {
-					exports.nextWaypoint = n;
-				} else if (exports.nextWaypoint == n) {
-					exports.nextWaypoint = n + 2;
-				}
-			} else {
-				move(n, n + 1);
-				r.insertAfter(r.next());
-				if (exports.nextWaypoint == n + 1) {
-					exports.nextWaypoint = n + 2;
-				} else if (exports.nextWaypoint == n + 2) {
-					exports.nextWaypoint = n;
-				}
+	function shiftWaypoint ($j, oldIndex, value) {
+		console.log("Waypoint #" + (oldIndex + 1) + "(index=" + oldIndex + ") shifted " + value);
+
+		var newIndex = oldIndex + value;
+
+		// If waypoint is shifting up (negative value)
+		if (value < 0 && newIndex >= 0) {
+			move(oldIndex, newIndex);
+
+			for (var i = 0, $e = $j; i < -value; i++) $e = $e.prev();
+			$j.insertBefore($e);
+
+			if (exports.nextWaypoint === newIndex) {
+				exports.nextWaypoint = oldIndex;
+			} else if (exports.nextWaypoint === oldIndex) {
+				exports.nextWaypoint = newIndex;
 			}
 		}
+
+		// If waypoint is shifting down (positive value)
+		else if (value > 0 && newIndex <= exports.route.length - 1) {
+			move(oldIndex, newIndex);
+
+			for (var i = 0, $e = $j; i < value; i++) $e = $e.next();
+			$j.insertAfter($e);
+
+			if (exports.nextWaypoint === oldIndex) {
+				exports.nextWaypoint = newIndex;
+			} else if (exports.nextWaypoint === newIndex) {
+				exports.nextWaypoint = oldIndex;
+			}
+		}
+
 	}
 
 	// Functions
