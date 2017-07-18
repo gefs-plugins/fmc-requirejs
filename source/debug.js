@@ -2,6 +2,9 @@
 
 define(['ui/elements'], function (E) {
 
+    // Production flag to determine if debug info is printed
+    var PRODUCTION = false;
+
     // Stops event propagation
     function stopPropagation (event) {
         event.stopImmediatePropagation();
@@ -26,6 +29,13 @@ define(['ui/elements'], function (E) {
                 .keyup(stopPropagation)
                 .keydown(stopPropagation)
                 .keypress(stopPropagation);
-        }
+        },
+
+        /**
+         * Logs debug statement into console when needed if not PRODUCTION
+         */
+         log: function (text) {
+             if (!PRODUCTION) console.log(text);
+         }
     };
 });

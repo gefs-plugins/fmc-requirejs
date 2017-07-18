@@ -1,6 +1,6 @@
 "use strict";
 
-define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/elements'], function (bugfix, distance, flight, math, waypoints, progress, E) {
+define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/elements'], function (debug, distance, flight, math, waypoints, progress, E) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes;
@@ -33,7 +33,7 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 				deltaAlt = targetAlt - currentAlt;
 				nextDist = distance.route(next);
 				targetDist = distance.target(deltaAlt);
-				console.log('targetAlt: ' + targetAlt + ', deltaAlt: ' + deltaAlt + ', nextDist: ' + nextDist + ', targetDist: ' + targetDist);
+				debug.log('targetAlt: ' + targetAlt + ', deltaAlt: ' + deltaAlt + ', nextDist: ' + nextDist + ', targetDist: ' + targetDist);
 			}
 
 			var spd, vs, alt;
@@ -89,7 +89,7 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
 					var totalDist = distance.target(cruiseAlt - currentAlt) + distance.target(targetAlt - cruiseAlt);
-					console.log("totalDist: " + totalDist);
+					debug.log("totalDist: " + totalDist);
 
 					// Checks to see if the altitude restriction is on the climbing phase or descent phase
 					if (nextDist < totalDist) {
@@ -140,8 +140,8 @@ define(['bugfix', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui
 					todDist = distance.target(fieldElev - cruiseAlt);
 				}
 				todDist = Math.round(todDist);
-				bugfix.input($(E.input.todDist).val(todDist).change());
-				console.log('TOD changed to ' + todDist);
+				debug.input($(E.input.todDist).val(todDist).change());
+				debug.log('TOD changed to ' + todDist);
 			}
 
 			// Updates SPD, VS, and ALT in Autopilot++ if new values exist

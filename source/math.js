@@ -1,6 +1,6 @@
 "use strict";
 
-define(['exports'], function (exports) {
+define(['debug', 'exports'], function (debug, exports) {
 
 		/**
 		 * Turns degrees to radians
@@ -30,7 +30,7 @@ define(['exports'], function (exports) {
 		exports.getGroundSpeed = function () {
 			var tas = geofs.aircraft.instance.animationValue.ktas;
 			var vs = (60 * geofs.aircraft.instance.animationValue.climbrate) * exports.FEET_TO_NM;
-			console.log("tas: " + tas + ", vs: " + vs);
+			debug.log("tas: " + tas + ", vs: " + vs);
 			return Math.sqrt(tas * tas - vs * vs);
 		};
 

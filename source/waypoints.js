@@ -1,9 +1,9 @@
 "use strict";
 
 define([
-	'bugfix', 'math', 'get/waypoint', 'flight', 'log', 'nav/progress',
+	'debug', 'math', 'get', 'flight', 'log', 'nav/progress',
 	'ui/elements', 'minify!html/waypoints.html', 'exports'
-], function (bugfix, math, getWaypoint, flight, log, progress, E, wptInputField, exports) {
+], function (debug, math, get, flight, log, progress, E, wptInputField, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -80,20 +80,6 @@ define([
 	}
 
 	/**
-	 * (Accesses autopilot_pp library and find the coordinates for the waypoints)
-	 * Accesses compiled library to find coords for icaos, fixes, or vors
-	 *
-	 * @param {String} wpt The waypoint to check for eligibility
-	 * @returns {Array} Array of coordinates if eligible,
-	 *         {Boolean} false otherwise
-	 */
-	function getCoords (wpt) {
-		wpt = getWaypoint(wpt);
-		if (wpt) return wpt;
-		return false;
-	}
-
-	/**
 	 * Turns the coordinate entered from minutes-seconds format to decimal format
 	 *
 	 * @param {String} a Coordinate in minutes-seconds format
@@ -149,7 +135,7 @@ define([
 
 		// Departure airport input/clear
 		if (departure) {
-			bugfix.input($(input.dep).val(str[0]).change());
+			debug.input($(input.dep).val(str[0]).change());
 			a = 1;
 		} else {
 			a = 0;
@@ -159,13 +145,13 @@ define([
 		// Adds all waypoints into waypoint input area
 		for (var i = 0; i + a < str.length; i++) {
 			addWaypoint();
-			bugfix.input($(input.wpt).eq(i).val(str[i+a]).change());
+			debug.input($(input.wpt).eq(i).val(str[i+a]).change());
 		}
 
 		// Arrival airpot input/clear
 		if (arrival) {
 			var wpt = str[str.length - 1];
-			bugfix.input($(input.arr).val(wpt).change());
+			debug.input($(input.arr).val(wpt).change());
 		} else $(input.arr).val('').change().parent().removeClass('is-dirty');
 	}
 
@@ -176,7 +162,7 @@ define([
 		exports.route.push([]);
 		$(container.wptList).find('tbody').append(wptInputField);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
-		bugfix.stopPropagation();
+		debug.stopPropagation();
 	}
 
 	/**
@@ -236,7 +222,7 @@ define([
 				toggle(true);
 
 				progress.update(); // Updates progress: prints general progress info and next waypoint info
-				console.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
+				debug.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
 			} else {
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
 				if (flight.arrival[1]) {
@@ -329,24 +315,24 @@ define([
 				if (!wpt[3] || wpt[3] === null) wpt[3] = undefined;
 			});
 
-			if (arr[0]) bugfix.input($(input.dep).val(arr[0]).change());
-			if (arr[1]) bugfix.input($(input.arr).val(arr[1]).change());
-			if (arr[2]) bugfix.input($(input.fn).val(arr[2]).change());
+			if (arr[0]) debug.input($(input.dep).val(arr[0]).change());
+			if (arr[1]) debug.input($(input.arr).val(arr[1]).change());
+			if (arr[2]) debug.input($(input.fn).val(arr[2]).change());
 
 			for (var i = 0; i < rte.length; i++) {
 				addWaypoint();
 
 				// Puts in the waypoint
-				if (rte[i][0]) bugfix.input($(input.wpt).eq(i).val(rte[i][0]).change());
+				if (rte[i][0]) debug.input($(input.wpt).eq(i).val(rte[i][0]).change());
 
 				// If the waypoint is not eligible or a duplicate
 				if (!rte[i][4] || !$(input.lat).eq(i).val()) {
-					if (rte[i][1]) bugfix.input($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
-					if (rte[i][2]) bugfix.input($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
+					if (rte[i][1]) debug.input($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
+					if (rte[i][2]) debug.input($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
 				}
 
 				if (rte[i][3]) // If there is an altitude restriction
-					bugfix.input($(input.alt).eq(i).val(rte[i][3]).change());
+					debug.input($(input.alt).eq(i).val(rte[i][3]).change());
 			}
 			// Auto-saves the data once again
 			saveData();
@@ -363,7 +349,7 @@ define([
 	 * FIXME Potential index confusion
 	 */
 	function shiftWaypoint ($j, oldIndex, value) {
-		console.log("Waypoint #" + (oldIndex + 1) + "(index=" + oldIndex + ") shifted " + value);
+		debug.log("Waypoint #" + (oldIndex + 1) + "(index=" + oldIndex + ") shifted " + value);
 
 		var newIndex = oldIndex + value;
 
@@ -402,7 +388,7 @@ define([
 	exports.makeFixesArray = makeFixesArray;
 	exports.toFixesString = toFixesString;
 	exports.toRouteString = toRouteString;
-	exports.getCoords = getCoords;
+	exports.getCoords = get.waypoint;
 	exports.formatCoords = formatCoords;
 	exports.toRoute = toRoute;
 	exports.addWaypoint = addWaypoint;

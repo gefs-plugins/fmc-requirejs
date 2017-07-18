@@ -1,9 +1,9 @@
 "use strict"; // jshint unused:false
 
 define([
-	'bugfix', 'distance', 'flight', 'log', 'map', 'math', 'waypoints',
+	'debug', 'distance', 'flight', 'log', 'map', 'math', 'waypoints',
 	'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine', './position'
-], function (bugfix, distance, flight, log, map, math, waypoints, lnav, progress, vnav, E) {
+], function (debug, distance, flight, log, map, math, waypoints, lnav, progress, vnav, E) {
 
 	// Checks if UI has been properly placed
 	var timer = setInterval(function () {
@@ -113,8 +113,8 @@ define([
 					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
 					waypoints.route[index] = [wpt, undefined, undefined, undefined, false, ''];
 				} else {
-					bugfix.input($(this).parents().eq(2).find(input.lat).val(coords[0]).change());
-					bugfix.input($(this).parents().eq(2).find(input.lon).val(coords[1]).change());
+					debug.input($(this).parents().eq(2).find(input.lat).val(coords[0]).change());
+					debug.input($(this).parents().eq(2).find(input.lon).val(coords[1]).change());
 					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
 					waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true, ''];
 					waypoints.printWaypointInfo(index, coords[2]);
@@ -236,7 +236,7 @@ define([
 
 		// Generates an FMC route to the textarea
 		$(modal).on('click', btn.generateRte, function () {
-			bugfix.input($(textarea.generateRte).val(waypoints.toRouteString()).change());
+			debug.input($(textarea.generateRte).val(waypoints.toRouteString()).change());
 		}).on('click', btn.clearRte, function () {
 			$(textarea.generateRte).val('').change().parent().removeClass('is-dirty');
 		});
