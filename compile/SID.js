@@ -4,6 +4,8 @@ var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 var path = require('path');
 
+require('graceful-fs').gracefulify(fs);
+
 var PATH = path.join(__dirname, require('./constants').ROOT_FOLDER + 'proc/');
 var RWY_REGEXP = /^\d\d[LCR]?$/;
 

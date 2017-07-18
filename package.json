@@ -10,7 +10,8 @@
 		"requirejs": "latest",
 		"minify": "harryxue1999/minify",
 		"csv-parser": "^1.11.0",
-		"bluebird": "^3.5.0"
+		"bluebird": "^3.5.0",
+		"graceful-fs": "latest"
 	},
 	"scripts": {
 		"start": "robohydra -I ./ -n -P testing -q"
