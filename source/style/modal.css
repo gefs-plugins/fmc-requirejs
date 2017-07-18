@@ -57,6 +57,13 @@ div.fmc-modal .fmc-modal__close {
 div.fmc-modal h4 {
 	text-align: center;
 	margin-top: 10px !important;
+	margin-bottom: 0px !important;
+}
+
+div.fmc-modal .fmc-modal__warning {
+	height: 20px;
+	text-align: center;
+	color: #d50000;
 }
 
 div.fmc-modal .fmc-modal__no-shadow {
@@ -76,6 +83,7 @@ div.fmc-modal .fmc-modal__no-shadow {
 div.fmc-modal__layout-container {
 	position: relative;
 	height: auto;
+	margin-top: -2px;
 }
 
 div.fmc-modal__layout-container .mdl-layout__container {
