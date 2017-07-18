@@ -4,69 +4,71 @@ var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 var path = require('path');
 
-var PATH = path.join(__dirname, require('./constants').ROOT_FOLDER + 'STAR/');
+var PATH = path.join(__dirname, require('./constants').ROOT_FOLDER + 'proc/');
+var RWY_REGEXP = /^\d\d[LCR]?$/;
 
-var fileList = readDir(PATH);
+var waypoints = require('./compiled-data/waypoints.json');
+var navaids = require('./compiled-data/navaids.json');
+
+var fileList = require('./constants').readDir(PATH);
 var STAR = {};
 
 fileList.forEach(function (file) {
     var airportName = file.substring(0, file.indexOf('.txt'));
-    STAR[airportName] = [];
 
     fs.readFileAsync(PATH + file, 'utf-8')
         .then(function (data) { parseFile(data, airportName); })
         .then(writeFile);
-})
+});
 
 
 // --
-function readDir (dir) {
-    var list = [];
-    fs.readdirSync(dir).forEach(function (file) {
-        if (/\.txt/.test(file)) list.push(file);
+function parseFile (fileContent, airportName) {
+    // Splits each block (may contain SID, STAR, Final...)
+    var temp = fileContent.split('\r\n\r\n');
+    temp.shift();
+    fileContent = []; // Empties fileContent for STAR filters
+
+    // Filters STAR blocks and pushes to fileContent
+    temp.forEach(function (block) {
+        if (block.indexOf('STAR') === 0) fileContent.push(block);
     });
 
-    return list;
-}
+    if (fileContent.length === 0) return;
 
-function parseFile (fileContent, airportName) {
-    // Splits each STAR based on STAR name and arrival runway (STAR blocks)
-    fileContent = fileContent.split('\r\n\r\n');
+    STAR[airportName] = [];
 
     for (var blocks = 0; blocks < fileContent.length; blocks++) {
         // Splits each STAR block by line (STAR line)
         fileContent[blocks] = fileContent[blocks].split('\r\n');
 
         var obj = {
-            name: '',
-            runway: '',
-            transition: '',
+            name: undefined,
+            runway: undefined,
+            transition: undefined,
             waypoints: []
         };
 
         for (var lines = 0; lines < fileContent[blocks].length; lines++) {
             // Splits each STAR line by element
-            fileContent[blocks][lines] = fileContent[blocks][lines].split('|');
+            fileContent[blocks][lines] = fileContent[blocks][lines].split(',');
 
-            if (fileContent[blocks][lines][1] !== ' ' && lines !== 0) {
-
+            var potentialWaypoint = fileContent[blocks][lines][1];
+            if (lines > 0 && (waypoints[potentialWaypoint] || navaids[potentialWaypoint])) {
                 obj.waypoints.push(fileContent[blocks][lines][1].trim());
-
-                // STAR[airportName][STAR[airportName].length - 1].waypoints.push({
-                //     fix: fileContent[blocks][lines][1],
-                //     altRes: 0 ? undefined : fileContent[blocks][lines][13],
-                //     spdRes: 0 ? undefined : fileContent[blocks][lines][11]
-                // });
             }
         }
 
         var descriptor = fileContent[blocks][0];
-        obj.name = String(descriptor[1]).trim();
-        obj.runway = String(descriptor[2]).trim();
-        obj.transition = String(descriptor[3]).trim();
+        var name = String(descriptor[1]).trim();
+        var runway = String(descriptor[2]).trim();
 
-        if (obj.name && obj.runway && obj.transition && obj.waypoints)
-            STAR[airportName].push(obj);
+        if (name) obj.name = name;
+        if (RWY_REGEXP.test(runway)) obj.runway = runway;
+        else if (runway === 'ALL') obj.runway = '*';
+        else if (waypoints[runway] || navaids[runway]) obj.transition = runway;
+
+        STAR[airportName].push(obj);
     }
 
 }
