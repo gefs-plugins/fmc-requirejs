@@ -42,6 +42,7 @@ define(['data', 'math', 'waypoints'], function (data, math, waypoints) {
      * Gets coordinates for ICAO Airports, Waypoints, or Navaids
      *
      * @param {String} fix The name of the fix
+     * @returns {Array} The coordinates array
      */
     return function (fix) {
         var coords = icao[fix];
