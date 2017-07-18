@@ -79,7 +79,7 @@ define(['ui/elements', 'flight'], function (E, flight) {
 				else $container.text('');
 
 				seconds++;
-			}, 1000)
+			}, 1000);
 		}
 	};
 

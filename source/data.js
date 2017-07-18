@@ -2,7 +2,7 @@
 
 define(['exports'], function (exports) {
 
-    var FILE_PATH = PAGE_PATH + 'fmc/compile/compiled-data/'
+    var FILE_PATH = PAGE_PATH + 'fmc/compile/compiled-data/';
 
     $.get(FILE_PATH + 'waypoints.json', function (waypoints) {
         exports.waypoints = waypoints;
