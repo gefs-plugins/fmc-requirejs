@@ -22,10 +22,10 @@ fs.createReadStream(FILE_NAME)
         else navaids[vor.navaid] = [obj];
     }).on('end', function () {
         var stringified = JSON.stringify(navaids);
-        stringified = stringified.replace(/\],"/g, ']\n, "')
-            .replace(/,(?=[-\d])/g, ', ')
-            .replace(/:\[/g, ': [')
-            .replace(/\],\[/g, '], [');
+        // stringified = stringified.replace(/\],"/g, ']\n, "')
+        //     .replace(/,(?=[-\d])/g, ', ')
+        //     .replace(/:\[/g, ': [')
+        //     .replace(/\],\[/g, '], [');
 
         fs.writeFileSync('compiled-data/navaids.json', stringified);
     });

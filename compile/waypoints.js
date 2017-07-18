@@ -20,10 +20,10 @@ fs.createReadStream(FILE_NAME)
         else waypoints[fix.waypoint] = [[ +fix.lat, +fix.lon ]];
     }).on('end', function () {
         var stringified = JSON.stringify(waypoints);
-        stringified = stringified.replace(/\],"/g, ']\n, "')
-            .replace(/,(?=[-\d])/g, ', ')
-            .replace(/:\[/g, ': [')
-            .replace(/\],\[/g, '], [');
+        // stringified = stringified.replace(/\],"/g, ']\n, "')
+        //     .replace(/,(?=[-\d])/g, ', ')
+        //     .replace(/:\[/g, ': [')
+        //     .replace(/\],\[/g, '], [');
 
         fs.writeFileSync('compiled-data/waypoints.json', stringified);
     });
