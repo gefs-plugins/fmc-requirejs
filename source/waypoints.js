@@ -1,13 +1,13 @@
 "use strict";
 
 define([
-	'bugfix', 'math', 'flight', 'nav/progress', 'ui/elements', 'minify!html/waypoints.html', 'exports'
-], function (bugfix, math, flight, progress, E, wptInputField, exports) {
+	'bugfix', 'math', 'get/waypoint', 'flight', 'log', 'nav/progress',
+	'ui/elements', 'minify!html/waypoints.html', 'exports'
+], function (bugfix, math, getWaypoint, flight, log, progress, E, wptInputField, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
 		gc = autopilot_pp.require('greatcircle'),
-		getWaypoint = autopilot_pp.require('getwaypoint'),
 		icao = autopilot_pp.require('json!data/icaoairports.json');
 
 	var container = E.container,
@@ -80,14 +80,17 @@ define([
 	}
 
 	/**
-	 * Accesses autopilot_pp library and find the coordinates for the waypoints
+	 * (Accesses autopilot_pp library and find the coordinates for the waypoints)
+	 * Accesses compiled library to find coords for icaos, fixes, or vors
 	 *
 	 * @param {String} wpt The waypoint to check for eligibility
 	 * @returns {Array} Array of coordinates if eligible,
 	 *         {Boolean} false otherwise
 	 */
 	function getCoords (wpt) {
-		return getWaypoint(wpt);
+		wpt = getWaypoint(wpt);
+		if (wpt) return wpt;
+		return false;
 	}
 
 	/**
@@ -136,7 +139,7 @@ define([
 
 		// If input is invalid, exit function call
 		if (!isWaypoints) {
-			console.error('Invalid Waypoints Input');
+			log.warn('Invalid Waypoints Input');
 			return;
 		}
 
@@ -253,6 +256,20 @@ define([
 	}
 
 	/**
+	 * Prints waypoint info to info section above each waypoint
+	 * Applies to ROUTE [and LEGS] TODO
+	 * Record in route array
+	 *
+	 * @param {Number} index The index of the element
+	 * @param {String} info
+	 */
+	function printWaypointInfo (index, info) {
+		if (!info) info = '';
+		$(E.container.wptInfo).eq(index).text(info);
+		exports.route[index][5] = info;
+	}
+
+	/**
 	 * Gets the next waypoint that has an altitude restriction
 	 *
 	 * @returns {Number} The index of the waypoint if eligible,
@@ -270,7 +287,7 @@ define([
 	 */
 	function saveData () {
 		if (exports.route.length < 1 || !exports.route[0][0]) {
-			alert ("There is no route to save");
+			log.warn("There is no route to save");
 		} else {
 			localStorage.removeItem('fmcWaypoints');
 			localStorage.setItem("fmcWaypoints", toRouteString());
@@ -309,7 +326,7 @@ define([
 
 			// JSON.stringify turns undefined into null; this loop turns it back
 			rte.forEach(function (wpt) {
-				if (!wpt[3] || wpt[3] === null || wpt[3] === 0) wpt[3] = undefined;
+				if (!wpt[3] || wpt[3] === null) wpt[3] = undefined;
 			});
 
 			if (arr[0]) bugfix.input($(input.dep).val(arr[0]).change());
@@ -334,7 +351,7 @@ define([
 			// Auto-saves the data once again
 			saveData();
 
-		} else alert ("You did not save the waypoints or you cleared the browser's cache");
+		} else log.warn("You did not save the waypoints or you cleared the browser's cache");
 	}
 
 	/**
@@ -379,6 +396,7 @@ define([
 	exports.addWaypoint = addWaypoint;
 	exports.removeWaypoint = removeWaypoint;
 	exports.activateWaypoint = activateWaypoint;
+	exports.printWaypointInfo = printWaypointInfo;
 	exports.nextWptAltRes = getNextWaypointWithAltRestriction;
 	exports.saveData = saveData;
 	exports.loadFromSave = loadFromSave;

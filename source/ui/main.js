@@ -111,12 +111,13 @@ define([
 					$(this).parents().eq(2).find(input.lat).val('').change().parent().removeClass('is-dirty');
 					$(this).parents().eq(2).find(input.lon).val('').change().parent().removeClass('is-dirty');
 					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
-					waypoints.route[index] = [wpt, undefined, undefined, undefined, false];
+					waypoints.route[index] = [wpt, undefined, undefined, undefined, false, ''];
 				} else {
 					bugfix.input($(this).parents().eq(2).find(input.lat).val(coords[0]).change());
 					bugfix.input($(this).parents().eq(2).find(input.lon).val(coords[1]).change());
 					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
-					waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true];
+					waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true, ''];
+					waypoints.printWaypointInfo(index, coords[2]);
 				}
 			}
 		}).on('change', input.lat, function () {
@@ -128,6 +129,7 @@ define([
 			} else {
 				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
 				waypoints.route[index][4] = false;
+				waypoints.route[index][5] = '';
 			}
 		}).on('change', input.lon, function () {
 			var index = $(this).parents().eq(2).index() - 1;
@@ -138,6 +140,7 @@ define([
 			} else {
 				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
 				waypoints.route[index][4] = false;
+				waypoints.route[index][5] = '';
 			}
 		}).on('change', input.alt, function () {
 			var index = $(this).parents().eq(2).index() - 1;
