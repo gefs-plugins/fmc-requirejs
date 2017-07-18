@@ -12,14 +12,11 @@ var navaids = {};
 fs.createReadStream(FILE_NAME)
     .pipe(csv())
     .on('data', function (vor) {
-        var obj = {
-            name: vor.name,
-            coords: [ +vor.lat, +vor.lon ]
-        };
+        var arr = [ +vor.lat, +vor.lon, vor.name ];
 
         if (navaids[vor.navaid] && Array.isArray(navaids[vor.navaid]))
-            navaids[vor.navaid].push(obj);
-        else navaids[vor.navaid] = [obj];
+            navaids[vor.navaid].push(arr);
+        else navaids[vor.navaid] = [arr];
     }).on('end', function () {
         var stringified = JSON.stringify(navaids);
         // stringified = stringified.replace(/\],"/g, ']\n, "')
