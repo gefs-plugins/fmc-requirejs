@@ -27,7 +27,10 @@ function parseFile (fileContent) {
             if (lines > 0) obj[String(fileContent[blocks][lines][1]).trim()] = [
                 +fileContent[blocks][lines][8], // lon
                 +fileContent[blocks][lines][9], // lat
-                +fileContent[blocks][lines][10] // fieldElev
+                +fileContent[blocks][lines][10], // fieldElev
+                +fileContent[blocks][lines][11], // glideslope
+                +fileContent[blocks][lines][3], // length
+                +fileContent[blocks][lines][4] // width
             ];
         }
 
