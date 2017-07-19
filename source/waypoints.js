@@ -1,12 +1,13 @@
 "use strict";
 
 define([
-	'debug', 'math', 'get', 'flight', 'log', 'nav/progress',
+	'debug', 'math', 'flight', 'log', 'nav/progress',
 	'ui/elements', 'minify!html/waypoints.html', 'exports'
-], function (debug, math, get, flight, log, progress, E, wptInputField, exports) {
+], function (debug, math, flight, log, progress, E, wptInputField, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
+		getWaypoint = autopilot_pp.require('getwaypoint'),
 		gc = autopilot_pp.require('greatcircle'),
 		icao = autopilot_pp.require('json!data/icaoairports.json');
 
@@ -388,7 +389,7 @@ define([
 	exports.makeFixesArray = makeFixesArray;
 	exports.toFixesString = toFixesString;
 	exports.toRouteString = toRouteString;
-	exports.getCoords = get.waypoint;
+	exports.getCoords = getWaypoint;
 	exports.formatCoords = formatCoords;
 	exports.toRoute = toRoute;
 	exports.addWaypoint = addWaypoint;
