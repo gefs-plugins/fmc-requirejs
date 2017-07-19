@@ -4,6 +4,6 @@
 // @namespace GeoFS-Plugins
 // @match http://*/geofs.php*
 // @run-at document-end
-// @version 0.0.0
+// @version 0.5.1-beta
 // @grant none
 // ==/UserScript==
