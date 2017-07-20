@@ -1,9 +1,9 @@
 "use strict"; // jshint unused:false
 
 define([
-	'debug', 'distance', 'flight', 'log', 'map', 'math', 'waypoints',
-	'nav/LNAV', 'nav/progress', 'nav/VNAV', './elements', 'redefine', './position'
-], function (debug, distance, flight, log, map, math, waypoints, lnav, progress, vnav, E) {
+	'knockout', './ViewModel', 'debug', 'distance', 'flight', 'log', 'map', 'math', 'waypoints',
+	'nav/LNAV', 'nav/progress', './elements', 'redefine', './position'
+], function (ko, ViewModel, debug, distance, flight, log, map, math, waypoints, lnav, progress, E) {
 
 	// Checks if UI has been properly placed
 	var timer = setInterval(function () {
@@ -20,6 +20,9 @@ define([
 			btn = E.btn,
 			input = E.input,
 			textarea = E.textarea;
+
+		// Applies knockout bindings
+		ko.applyBindings(new ViewModel(), $(E.modal)[0]);
 
 		// Adds one input field on start
 		waypoints.addWaypoint();
@@ -90,15 +93,15 @@ define([
 		});
 
 		// Arrival airport input
-		$(container.depArr).on('change', input.arr, function () {
-			var wpt = $(this).val().trim();
-			if (wpt) {
-				var coords = waypoints.getCoords(wpt);
-				if (coords) flight.arrival = [wpt, coords[0], coords[1]];
-				else flight.arrival = [];
-			} else flight.arrival = [];
-			lnav.update();
-		});
+		// $(container.depArr).on('change', input.arr, function () {
+		// 	var wpt = $(this).val().trim();
+		// 	if (wpt) {
+		// 		var coords = waypoints.getCoords(wpt);
+		// 		if (coords) flight.arrival = [wpt, coords[0], coords[1]];
+		// 		else flight.arrival = [];
+		// 	} else flight.arrival = [];
+		// 	lnav.update();
+		// });
 
 		// Waypoint list input actions: update `route` array
 		$(container.wptList).on('change', input.wpt, function () {
@@ -149,79 +152,6 @@ define([
 		 	else waypoints.route[index][3] = undefined;
 		});
 
-		// -----------------------------------------
-		// ---------------- ARR TAB ----------------
-		// -----------------------------------------
-
-		// TOD Distance and Field Elevation inputs
-		$(container.arrPage).on('change', input.todDist, function () {
-			if (!$(this).parent().hasClass('is-invalid')) flight.todDist = Number($(this).val());
-			else flight.todDist = 0;
-		}).on('change', input.fieldElev, function () {
-			if (!$(this).parent().hasClass('is-invalid')) flight.fieldElev = Number($(this).val());
-			else flight.fieldElev = 0;
-		});
-
-		// Automatic TOD calculation button
-		$(container.autoTOD).on('click', btn.autoTOD, function () {
-			if ($(this).parent().hasClass('is-checked'))
-				flight.todCalc = false;
-			else flight.todCalc = true;
-
-			// Instantly updates VNAV info
-			vnav.update();
-		});
-
-		// ----------------------------------------
-		// --------------- VNAV TAB ---------------
-		// ----------------------------------------
-
-		$(btn.vnavToggle).prop('disabled', true).parent().addClass('is-disabled');
-
-		// VNAV, Speed toggle and cruising altitude input
-		$(container.vnavPage).on('click', btn.vnavToggle, function () {
-			if (flight.cruiseAlt) {
-				if ($(this).parent().hasClass('is-checked')) {
-					flight.VNAV = false;
-					clearInterval(vnav.timer);
-				} else {
-					flight.VNAV = true;
-					vnav.timer = setInterval(function () { vnav.update(); }, 5000);
-				}
-			}
-		}).on('click', btn.spdToggle, function () {
-			if ($(this).parent().hasClass('is-checked'))
-				flight.spdControl = false;
-			else {
-				flight.spdControl = true;
-				vnav.update();
-			}
-		}).on('change', input.cruiseAlt, function () {
-			// If cruise altitude is an error or is empty (0)
-			if ($(this).parent().hasClass('is-invalid') || Number($(this).val().trim()) === 0) {
-				// Disables VNAV toggle button
-				flight.cruiseAlt = undefined;
-				$(btn.vnavToggle).prop('disabled', true)
-					.parent().removeClass('is-checked').addClass('is-disabled');
-				flight.VNAV = false;
-				clearInterval(vnav.timer);
-				return;
-			}
-
-			// Sets cruise alt and enables vnav toggle button
-			flight.cruiseAlt = Number($(this).val().trim());
-			$(btn.vnavToggle).prop('disabled', false).parent().removeClass('is-disabled');
-			vnav.update();
-		});
-
-		// VNAV phase
-		$(container.vnavPhase).on('click', btn.togglePhase, function () {
-			progress.updatePhase();
-		}).on('click', btn.lockPhase, function () {
-			if ($(this).hasClass('locked')) $(this).removeClass('locked');
-			else $(this).addClass('locked');
-		});
-
 		// ----------------------------------------
 		// --------------- LOAD TAB ---------------
 		// ----------------------------------------
@@ -241,13 +171,6 @@ define([
 			$(textarea.generateRte).val('').change().parent().removeClass('is-dirty');
 		});
 
-		// -----------------------------------------
-		// ---------------- LOG TAB ----------------
-		// -----------------------------------------
-
-		$(modal).on('click', btn.removeLogData, function () {
-			log.removeData();
-		});
 
 		/* ---- All Initializations ---- */
 

@@ -1,33 +1,36 @@
 "use strict";
 
-define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
+define(['knockout', 'vnav-profile', 'exports'], function (ko, vnavProfile, exports) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes;
 
 	// Top Of Descent distance
-	var todDist = 0;
+	var todDist = ko.observable();
 
 	// If VNAV is enabled
-	var VNAV = false;
+	var vnavEnabled = ko.observable(false);
 
 	// Speed control
-	var spdControl = true;
+	var spdControl = ko.observable(true);
+
+	// Departure airport name and coords
+	var departure = ko.observableArray([]);
 
 	// Arrival airport name and coords
-	var arrival = [];
+	var arrival = ko.observableArray([]);
 
 	// Cruise altitude
-	var cruiseAlt;
+	var cruiseAlt = ko.observable();
 
 	// Flight phase
-	var phase = 'climb';
+	var phase = ko.observable(0);
 
 	// Automatic TOD calculation
-	var todCalc = false;
+	var todCalc = ko.observable(false);
 
 	// Arrival Airport field altitude
-	var fieldElev = 0;
+	var fieldElev = ko.observable();
 
 	/**
 	 * Gets each plane's flight parameters, for VNAV
@@ -173,8 +176,9 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 
 	// Variables
 	exports.todDist = todDist;
-	exports.VNAV = VNAV;
+	exports.vnavEnabled = vnavEnabled;
 	exports.spdControl = spdControl;
+	exports.departure = departure;
 	exports.arrival = arrival;
 	exports.cruiseAlt = cruiseAlt;
 	exports.phase = phase;

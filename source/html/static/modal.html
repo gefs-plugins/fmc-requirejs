@@ -57,20 +57,20 @@
         </button>
         <div class="fmc-auto-tod-container interactive arr-tab">
             <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="auto-tod">
-                <input type="checkbox" id="auto-tod" class="mdl-switch__input">
+                <input type="checkbox" id="auto-tod" class="mdl-switch__input" data-bind="checked: todCalc, mdlSwitch: true">
                 <span class="mdl-switch__label">Automatically Calculate T/D</span>
             </label>
         </div>
         <div class="fmc-vnav-phase-container interactive vnav-tab">
             <span>Phase</span>
-            <button class="mdl-button mdl-js-button mdl-button--raised toggle-phase">climb</button>
-            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase">
+            <button class="mdl-button mdl-js-button mdl-button--raised toggle-phase" data-bind="text: currentPhaseText, click: nextPhase"></button>
+            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase" data-bind="click: locked">
                 <i class="material-icons">lock</i>
             </button>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised interactive clear-rte load-tab">Clear</button>
         <button class="mdl-button mdl-js-button mdl-button--raised interactive generate-rte load-tab">Generate Route</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab">Remove Log Data</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab" data-bind="click: removeLogData">Remove Log Data</button>
 
     </div>
 </div>

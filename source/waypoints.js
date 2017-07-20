@@ -1,9 +1,9 @@
-"use strict";
+"use strict"; // FIXME
 
 define([
-	'debug', 'math', 'get', 'flight', 'log', 'nav/progress',
+	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress',
 	'ui/elements', 'minify!html/waypoints.html', 'exports'
-], function (debug, math, get, flight, log, progress, E, wptInputField, exports) {
+], function (ko, debug, math, get, flight, log, progress, E, wptInputField, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -14,7 +14,7 @@ define([
 		btn = E.btn,
 		input = E.input;
 
-	exports.route = [];
+	exports.route = ko.observableArray([]);
 	exports.nextWaypoint = null;
 
 	/**
@@ -24,14 +24,14 @@ define([
 	 * @param {Number} index2 The end/target index
 	 */
 	function move (index1, index2) {
-		if (index2 >= exports.route.length) {
-			var k = index2 - exports.route.length;
+		if (index2 >= exports.route().length) {
+			var k = index2 - exports.route().length;
 			while ((k--) + 1) {
-				exports.route.push(undefined);
+				exports.route().push(undefined);
 			}
 		}
-		exports.route.splice(index2, 0, exports.route.splice(index1, 1)[0]);
-		return exports.route;
+		exports.route().splice(index2, 0, exports.route().splice(index1, 1)[0]);
+		return exports.route();
 	}
 
 	/**
@@ -42,14 +42,14 @@ define([
 	function makeFixesArray () {
 		var result = [];
 
-		var departureVal = $(input.dep).val();
+		var departureVal = flight.departure()[0];
 		if (departureVal) result.push(departureVal);
 
-		exports.route.forEach(function (wpt) {
+		exports.route().forEach(function (wpt) {
 			result.push(wpt[0]);
 		});
 
-		var arrivalVal = $(input.arr).val();
+		var arrivalVal = flight.arrival()[0];
 		if (arrivalVal) result.push(arrivalVal);
 
 		return result;
@@ -72,10 +72,10 @@ define([
 	 */
 	function toRouteString () {
 		return JSON.stringify ([
-			$(input.dep).val(),
-			$(input.arr).val(),
-			$(input.fn).val(),
-			exports.route
+			flight.departure(),
+			flight.arrival(),
+			flight.number(),
+			exports.route()
 		]);
 	}
 
@@ -131,35 +131,40 @@ define([
 
 		// Removes all current waypoints
 		$(E.container.wptRow).remove();
-		exports.route = [];
+		exports.route([]);
 
 		// Departure airport input/clear
 		if (departure) {
-			debug.input($(input.dep).val(str[0]).change());
+			var wpt = str[0];
+			var coords = exports.getCoords(wpt);
+			if (coords) flight.departure([wpt, coords[0], coords[1]]);
+			else flight.departure([]);
 			a = 1;
 		} else {
 			a = 0;
-			$(input.dep).val('').change().parent().removeClass('is-dirty');
+			flight.departure([]);
 		}
 
 		// Adds all waypoints into waypoint input area
 		for (var i = 0; i + a < str.length; i++) {
 			addWaypoint();
-			debug.input($(input.wpt).eq(i).val(str[i+a]).change());
+			debug.input($(input.wpt).eq(i).val(str[i+a]).change()); // FIXME
 		}
 
 		// Arrival airpot input/clear
 		if (arrival) {
 			var wpt = str[str.length - 1];
-			debug.input($(input.arr).val(wpt).change());
-		} else $(input.arr).val('').change().parent().removeClass('is-dirty');
+			var coords = exports.getCoords(wpt);
+			if (coords) flight.arrival([wpt, coords[0], coords[1]]);
+			else flight.arrival([]);
+		} else flight.arrival([]);
 	}
 
 	/**
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
-	function addWaypoint () {
-		exports.route.push([]);
+	function addWaypoint () { // FIXME
+		exports.route().push([]);
 		$(container.wptList).find('tbody').append(wptInputField);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		debug.stopPropagation();
@@ -170,9 +175,9 @@ define([
 	 *
 	 * @param {Number} n The index of which will be removed
 	 */
-	function removeWaypoint (n) {
+	function removeWaypoint (n) { // FIXME
 		$(container.wptRow).eq(n).remove();
-		exports.route.splice(n, 1);
+		exports.route().splice(n, 1);
 		if (exports.nextWaypoint === n) {
 			exports.nextWaypoint = null;
 			gc.latitude(undefined);
@@ -194,7 +199,7 @@ define([
 		 *
 		 * @param {Boolean} toggleOn Whether the action is to toggle on
 		 */
-		var toggle = function (toggleOn) {
+		var toggle = function (toggleOn) { // FIXME
 			if (toggleOn) {
 				$(btn.activateWpt)
 					.eq(n).removeClass('mdl-button--colored')
@@ -209,9 +214,9 @@ define([
 		};
 
 		if (exports.nextWaypoint !== n) {
-			if (n < exports.route.length) {
+			if (n < exports.route().length) {
 				exports.nextWaypoint = n;
-				var wpt = exports.route[exports.nextWaypoint];
+				var wpt = exports.route()[exports.nextWaypoint];
 
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
 				gc.latitude(wpt[1]);
@@ -252,7 +257,7 @@ define([
 	function printWaypointInfo (index, info) {
 		if (!info) info = '';
 		$(E.container.wptInfo).eq(index).text(info);
-		exports.route[index][5] = info;
+		exports.route()[index][5] = info;
 	}
 
 	/**
@@ -262,8 +267,8 @@ define([
 	 * 		   -1 if not eligible
 	 */
 	function getNextWaypointWithAltRestriction () {
-		for (var i = exports.nextWaypoint; i < exports.route.length; i++) {
-			if (exports.route[i] && exports.route[i][3]) return i;
+		for (var i = exports.nextWaypoint; i < exports.route().length; i++) {
+			if (exports.route()[i] && exports.route()[i][3]) return i;
 		}
 		return -1;
 	}
@@ -272,7 +277,7 @@ define([
 	 * Saves the waypoints data into localStorage
 	 */
 	function saveData () {
-		if (exports.route.length < 1 || !exports.route[0][0]) {
+		if (exports.route().length < 1 || !exports.route()[0][0]) {
 			log.warn("There is no route to save");
 		} else {
 			localStorage.removeItem('fmcWaypoints');
@@ -305,7 +310,7 @@ define([
 
 		if (arr) {
 			// Clears all
-			exports.route = [];
+			exports.route([]);
 			$(container.wptRow).remove();
 
 			var rte = arr[3];
@@ -368,7 +373,7 @@ define([
 		}
 
 		// If waypoint is shifting down (positive value)
-		else if (value > 0 && newIndex <= exports.route.length - 1) {
+		else if (value > 0 && newIndex <= exports.route().length - 1) {
 			move(oldIndex, newIndex);
 
 			for (var i = 0, $e = $j; i < value; i++) $e = $e.next();

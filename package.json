@@ -4,14 +4,15 @@
 	"description": "Proxy server to test FMC RequireJS port",
 	"main": "index.js",
 	"dependencies": {
-		"robohydra": "^0.6.4"
-	},
-	"devDependencies": {
-		"requirejs": "latest",
-		"minify": "harryxue1999/minify",
+		"robohydra": "^0.6.4",
 		"csv-parser": "^1.11.0",
 		"bluebird": "^3.5.0",
 		"graceful-fs": "latest"
+	},
+	"devDependencies": {
+		"requirejs": "latest",
+		"knockout": "^3.4.2",
+		"minify": "harryxue1999/minify"
 	},
 	"scripts": {
 		"start": "robohydra -I ./ -n -P testing -q"
