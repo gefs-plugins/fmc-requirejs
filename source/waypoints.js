@@ -2,8 +2,8 @@
 
 define([
 	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress',
-	'ui/elements', 'minify!html/waypoints.html', 'exports'
-], function (ko, debug, math, get, flight, log, progress, E, wptInputField, exports) {
+	'ui/elements', 'exports'
+], function (ko, debug, math, get, flight, log, progress, E, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -14,7 +14,7 @@ define([
 		btn = E.btn,
 		input = E.input;
 
-	exports.route = ko.observableArray([]);
+	exports.route = ko.observableArray();
 	exports.nextWaypoint = null;
 
 	/**
@@ -163,9 +163,8 @@ define([
 	/**
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
-	function addWaypoint () { // FIXME
-		exports.route().push([]);
-		$(container.wptList).find('tbody').append(wptInputField);
+	function addWaypoint () {
+		exports.route.push([]);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		debug.stopPropagation();
 	}
