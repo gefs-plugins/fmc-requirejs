@@ -64,7 +64,7 @@
         <div class="fmc-vnav-phase-container interactive vnav-tab">
             <span>Phase</span>
             <button class="mdl-button mdl-js-button mdl-button--raised toggle-phase" data-bind="text: currentPhaseText, click: nextPhase"></button>
-            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase" data-bind="click: locked">
+            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase" data-bind="click: locked, css: {locked: locked}">
                 <i class="material-icons">lock</i>
             </button>
         </div>

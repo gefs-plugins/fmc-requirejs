@@ -22,7 +22,8 @@ define([
 			textarea = E.textarea;
 
 		// Applies knockout bindings
-		ko.applyBindings(new ViewModel(), $(E.modal)[0]);
+		window.debugVM = new ViewModel();
+		ko.applyBindings(window.debugVM, $(E.modal)[0]);
 
 		// Adds one input field on start
 		waypoints.addWaypoint();
