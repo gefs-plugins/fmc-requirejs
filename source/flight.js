@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'vnav-profile', 'exports'], function (ko, vnavProfile, exports) {
+define(['knockout', 'nav/VNAV', 'vnav-profile', 'exports'], function (ko, vnav, vnavProfile, exports) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes;
@@ -9,22 +9,76 @@ define(['knockout', 'vnav-profile', 'exports'], function (ko, vnavProfile, expor
 	var todDist = ko.observable();
 
 	// If VNAV is enabled
-	var vnavEnabled = ko.observable(false);
+	var _vnavEnabled = ko.observable(false);
+	var vnavEnabled = ko.pureComputed({
+		read: function () {
+			return _vnavEnabled();
+		},
+		write: function (boolean) {
+			var set = _vnavEnabled;
+
+			if (!cruiseAlt()) set(false);
+
+			else if (boolean) {
+				vnav.timer = setInterval(function () { vnav.update(); }, 5000);
+				set(true);
+			} else {
+				clearInterval(vnav.timer);
+				vnav.timer = null;
+				set(false);
+			}
+		}
+	});
 
 	// Speed control
 	var spdControl = ko.observable(true);
 
 	// Departure airport name and coords
-	var departure = ko.observableArray([]);
+	var departure = [];
 
 	// Arrival airport name and coords
-	var arrival = ko.observableArray([]);
+	var arrival = [];
+
+	// Flight Number
+	var flightNumber = ko.observable();
 
 	// Cruise altitude
-	var cruiseAlt = ko.observable();
+	var _cruiseAlt = ko.observable();
+	var cruiseAlt = ko.pureComputed({
+		read: function () {
+			return _cruiseAlt();
+		},
+		write: function (val) {
+			var set = _cruiseAlt;
+
+			if (!val) {
+				set(undefined);
+				vnavEnabled(false);
+			} else set(val);
+		}
+	});
 
 	// Flight phase
-	var phase = ko.observable(0);
+	var _phase = ko.observable(0);
+	var phase = ko.pureComputed({
+		read: function () {
+			return _phase();
+		},
+		write: function (index) {
+			if (phaseLocked() || index > 3) return;
+			_phase(index);
+		},
+	});
+
+	var _phaseLocked = ko.observable(false);
+	var phaseLocked = ko.pureComputed({
+		read: function () {
+			return _phaseLocked();
+		},
+		write: function (boolean) {
+			_phaseLocked(boolean);
+		}
+	});
 
 	// Automatic TOD calculation
 	var todCalc = ko.observable(false);
@@ -45,7 +99,7 @@ define(['knockout', 'vnav-profile', 'exports'], function (ko, vnavProfile, expor
 		apModes.speed.isMach(false);
 
 		// CLIMB
-		if (phase == 'climb') {
+		if (phase() === 0) {
 			var profile = getVNAVProfile().climb;
 
 			for (var i = 0, index = 0; i < profile.length; i++) {
@@ -62,7 +116,7 @@ define(['knockout', 'vnav-profile', 'exports'], function (ko, vnavProfile, expor
 		}
 
 		// DESCENT
-		else if (phase == 'descent') {
+		else if (phase() === 2) {
 			var profile = getVNAVProfile().descent;
 
 			for (var i = 0, index = 0; i < profile.length; i++) {
@@ -180,8 +234,10 @@ define(['knockout', 'vnav-profile', 'exports'], function (ko, vnavProfile, expor
 	exports.spdControl = spdControl;
 	exports.departure = departure;
 	exports.arrival = arrival;
+	exports.number = flightNumber;
 	exports.cruiseAlt = cruiseAlt;
 	exports.phase = phase;
+	exports.phaseLocked = phaseLocked;
 	exports.todCalc = todCalc;
 	exports.fieldElev = fieldElev;
 

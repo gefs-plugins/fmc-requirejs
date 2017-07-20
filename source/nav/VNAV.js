@@ -84,7 +84,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 			var phase = flight.phase();
 
 			// If the aircraft is climbing
-			if (phase === 'climb') {
+			if (phase === 0) {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -110,7 +110,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 			}
 
 			// If the aircraft is on descent
-			else if (phase == 'descent') {
+			else if (phase === 2) {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -132,7 +132,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 			}
 
 			// Calculates Top of Descent
-			if (phase === 'cruise' && (todCalc || !todDist)) {
+			if (phase === 1 && (todCalc || !todDist)) {
 				if (hasRestriction) {
 					todDist = distance.route(route.length) - nextDist;
 					todDist += distance.target(targetAlt - cruiseAlt);

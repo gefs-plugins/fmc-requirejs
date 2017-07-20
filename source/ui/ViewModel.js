@@ -1,23 +1,53 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/VNAV'], function (ko, debug, flight, log, waypoints, vnav) {
+define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV'], function (ko, debug, flight, log, waypoints, lnav) {
+
+    // Autopilot++ Dependencies
+    var	icao = autopilot_pp.require('json!data/icaoairports.json');
+
     /**
      * ViewModel function for knockout bindings
      */
     function ViewModel () {
 
         // RTE tab
-        this.arrival = ko.pureComputed({
-            read: function () {
-                return flight.arrival;
-            },
+        this.departureAirport = ko.pureComputed({
+            read: function () {},
             write: function (airport) {
-                var coords = waypoints.getCoords(airport);
+                var coords = icao[airport];
 
-                if (!coords) flight.arrival([]);
-                else flight.arrival([airport, coords[0], coords[1]]);
+                if (!coords) flight.departure = [];
+                else flight.departure = [
+                    airport,
+                    coords[0],
+                    coords[1]
+                ];
+
+                lnav.update();
             }
         });
+
+        this.arrivalAirport = ko.pureComputed({
+            read: function () {},
+            write: function (airport) {
+                var coords = icao[airport];
+
+                if (!coords) flight.arrival = [];
+                else flight.arrival = [
+                    airport,
+                    coords[0],
+                    coords[1]
+                ];
+
+                lnav.update();
+            }
+        });
+
+        this.flightNumber = flight.number;
+        this.route = waypoints.route;
+        this.saveWaypoints = waypoints.saveData;
+        this.retrieveWaypoints = waypoints.loadFromSave;
+        this.addWaypoint = waypoints.addWaypoint;
 
         // ARR tab
         this.fieldElev = flight.fieldElev;
@@ -25,64 +55,13 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/VNAV'], function
         this.todCalc = flight.todCalc;
 
         // VNAV tab
-        this.vnavEnabled = ko.pureComputed({
-            read: function () {
-                return flight.vnavEnabled();
-            },
-            write: function (boolean) {
-                var set = flight.vnavEnabled;
-
-                if (!flight.cruiseAlt()) set(false);
-
-                else if (boolean) {
-                    vnav.timer = setInterval(function () { vnav.update(); }, 5000);
-                    set(true);
-                } else {
-                    clearInterval(vnav.timer);
-                    vnav.timer = null;
-                    set(false);
-                }
-            }
-        });
-
-        this.cruiseAlt = ko.pureComputed({
-            read: function () {
-                return flight.cruiseAlt();
-            },
-            write: function (val) {
-                var set = flight.cruiseAlt;
-
-                if (!val) {
-                    set(undefined);
-                    flight.vnavEnabled(false);
-                } else set(val);
-            }
-        });
-
+        this.vnavEnabled = flight.vnavEnabled;
+        this.cruiseAlt = flight.cruiseAlt;
         this.spdControl = flight.spdControl;
+        this.phase = flight.phase;
+        this.phaseLocked = flight.phaseLocked;
 
         var phaseToText = ['climb', 'cruise', 'descent'];
-        var phaseLocked = ko.observable(false);
-
-        this.locked = ko.pureComputed({
-            read: function () {
-                return phaseLocked();
-            },
-            write: function (boolean) {
-                phaseLocked(boolean);
-            }
-        });
-
-        this.phase = ko.pureComputed({
-            read: function () {
-                return flight.phase();
-            },
-            write: function (index) {
-                if (phaseLocked()) return;
-                flight.phase(index);
-            }
-        });
-
         this.currentPhaseText = ko.pureComputed(function () {
             return phaseToText[flight.phase()];
         });
@@ -95,11 +74,13 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/VNAV'], function
 
         // Log tab
         this.removeLogData = log.removeData;
+
     }
 
 
     // Adds custom binding handler to fix MDL Inputs
-    // ko.bindingHandlers.mdlInput = { update: debug.mdlInput };
+    // FIXME
+    ko.bindingHandlers.mdlInput = { update: debug.mdlInput };
     ko.bindingHandlers.mdlSwitch = { update: debug.mdlSwitch };
 
     return ViewModel;

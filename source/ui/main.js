@@ -76,9 +76,7 @@ define([
 
 		// Waypoint list actions: activate/add/remove/move up or down
 		// FIXME potential item index confusion/mess up
-		$(modal).on('click', btn.addWpt, function () {
-			waypoints.addWaypoint();
-		}).on('click', btn.activateWpt, function () {
+		$(modal).on('click', btn.activateWpt, function () {
 			var index = $(this).parents().eq(1).index() - 1;
 			waypoints.activateWaypoint(index);
 			lnav.update();
