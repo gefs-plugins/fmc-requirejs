@@ -67,19 +67,11 @@ define(['ui/elements', 'flight'], function (E, flight) {
 		},
 
 		/**
-		 * Prints warning statements to FMC warning section, flashing 3 times
+		 * Prints warning statements to FMC warning section, lasting 5 seconds
 		 */
 		warn: function (warning) {
-			var seconds = 0;
-			var $container = $(E.container.warning);
-			var timer = setInterval(function () {
-				if (seconds === 5) clearInterval(timer);
-
-				if (seconds % 2 === 0) $container.text(warning);
-				else $container.text('');
-
-				seconds++;
-			}, 1000);
+			var $container = $(E.container.warning).text(warning);
+			setTimeout(function () { $container.text(''); }, 5000);
 		}
 	};
 
