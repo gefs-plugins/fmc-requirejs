@@ -3,16 +3,30 @@
     <div class="page-content">
         <div class="fmc-log-container">
             <table class="mdl-data-table mdl-js-data-table">
-                <tr class="log-header">
-                    <th class="time-col">Time</th>
-                    <th class="spd-col">Spd.</th>
-                    <th class="hdg-col">Hdg.</th>
-                    <th class="alt-col">Alt.</th>
-                    <th class="lat-col">Lat.</th>
-                    <th class="lon-col">Lon.</th>
-                    <th class="fps-col">FPS</th>
-                    <th class="oth-col">Other</th>
-                </tr>
+                <tbody>
+                    <tr class="log-header">
+                        <th class="time-col">Time</th>
+                        <th class="spd-col">Spd.</th>
+                        <th class="hdg-col">Hdg.</th>
+                        <th class="alt-col">Alt.</th>
+                        <th class="lat-col">Lat.</th>
+                        <th class="lon-col">Lon.</th>
+                        <th class="fps-col">FPS</th>
+                        <th class="oth-col">Other</th>
+                    </tr>
+                </tbody>
+                <tbody data-bind="foreach: logData">
+                    <tr class="log-data">
+                        <td data-bind="text: time"></td>
+                        <td data-bind="text: spd"></td>
+                        <td data-bind="text: hdg"></td>
+                        <td data-bind="text: alt"></td>
+                        <td data-bind="text: lat"></td>
+                        <td data-bind="text: lon"></td>
+                        <td data-bind="text: fps"></td>
+                        <td data-bind="text: other"></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

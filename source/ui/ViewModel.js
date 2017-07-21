@@ -1,9 +1,6 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV', './elements'], function (ko, debug, flight, log, waypoints, lnav, E) {
-
-    // Autopilot++ Dependencies
-    var	icao = autopilot_pp.require('json!data/icaoairports.json');
+define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug, flight, log, waypoints) {
 
     /**
      * ViewModel function for knockout bindings
@@ -80,6 +77,7 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV', './elemen
         self.generateRoute = waypoints.toRouteString;
 
         // LOG tab
+        self.logData = log.data;
         self.removeLogData = log.removeData;
 
     }
