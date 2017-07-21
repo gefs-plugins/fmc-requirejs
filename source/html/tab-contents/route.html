@@ -87,16 +87,17 @@
                         </td>
                         <td>
                             <!-- Action buttons -->
-                            <button data-bind="click: $parent.activateWaypoint, css: {'mdl-button--accent': $parent.nextWaypoint() === $index(), 'mdl-button--colored': $parent.nextWaypoint() !== $index()}" class="mdl-button mdl-js-button mdl-button--icon">
+                            <button data-bind="click: function(){ $parent.activateWaypoint($index()) }, css: {'mdl-button--accent': $parent.nextWaypoint() === $index(), 'mdl-button--colored': $parent.nextWaypoint() !== $index()}" class="mdl-button mdl-js-button mdl-button--icon">
                                 <i class="material-icons" data-bind="text: $parent.nextWaypoint() === $index() ? 'check_circle' : 'check'"></i>
                             </button>
-                            <button data-bind="click: $parent.shiftWaypoint($index(), -1)" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                            <button data-bind="click: function(){ $parent.shiftWaypoint($index(), -1) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">arrow_upward</i>
                             </button>
-                            <button data-bind="click: $parent.shiftWaypoint($index(), 1)" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                            <button data-bind="click: function(){ $parent.shiftWaypoint($index(), 1) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">arrow_downward</i>
                             </button>
-                            <button data-bind="click: $parent.removeWaypoint($index())" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+
+                            <button data-bind="click: function(){ $parent.removeWaypoint($index()) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">delete_forever</i>
                             </button>
                         </td>

@@ -14,7 +14,7 @@ define([
 		btn = E.btn,
 		input = E.input;
 
-	var route = ko.observableArray([]);
+	var route = ko.observableArray();
 	var nextWaypoint = ko.observable(null);
 
 	var DEFAULT_ROUTE = [

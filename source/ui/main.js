@@ -62,7 +62,7 @@ define([
 			$that.removeClass(c);
 			$this.addClass(c);
 		});
-
+		/*
 		// Waypoint list input actions: update `route` array
 		$(container.wptList).on('change', input.wpt, function () {
 			var index = $(this).parents().eq(2).index() - 1;
@@ -110,7 +110,7 @@ define([
 
 			if (!$(this).parent().hasClass('is-invalid')) waypoints.route[index][3] = Number($(this).val());
 		 	else waypoints.route[index][3] = undefined;
-		});
+		});*/
 
 		// ----------------------------------------
 		// --------------- LOAD TAB ---------------
