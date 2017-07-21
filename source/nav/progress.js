@@ -10,8 +10,8 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	 * Updates the plane's progress during flying, set on a timer
 	 */
 	function update () {
-		var route = waypoints.route;
-		var nextWaypoint = waypoints.nextWaypoint;
+		var route = waypoints.route();
+		var nextWaypoint = waypoints.nextWaypoint();
 		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
 		var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
 		var lat2 = flight.arrival[1] || null;

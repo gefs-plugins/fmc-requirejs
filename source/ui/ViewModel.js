@@ -9,71 +9,46 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV'], function
      * ViewModel function for knockout bindings
      */
     function ViewModel () {
+        var self = this;
 
         // RTE tab
-        this.departureAirport = ko.pureComputed({
-            read: function () {},
-            write: function (airport) {
-                var coords = icao[airport];
-
-                if (!coords) flight.departure = [];
-                else flight.departure = [
-                    airport,
-                    coords[0],
-                    coords[1]
-                ];
-
-                lnav.update();
-            }
-        });
-
-        this.arrivalAirport = ko.pureComputed({
-            read: function () {},
-            write: function (airport) {
-                var coords = icao[airport];
-
-                if (!coords) flight.arrival = [];
-                else flight.arrival = [
-                    airport,
-                    coords[0],
-                    coords[1]
-                ];
-
-                lnav.update();
-            }
-        });
-
-        this.flightNumber = flight.number;
-        this.route = waypoints.route;
-        this.saveWaypoints = waypoints.saveData;
-        this.retrieveWaypoints = waypoints.loadFromSave;
-        this.addWaypoint = waypoints.addWaypoint;
+        self.departureAirport = flight.departure.airport;
+        self.arrivalAirport = flight.arrival.airport;
+        self.flightNumber = flight.number;
+        self.route = waypoints.route;
+        self.nextWaypoint = waypoints.nextWaypoint;
+        self.saveWaypoints = waypoints.saveData;
+        self.retrieveWaypoints = waypoints.loadFromSave;
+        self.addWaypoint = waypoints.addWaypoint;
+        self.activateWaypoint = waypoints.activateWaypoint;
+        self.shiftWaypoint = waypoints.shiftWaypoint;
+        self.removeWaypoint = waypoints.removeWaypoint;
 
         // ARR tab
-        this.fieldElev = flight.fieldElev;
-        this.todDist = flight.todDist;
-        this.todCalc = flight.todCalc;
+        self.fieldElev = flight.fieldElev;
+        self.todDist = flight.todDist;
+        self.todCalc = flight.todCalc;
 
         // VNAV tab
-        this.vnavEnabled = flight.vnavEnabled;
-        this.cruiseAlt = flight.cruiseAlt;
-        this.spdControl = flight.spdControl;
-        this.phase = flight.phase;
-        this.phaseLocked = flight.phaseLocked;
+        self.vnavEnabled = flight.vnavEnabled;
+        self.cruiseAlt = flight.cruiseAlt;
+        self.spdControl = flight.spdControl;
+        self.phase = flight.phase;
+        self.phaseLocked = flight.phaseLocked;
 
         var phaseToText = ['climb', 'cruise', 'descent'];
-        this.currentPhaseText = ko.pureComputed(function () {
+        self.currentPhaseText = ko.pureComputed(function () {
             return phaseToText[flight.phase()];
         });
 
-        this.nextPhase = function () {
+        self.nextPhase = function () {
             var phase = flight.phase();
 
             flight.phase(phase === phaseToText.length - 1 ? 0 : phase + 1);
         };
 
         // Log tab
-        this.removeLogData = log.removeData;
+        self.removeLogData = log.removeData;
 
     }
 

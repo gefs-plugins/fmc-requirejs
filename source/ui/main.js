@@ -63,45 +63,6 @@ define([
 			$this.addClass(c);
 		});
 
-		// ---------------------------------------
-		// -------------- ROUTE TAB --------------
-		// ---------------------------------------
-
-		// Save/retrieve waypoints data
-		$(modal).on('click', btn.saveWptData, function () {
-			waypoints.saveData();
-		}).on('click', btn.retrieveWpt, function () {
-			waypoints.loadFromSave();
-		});
-
-		// Waypoint list actions: activate/add/remove/move up or down
-		// FIXME potential item index confusion/mess up
-		$(modal).on('click', btn.activateWpt, function () {
-			var index = $(this).parents().eq(1).index() - 1;
-			waypoints.activateWaypoint(index);
-			lnav.update();
-		}).on('click', btn.removeWpt, function () {
-			var index = $(this).parents().eq(1).index() - 1;
-			waypoints.removeWaypoint(index);
-		}).on('click', btn.moveWptUp, function () {
-			var row = $(this).parents().eq(1);
-			waypoints.shiftWaypoint(row, row.index() - 1, -1);
-		}).on('click', btn.moveWptDown, function () {
-			var row = $(this).parents().eq(1);
-			waypoints.shiftWaypoint(row, row.index() - 1, 1);
-		});
-
-		// Arrival airport input
-		// $(container.depArr).on('change', input.arr, function () {
-		// 	var wpt = $(this).val().trim();
-		// 	if (wpt) {
-		// 		var coords = waypoints.getCoords(wpt);
-		// 		if (coords) flight.arrival = [wpt, coords[0], coords[1]];
-		// 		else flight.arrival = [];
-		// 	} else flight.arrival = [];
-		// 	lnav.update();
-		// });
-
 		// Waypoint list input actions: update `route` array
 		$(container.wptList).on('change', input.wpt, function () {
 			var index = $(this).parents().eq(2).index() - 1;
@@ -174,7 +135,7 @@ define([
 		/* ---- All Initializations ---- */
 
 		// Initializes all timers
-		progress.timer = setInterval(function () { progress.update(); }, 5000);
+		//progress.timer = setInterval(function () { progress.update(); }, 5000);
 		log.mainTimer = setInterval(function () { log.update(); }, 30000);
 		log.speedTimer = setInterval(function () { log.speed(); }, 15000);
 

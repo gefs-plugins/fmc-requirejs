@@ -14,8 +14,17 @@ define([
 		btn = E.btn,
 		input = E.input;
 
-	exports.route = ko.observableArray();
-	exports.nextWaypoint = null;
+	var route = ko.observableArray([]);
+	var nextWaypoint = ko.observable(null);
+
+	var DEFAULT_ROUTE = [
+		ko.observable(), // FIX/VOR/ICAO
+		ko.observable(), // Latitude
+		ko.observable(), // Longitude
+		ko.observable(), // Alt. Restriction
+		ko.observable(false), // If valid waypoint with coords
+		ko.observable('') // Waypoint information
+	];
 
 	/**
 	 * Defines method to move elements in the route array
@@ -24,14 +33,18 @@ define([
 	 * @param {Number} index2 The end/target index
 	 */
 	function move (index1, index2) {
-		if (index2 >= exports.route().length) {
-			var k = index2 - exports.route().length;
+		var tempRoute = route();
+
+		if (index2 >= tempRoute.length) {
+			var k = index2 - tempRoute.length;
 			while ((k--) + 1) {
-				exports.route().push(undefined);
+				tempRoute.push(undefined);
 			}
 		}
-		exports.route().splice(index2, 0, exports.route().splice(index1, 1)[0]);
-		return exports.route();
+		tempRoute.splice(index2, 0, tempRoute.splice(index1, 1)[0]);
+
+		// Sets tempRoute as the new route
+		route(tempRoute);
 	}
 
 	/**
@@ -42,14 +55,14 @@ define([
 	function makeFixesArray () {
 		var result = [];
 
-		var departureVal = flight.departure()[0];
+		var departureVal = flight.departure.airport();
 		if (departureVal) result.push(departureVal);
 
-		exports.route().forEach(function (wpt) {
-			result.push(wpt[0]);
+		route().forEach(function (wpt) {
+			result.push(wpt[0]());
 		});
 
-		var arrivalVal = flight.arrival()[0];
+		var arrivalVal = flight.arrival.airport();
 		if (arrivalVal) result.push(arrivalVal);
 
 		return result;
@@ -72,10 +85,10 @@ define([
 	 */
 	function toRouteString () {
 		return JSON.stringify ([
-			flight.departure(),
-			flight.arrival(),
+			flight.departure.airport(),
+			flight.arrival.airport(),
 			flight.number(),
-			exports.route()
+			route()
 		]);
 	}
 
@@ -129,20 +142,16 @@ define([
 			return;
 		}
 
-		// Removes all current waypoints
-		$(E.container.wptRow).remove();
-		exports.route([]);
+		route.destroyAll();
 
 		// Departure airport input/clear
 		if (departure) {
 			var wpt = str[0];
-			var coords = exports.getCoords(wpt);
-			if (coords) flight.departure([wpt, coords[0], coords[1]]);
-			else flight.departure([]);
+			flight.departure.airport(wpt);
 			a = 1;
 		} else {
 			a = 0;
-			flight.departure([]);
+			flight.departure.airport(undefined);
 		}
 
 		// Adds all waypoints into waypoint input area
@@ -154,17 +163,15 @@ define([
 		// Arrival airpot input/clear
 		if (arrival) {
 			var wpt = str[str.length - 1];
-			var coords = exports.getCoords(wpt);
-			if (coords) flight.arrival([wpt, coords[0], coords[1]]);
-			else flight.arrival([]);
-		} else flight.arrival([]);
+			flight.arrival.airport(wpt);
+		} else flight.arrival.airport(undefined);
 	}
 
 	/**
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
 	function addWaypoint () {
-		exports.route.push([]);
+		route.push(DEFAULT_ROUTE);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		debug.stopPropagation();
 	}
@@ -174,11 +181,10 @@ define([
 	 *
 	 * @param {Number} n The index of which will be removed
 	 */
-	function removeWaypoint (n) { // FIXME
-		$(container.wptRow).eq(n).remove();
-		exports.route().splice(n, 1);
-		if (exports.nextWaypoint === n) {
-			exports.nextWaypoint = null;
+	function removeWaypoint (n) {
+		route.splice(n, 1);
+		if (nextWaypoint() === n) {
+			nextWaypoint(null);
 			gc.latitude(undefined);
 			gc.longitude(undefined);
 			autopilot.currentMode(0);
@@ -198,47 +204,30 @@ define([
 		 *
 		 * @param {Boolean} toggleOn Whether the action is to toggle on
 		 */
-		var toggle = function (toggleOn) { // FIXME
-			if (toggleOn) {
-				$(btn.activateWpt)
-					.eq(n).removeClass('mdl-button--colored')
-					.addClass('mdl-button--accent')
-					.children().text('check_circle');
-			} else {
-				$(btn.activateWpt)
-					.removeClass('mdl-button--accent')
-					.addClass('mdl-button--colored')
-					.children().text('check');
-			}
-		};
 
-		if (exports.nextWaypoint !== n) {
-			if (n < exports.route().length) {
-				exports.nextWaypoint = n;
-				var wpt = exports.route()[exports.nextWaypoint];
+
+		if (nextWaypoint() !== n) {
+			if (n < route().length) {
+				nextWaypoint(n);
+				var wpt = route()[nextWaypoint()];
 
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
 				gc.latitude(wpt[1]);
 				gc.longitude(wpt[2]);
 				autopilot.currentMode(1); // Switches to Lat/Lon mode
 
-				toggle(false);
-				toggle(true);
-
 				progress.update(); // Updates progress: prints general progress info and next waypoint info
 				debug.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
 			} else {
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
-				if (flight.arrival[1]) {
-					gc.latitude(flight.arrival[1]);
-					gc.longitude(flight.arrival[2]);
+				if (flight.arrival.coords[1]) {
+					gc.latitude(flight.arrival.coords[1]);
+					gc.longitude(flight.arrival.coords[2]);
 				}
-
-				toggle(false);
+				nextWaypoint(null);
 			}
 		} else {
-			toggle(false);
-			exports.nextWaypoint = null;
+			nextWaypoint(null);
 			gc.latitude(undefined);
 			gc.longitude(undefined);
 			autopilot.currentMode(0);
@@ -255,8 +244,7 @@ define([
 	 */
 	function printWaypointInfo (index, info) {
 		if (!info) info = '';
-		$(E.container.wptInfo).eq(index).text(info);
-		exports.route()[index][5] = info;
+		route()[index][5](info);
 	}
 
 	/**
@@ -266,8 +254,8 @@ define([
 	 * 		   -1 if not eligible
 	 */
 	function getNextWaypointWithAltRestriction () {
-		for (var i = exports.nextWaypoint; i < exports.route().length; i++) {
-			if (exports.route()[i] && exports.route()[i][3]) return i;
+		for (var i = nextWaypoint(); i < route().length; i++) {
+			if (route()[i]() && route()[i][3]()) return i;
 		}
 		return -1;
 	}
@@ -276,7 +264,7 @@ define([
 	 * Saves the waypoints data into localStorage
 	 */
 	function saveData () {
-		if (exports.route().length < 1 || !exports.route()[0][0]) {
+		if (route().length < 1 || !route()[0][0]()) {
 			log.warn("There is no route to save");
 		} else {
 			localStorage.removeItem('fmcWaypoints');
@@ -309,8 +297,7 @@ define([
 
 		if (arr) {
 			// Clears all
-			exports.route([]);
-			$(container.wptRow).remove();
+			route.destroyAll();
 
 			var rte = arr[3];
 
@@ -347,12 +334,11 @@ define([
 	/**
 	 * Shifts a waypoint up or down one step
 	 *
-	 * @param {jQuery} $j The element to be moved in the UI
 	 * @param {Number} oldIndex Index of this waypoint
 	 * @param {Number} value Direction (+/-) and quantity moved
 	 * FIXME Potential index confusion
 	 */
-	function shiftWaypoint ($j, oldIndex, value) {
+	function shiftWaypoint (oldIndex, value) {
 		debug.log("Waypoint #" + (oldIndex + 1) + "(index=" + oldIndex + ") shifted " + value);
 
 		var newIndex = oldIndex + value;
@@ -361,31 +347,29 @@ define([
 		if (value < 0 && newIndex >= 0) {
 			move(oldIndex, newIndex);
 
-			for (var i = 0, $e = $j; i < -value; i++) $e = $e.prev();
-			$j.insertBefore($e);
-
-			if (exports.nextWaypoint === newIndex) {
-				exports.nextWaypoint = oldIndex;
-			} else if (exports.nextWaypoint === oldIndex) {
-				exports.nextWaypoint = newIndex;
+			if (nextWaypoint() === newIndex) {
+				nextWaypoint(oldIndex);
+			} else if (nextWaypoint() === oldIndex) {
+				nextWaypoint(newIndex);
 			}
 		}
 
 		// If waypoint is shifting down (positive value)
-		else if (value > 0 && newIndex <= exports.route().length - 1) {
+		else if (value > 0 && newIndex <= route().length - 1) {
 			move(oldIndex, newIndex);
 
-			for (var i = 0, $e = $j; i < value; i++) $e = $e.next();
-			$j.insertAfter($e);
-
-			if (exports.nextWaypoint === oldIndex) {
-				exports.nextWaypoint = newIndex;
-			} else if (exports.nextWaypoint === newIndex) {
-				exports.nextWaypoint = oldIndex;
+			if (nextWaypoint() === oldIndex) {
+				nextWaypoint(newIndex);
+			} else if (nextWaypoint() === newIndex) {
+				nextWaypoint(oldIndex);
 			}
 		}
 
 	}
+	// Variables
+	exports.route = route;
+	exports.nextWaypoint = nextWaypoint;
+	exports.DEFAULT_ROUTE = DEFAULT_ROUTE;
 
 	// Functions
 	exports.move = move;

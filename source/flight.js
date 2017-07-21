@@ -1,9 +1,10 @@
 "use strict";
 
-define(['knockout', 'nav/VNAV', 'vnav-profile', 'exports'], function (ko, vnav, vnavProfile, exports) {
+define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function (ko, lnav, vnav, vnavProfile, exports) {
 
 	// Autopilot++ Dependencies
-	var apModes = autopilot_pp.require('autopilot').modes;
+	var apModes = autopilot_pp.require('autopilot').modes,
+		icao = autopilot_pp.require('json!data/icaoairports.json');
 
 	// Top Of Descent distance
 	var todDist = ko.observable();
@@ -34,10 +35,52 @@ define(['knockout', 'nav/VNAV', 'vnav-profile', 'exports'], function (ko, vnav, 
 	var spdControl = ko.observable(true);
 
 	// Departure airport name and coords
-	var departure = [];
+	var _departureAirport = ko.observable();
+	var departure = {
+		airport: ko.pureComputed({
+			read: function () {
+				return _departureAirport();
+			},
+			write: function (airport) {
+				var coords = icao[airport];
+
+				if (!coords) {
+					_departureAirport(undefined);
+					departure.coords = [];
+				}
+				else {
+					_departureAirport(airport);
+					departure.coords = coords;
+				}
+				lnav.update();
+			}
+		}),
+		coords: []
+	};
 
 	// Arrival airport name and coords
-	var arrival = [];
+	var _arrivalAirport = ko.observable();
+	var arrival = {
+		airport: ko.pureComputed({
+			read: function () {
+				return _arrivalAirport();
+			},
+			write: function (airport) {
+				var coords = icao[airport];
+
+				if (!coords) {
+					_arrivalAirport(undefined);
+					arrival.coords = [];
+				}
+				else {
+					_arrivalAirport(airport);
+					arrival.coords = coords;
+				}
+				lnav.update();
+			}
+		}),
+		coords: []
+	};
 
 	// Flight Number
 	var flightNumber = ko.observable();

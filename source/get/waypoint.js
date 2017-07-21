@@ -19,9 +19,9 @@ define(['data', 'math', 'waypoints'], function (data, math, waypoints) {
             // Sets current coords to the last waypoint in the list if applicable
             // Else, current coords set to current position
             // FIXME add better logic
-            var lat = waypoints.route[waypoints.route.length - 1][0] ||
+            var lat = waypoints.route()[waypoints.route().length - 1][0] ||
                 geofs.aircraft.instance.llaLocation[0];
-            var lon = waypoints.route[waypoints.route.length - 1][1] ||
+            var lon = waypoints.route()[waypoints.route().length - 1][1] ||
                 geofs.aircraft.instance.llaLocation[1];
 
             var relativeDist = math.getDistance(point[0], point[1], lat, lon);
