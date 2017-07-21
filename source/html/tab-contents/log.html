@@ -17,14 +17,14 @@
                 </tbody>
                 <tbody data-bind="foreach: logData">
                     <tr class="log-data">
-                        <td data-bind="text: time"></td>
-                        <td data-bind="text: spd"></td>
-                        <td data-bind="text: hdg"></td>
-                        <td data-bind="text: alt"></td>
-                        <td data-bind="text: lat"></td>
-                        <td data-bind="text: lon"></td>
-                        <td data-bind="text: fps"></td>
-                        <td data-bind="text: other"></td>
+                        <td data-bind="text: $data[0]"></td>
+                        <td data-bind="text: $data[1]"></td>
+                        <td data-bind="text: $data[2]"></td>
+                        <td data-bind="text: $data[3]"></td>
+                        <td data-bind="text: $data[4]"></td>
+                        <td data-bind="text: $data[5]"></td>
+                        <td data-bind="text: $data[6]"></td>
+                        <td data-bind="text: $data[7]"></td>
                     </tr>
                 </tbody>
             </table>

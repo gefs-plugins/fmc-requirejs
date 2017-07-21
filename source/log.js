@@ -19,7 +19,7 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 			var spd = Math.round(animationValue.ktas);
 			var hdg = Math.round(animationValue.heading360);
 			var alt = Math.round(animationValue.altitude);
-			var fps = geofs.debug.fps;
+			var fps = +geofs.debug.fps;
 			var lat = (Math.round(10000 * geofs.aircraft.instance.llaLocation[0])) / 10000;
 			var lon = (Math.round(10000 * geofs.aircraft.instance.llaLocation[1])) / 10000;
 			var date = new Date();
@@ -28,18 +28,8 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 			var time = flight.formatTime(flight.timeCheck(h, m));
 			other = other || "--";
 
-			var dataObject = {
-				time: time,
-				spd: spd,
-				hdg: hdg,
-				alt: alt,
-				lat: lat,
-				lon: lon,
-				fps: fps,
-				other: other
-			};
-
-			exports.data.push(dataObject);
+			var dataArray = [ time, spd, hdg, alt, lat, lon, fps, other ]
+			exports.data.push(dataArray);
 		}
 		clearInterval(exports.mainTimer);
 		if (animationValue.altitude > 18000) {
