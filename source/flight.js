@@ -118,7 +118,7 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 		read: function () {
 			return _phaseLocked();
 		},
-		write: function (boolean) {
+		write: function (boolean, viewmodel) { // jshint unused:false
 			_phaseLocked(boolean);
 		}
 	});

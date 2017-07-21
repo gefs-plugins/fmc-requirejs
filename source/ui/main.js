@@ -22,8 +22,9 @@ define([
 			textarea = E.textarea;
 
 		// Applies knockout bindings
-		window.debugVM = new ViewModel();
-		ko.applyBindings(window.debugVM, $(E.modal)[0]);
+		var vm = window.debugVM = new ViewModel();
+		ko.applyBindings(vm, $(modal)[0]);
+		ko.applyBindings(vm, $(btn.fmcBtn)[1]);
 
 		// Adds one input field on start
 		waypoints.addWaypoint();
@@ -34,13 +35,8 @@ define([
 		// ------------- General Modal -------------
 		// -----------------------------------------
 
-		// Modal actions: open/close
-		$(modal).on('click', btn.close, function () {
-			$(modal).removeClass('opened');
-		}).parent().on('click', btn.fmcBtn, function () {
-			if ($(modal).hasClass('opened')) $(modal).removeClass('opened');
-			else $(modal).addClass('opened');
-		}).keydown(function (event) { // Sets escape button to close FMC
+		// Modal actions: close on button click
+		$(modal).keydown(function (event) { // Sets escape button to close FMC
 			if ((event.which === 27 || event.keyCode === 27) && $(this).is(':visible'))
 				$(modal).removeClass('opened');
 		});

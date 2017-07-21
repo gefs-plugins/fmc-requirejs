@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV'], function (ko, debug, flight, log, waypoints, lnav) {
+define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV', './elements'], function (ko, debug, flight, log, waypoints, lnav, E) {
 
     // Autopilot++ Dependencies
     var	icao = autopilot_pp.require('json!data/icaoairports.json');
@@ -11,6 +11,17 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV'], function
     function ViewModel () {
         var self = this;
 
+         // General modal actions
+        var _opened = ko.observable(false);
+        self.opened = ko.pureComputed({
+            read: function () {
+                return _opened();
+            },
+            write: function (boolean, viewmodel) { // jshint unused:false
+                _opened(boolean);
+            }
+        });
+
         // RTE tab
         self.departureAirport = flight.departure.airport;
         self.arrivalAirport = flight.arrival.airport;
@@ -18,7 +29,9 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV'], function
         self.route = waypoints.route;
         self.nextWaypoint = waypoints.nextWaypoint;
         self.saveWaypoints = waypoints.saveData;
-        self.retrieveWaypoints = waypoints.loadFromSave;
+        self.retrieveWaypoints = ko.pureComputed(function () {
+            waypoints.loadFromSave();
+        });
         self.addWaypoint = waypoints.addWaypoint;
         self.activateWaypoint = waypoints.activateWaypoint;
         self.shiftWaypoint = waypoints.shiftWaypoint;
@@ -47,7 +60,26 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/LNAV'], function
             flight.phase(phase === phaseToText.length - 1 ? 0 : phase + 1);
         };
 
-        // Log tab
+        // LOAD tab
+        self.loadRouteText = ko.observable();
+        self.loadRoute = function () {
+            waypoints.toRoute(self.loadRouteText());
+        };
+
+        self.generatedRouteText = ko.observable();
+        self.setGeneratedRouteText = ko.pureComputed({
+            read: function () {
+                return self.generatedRouteText;
+            },
+            write: function (text, viewmodel) { // jshint unused:false
+                if (!text) self.generatedRouteText(undefined);
+                else self.generatedRouteText(self.generateRoute());
+            }
+        });
+
+        self.generateRoute = waypoints.toRouteString;
+
+        // LOG tab
         self.removeLogData = log.removeData;
 
     }

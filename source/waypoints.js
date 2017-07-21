@@ -1,18 +1,13 @@
 "use strict"; // FIXME
 
 define([
-	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress',
-	'ui/elements', 'exports'
-], function (ko, debug, math, get, flight, log, progress, E, exports) {
+	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress', 'exports'
+], function (ko, debug, math, get, flight, log, progress, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
 		gc = autopilot_pp.require('greatcircle'),
 		icao = autopilot_pp.require('json!data/icaoairports.json');
-
-	var container = E.container,
-		btn = E.btn,
-		input = E.input;
 
 	var route = ko.observableArray();
 	var nextWaypoint = ko.observable(null);
@@ -84,11 +79,23 @@ define([
 	 * 					using `JSON.stringify` method
 	 */
 	function toRouteString () {
+
+		var normalizedRoute = [];
+
+		for (var i = 0; i < route().length; i++) {
+			var singleRoute = [];
+			route()[i].forEach(function (element) {
+				singleRoute.push(element());
+			});
+
+			normalizedRoute.push(singleRoute);
+		}
+
 		return JSON.stringify ([
 			flight.departure.airport(),
 			flight.arrival.airport(),
 			flight.number(),
-			route()
+			normalizedRoute
 		]);
 	}
 
@@ -116,6 +123,12 @@ define([
 	 * @param {String} s Input of waypoints or a shared/generated route
 	 */
 	function toRoute (s) {
+
+		if (!s) {
+			log.warn('Please enter waypoints separated by spaces or a generated route');
+			return;
+		}
+
 		// If it is a generated route
 		if (s.indexOf('["') === 0) {
 			loadFromSave(s);
@@ -157,7 +170,7 @@ define([
 		// Adds all waypoints into waypoint input area
 		for (var i = 0; i + a < str.length; i++) {
 			addWaypoint();
-			debug.input($(input.wpt).eq(i).val(str[i+a]).change()); // FIXME
+			route()[i][0](str[i+1]);
 		}
 
 		// Arrival airpot input/clear
@@ -197,23 +210,14 @@ define([
 	 * @param {Number} n The index (starts with 0) to be activated or deactivated
 	 */
 	function activateWaypoint (n) {
-
-		/**
-		 * @private
-		 * Toggles activated buttons
-		 *
-		 * @param {Boolean} toggleOn Whether the action is to toggle on
-		 */
-
-
 		if (nextWaypoint() !== n) {
 			if (n < route().length) {
 				nextWaypoint(n);
 				var wpt = route()[nextWaypoint()];
 
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
-				gc.latitude(wpt[1]);
-				gc.longitude(wpt[2]);
+				gc.latitude(wpt[1]());
+				gc.longitude(wpt[2]());
 				autopilot.currentMode(1); // Switches to Lat/Lon mode
 
 				progress.update(); // Updates progress: prints general progress info and next waypoint info
@@ -306,24 +310,24 @@ define([
 				if (!wpt[3] || wpt[3] === null) wpt[3] = undefined;
 			});
 
-			if (arr[0]) debug.input($(input.dep).val(arr[0]).change());
-			if (arr[1]) debug.input($(input.arr).val(arr[1]).change());
-			if (arr[2]) debug.input($(input.fn).val(arr[2]).change());
+			if (arr[0]) flight.departure.airport(arr[0]);
+			if (arr[1]) flight.arrival.airport(arr[1]);
+			if (arr[2]) flight.number(arr[2]);
 
 			for (var i = 0; i < rte.length; i++) {
 				addWaypoint();
 
 				// Puts in the waypoint
-				if (rte[i][0]) debug.input($(input.wpt).eq(i).val(rte[i][0]).change());
+				if (rte[i][0]) route()[i][0](rte[i][0]);
 
 				// If the waypoint is not eligible or a duplicate
-				if (!rte[i][4] || !$(input.lat).eq(i).val()) {
-					if (rte[i][1]) debug.input($(input.lat).eq(i).val(rte[i][1]).change()); // Puts in the lat.
-					if (rte[i][2]) debug.input($(input.lon).eq(i).val(rte[i][2]).change()); // Puts in the lon.
+				if (!rte[i][4] || !route()[i][1]()) {
+					if (rte[i][1]) route()[i][1](rte[i][1]); // Puts in the lat.
+					if (rte[i][2]) route()[i][3](rte[i][2]); // Puts in the lon.
 				}
 
 				if (rte[i][3]) // If there is an altitude restriction
-					debug.input($(input.alt).eq(i).val(rte[i][3]).change());
+					route()[i][3](rte[i][3]);
 			}
 			// Auto-saves the data once again
 			saveData();
