@@ -28,7 +28,7 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 			var time = flight.formatTime(flight.timeCheck(h, m));
 			other = other || "--";
 
-			var dataArray = [ time, spd, hdg, alt, lat, lon, fps, other ]
+			var dataArray = [ time, spd, hdg, alt, lat, lon, fps, other ];
 			exports.data.push(dataArray);
 		}
 		clearInterval(exports.mainTimer);
@@ -57,5 +57,5 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 	exports.removeData = function () {
 		exports.data.destroyAll();
 	};
-	
+
 });

@@ -68,8 +68,8 @@
                 <i class="material-icons">lock</i>
             </button>
         </div>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive clear-rte load-tab" data-bind="click: setGeneratedRouteText.bind($data, undefined)">Clear</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive generate-rte load-tab" data-bind="click: generateRoute">Generate Route</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive clear-rte load-tab" data-bind="click: generateRoute.bind($data,false)">Clear</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive generate-rte load-tab" data-bind="click: generateRoute.bind($data,true)">Generate Route</button>
         <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab" data-bind="click: removeLogData">Remove Log Data</button>
 
     </div>

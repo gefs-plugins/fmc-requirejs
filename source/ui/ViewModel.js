@@ -70,20 +70,19 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug,
         self.loadRouteText = ko.observable();
         self.loadRoute = function () {
             waypoints.toRoute(self.loadRouteText());
+            self.loadRouteText(undefined);
         };
 
-        self.generatedRouteText = ko.observable();
-        self.setGeneratedRouteText = ko.pureComputed({
+        var generatedRouteText = ko.observable();
+        self.generateRoute = ko.pureComputed({
             read: function () {
-                return self.generatedRouteText();
+                return generatedRouteText();
             },
-            write: function (text, viewmodel) { // jshint unused:false
-                if (!text) self.generatedRouteText(undefined);
-                else self.generatedRouteText(self.generateRoute());
+            write: function (isGenerate, viewmodel) { // jshint unused:false
+                var generatedRoute = isGenerate ? waypoints.toRouteString() : undefined;
+                generatedRouteText(generatedRoute);
             }
         });
-
-        self.generateRoute = waypoints.toRouteString;
 
         // LOG tab
         self.logData = log.data;

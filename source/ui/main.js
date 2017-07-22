@@ -108,24 +108,10 @@ define([
 		 	else waypoints.route[index][3] = undefined;
 		});*/
 
-		// ----------------------------------------
-		// --------------- LOAD TAB ---------------
-		// ----------------------------------------
-
-		// Loads waypoints separated by spaces or generated route
-		$(container.loadPage).on('click', btn.loadWpt, function () {
-			waypoints.toRoute($(input.loadWpt).val().trim());
-		});
-
 		// Disables editing on the generated route textarea
 		$(textarea.generateRte).prop('disabled', true);
 
-		// Generates an FMC route to the textarea
-		$(modal).on('click', btn.generateRte, function () {
-			debug.input($(textarea.generateRte).val(waypoints.toRouteString()).change());
-		}).on('click', btn.clearRte, function () {
-			$(textarea.generateRte).val('').change().parent().removeClass('is-dirty');
-		});
+
 
 
 		/* ---- All Initializations ---- */

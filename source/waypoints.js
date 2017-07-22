@@ -170,7 +170,7 @@ define([
 		// Adds all waypoints into waypoint input area
 		for (var i = 0; i + a < str.length; i++) {
 			addWaypoint();
-			route()[i][0](str[i+1]);
+			route()[i][0](str[i]);
 		}
 
 		// Arrival airpot input/clear
