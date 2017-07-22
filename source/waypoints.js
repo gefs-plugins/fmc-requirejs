@@ -197,24 +197,24 @@ define([
 	 * @param {Object} [event] Passed in by knockout
 	 */
 	function removeWaypoint (n, data, event) { // jshint unused:false
+		// debugger;
 		if (event.shiftKey) route.removeAll(); // Shift-click: removes all waypoints
 		else route.splice(n, 1);
 
 		if (nextWaypoint() === n || event.shiftKey) {
-			nextWaypoint(null);
-			gc.latitude(undefined);
-			gc.longitude(undefined);
-			autopilot.currentMode(0);
-		}
+			activateWaypoint(false);
+		} else if (nextWaypoint() === n + 1) activateWaypoint(n);
+		else if (nextWaypoint() > n) nextWaypoint(nextWaypoint() - 1);
 	}
 
 	/**
 	 * Activates a waypoint or deactivates if the waypoint is already activated
 	 *
 	 * @param {Number} n The index (starts with 0) to be activated or deactivated
+	 *		{Boolean} If false, deactivates all waypoints
 	 */
 	function activateWaypoint (n) {
-		if (nextWaypoint() !== n) {
+		if (n !== false && nextWaypoint() !== n) {
 			if (n < route().length) {
 				nextWaypoint(n);
 				var wpt = route()[nextWaypoint()];
@@ -232,7 +232,7 @@ define([
 					gc.latitude(flight.arrival.coords[1]);
 					gc.longitude(flight.arrival.coords[2]);
 				}
-				nextWaypoint(null);
+				nextWaypoint(-1);
 			}
 		} else {
 			nextWaypoint(null);
@@ -356,9 +356,9 @@ define([
 			move(oldIndex, newIndex);
 
 			if (nextWaypoint() === newIndex) {
-				nextWaypoint(oldIndex);
+				activateWaypoint(oldIndex);
 			} else if (nextWaypoint() === oldIndex) {
-				nextWaypoint(newIndex);
+				activateWaypoint(newIndex);
 			}
 		}
 
@@ -367,9 +367,9 @@ define([
 			move(oldIndex, newIndex);
 
 			if (nextWaypoint() === oldIndex) {
-				nextWaypoint(newIndex);
+				activateWaypoint(newIndex);
 			} else if (nextWaypoint() === newIndex) {
-				nextWaypoint(oldIndex);
+				activateWaypoint(oldIndex);
 			}
 		}
 
