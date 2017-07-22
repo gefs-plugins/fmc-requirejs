@@ -57,12 +57,5 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 	exports.removeData = function () {
 		exports.data.destroyAll();
 	};
-
-	/**
-	 * Prints warning statements to FMC warning section, lasting 5 seconds
-	 */
-	exports.warn = function (warning) {
-		var $container = $(E.container.warning).text(warning);
-		setTimeout(function () { $container.text(''); }, 5000);
-	};
+	
 });

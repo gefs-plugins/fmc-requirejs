@@ -19,6 +19,17 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug,
             }
         });
 
+        self.modalWarning = ko.observable();
+        log.warn = ko.pureComputed({ // Prints modal warning, disappears after 5 seconds
+    		read: function () {
+    			return self.modalWarning();
+    		},
+    		write: function (warningText) {
+    			self.modalWarning(warningText);
+    			setTimeout(function () { self.modalWarning(undefined); }, 5000);
+    		}
+    	});
+
         // RTE tab
         self.departureAirport = flight.departure.airport;
         self.arrivalAirport = flight.arrival.airport;
@@ -26,9 +37,7 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug,
         self.route = waypoints.route;
         self.nextWaypoint = waypoints.nextWaypoint;
         self.saveWaypoints = waypoints.saveData;
-        self.retrieveWaypoints = ko.pureComputed(function () {
-            waypoints.loadFromSave();
-        });
+        self.retrieveWaypoints = waypoints.loadFromSave;
         self.addWaypoint = waypoints.addWaypoint;
         self.activateWaypoint = waypoints.activateWaypoint;
         self.shiftWaypoint = waypoints.shiftWaypoint;
@@ -66,7 +75,7 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug,
         self.generatedRouteText = ko.observable();
         self.setGeneratedRouteText = ko.pureComputed({
             read: function () {
-                return self.generatedRouteText;
+                return self.generatedRouteText();
             },
             write: function (text, viewmodel) { // jshint unused:false
                 if (!text) self.generatedRouteText(undefined);
