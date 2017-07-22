@@ -155,7 +155,7 @@ define([
 			return;
 		}
 
-		route.destroyAll();
+		route.removeAll();
 
 		// Departure airport input/clear
 		if (departure) {
@@ -193,10 +193,14 @@ define([
 	 * Removes a waypoint
 	 *
 	 * @param {Number} n The index of which will be removed
+	 * @param {Object} [data] Passed in by knockout
+	 * @param {Object} [event] Passed in by knockout
 	 */
-	function removeWaypoint (n) {
-		route.splice(n, 1);
-		if (nextWaypoint() === n) {
+	function removeWaypoint (n, data, event) { // jshint unused:false
+		if (event.shiftKey) route.removeAll(); // Shift-click: removes all waypoints
+		else route.splice(n, 1);
+
+		if (nextWaypoint() === n || event.shiftKey) {
 			nextWaypoint(null);
 			gc.latitude(undefined);
 			gc.longitude(undefined);
@@ -301,7 +305,7 @@ define([
 
 		if (arr) {
 			// Clears all
-			route.destroyAll();
+			route.removeAll();
 
 			var rte = arr[3];
 
