@@ -44,7 +44,7 @@ define(['data', 'math', 'waypoints'], function (data, math, waypoints) {
      * @param {String} fix The name of the fix
      * @returns {Array} The coordinates array
      */
-    return function (fix) {
+    return function getWaypoint (fix) {
         var coords = icao[fix];
         if (coords) return coords;
 
