@@ -19,7 +19,7 @@ define(['knockout', 'data'], function (ko, data) {
             });
         }
 
-        return ko.observableArray(runwayArray);
+        return runwayArray;
     };
 
 });

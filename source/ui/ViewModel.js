@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/progress'], function (ko, debug, flight, log, waypoints, progress) {
+define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], function (ko, debug, flight, get, log, waypoints, progress) {
 
     /**
      * ViewModel function for knockout bindings
@@ -31,8 +31,30 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/progress'], func
     	});
 
         // RTE tab
-        self.departureAirport = flight.departure.airport;
-        self.arrivalAirport = flight.arrival.airport;
+        self.departureAirport = ko.pureComputed({
+            read: function () {
+                return flight.departure.airport();
+            },
+            write: function (airport) {
+                flight.departure.airport(airport);
+
+                self.departureRwy();
+                self.STAR();
+            }
+        });
+
+        self.arrivalAirport = ko.pureComputed({
+            read: function () {
+                return flight.arrival.airport();
+            },
+            write: function (airport) {
+                flight.arrival.airport(airport);
+
+                self.SID();
+                self.arrivalRwy();
+            }
+        });
+
         self.flightNumber = flight.number;
         self.route = waypoints.route;
         self.nextWaypoint = waypoints.nextWaypoint;
@@ -43,10 +65,26 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/progress'], func
         self.shiftWaypoint = waypoints.shiftWaypoint;
         self.removeWaypoint = waypoints.removeWaypoint;
 
-        // ARR tab
+        // DEP/ARR tab
         self.fieldElev = flight.fieldElev;
         self.todDist = flight.todDist;
         self.todCalc = flight.todCalc;
+
+        self.departureRwy = ko.pureComputed(function () {
+            return get.runway(flight.departure.airport);
+        });
+
+        self.SID = ko.pureComputed(function () {
+            return get.SID(flight.departure.airport);
+        });
+
+        self.STAR = ko.pureComputed(function () {
+            return get.STAR(flight.arrival.airport);
+        });
+
+        self.arrivalRwy = ko.pureComputed(function () {
+            return get.runway(flight.arrival.airport);
+        });
 
         // VNAV tab
         self.vnavEnabled = flight.vnavEnabled;
