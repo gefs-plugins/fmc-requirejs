@@ -67,7 +67,7 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/progress'], func
         };
 
         // PROG tab
-        this.progInfo = progress.info;
+        self.progInfo = progress.info;
 
         // LOAD tab
         self.loadRouteText = ko.observable();
@@ -92,12 +92,6 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/progress'], func
         self.removeLogData = log.removeData;
 
     }
-
-
-    // Adds custom binding handler to fix MDL Inputs
-    // FIXME
-    ko.bindingHandlers.mdlInput = { update: debug.mdlInput };
-    ko.bindingHandlers.mdlSwitch = { update: debug.mdlSwitch };
 
     return ViewModel;
 });

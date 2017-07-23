@@ -13,41 +13,6 @@ define(['ui/elements'], function (E) {
 
      return {
         /**
-        * Fixes MDL input changes that use .change() function
-        *
-        * @param {jQuery} e jQuery element
-        */
-        input: function (e) {
-            e.parent().addClass('is-dirty');
-        },
-
-        /**
-         * Fixes MDL input: is-dirty and/or is-focused
-         *
-         * @param {HTMLElement} e The HTML Element to be checked
-         */
-         mdlInput: function (e) {debugger;
-             var materialTextfield = e.parentNode.MaterialTextfield;
-             if (!materialTextfield) return;
-
-             materialTextfield.checkDirty();
-             materialTextfield.checkFocus();
-         },
-
-         /**
-          * Updates MDL checkbox switch manually
-          *
-          * @param {HTMLElement} e
-          */
-          mdlSwitch: function (e) {
-              var materialSwitch = e.parentNode.MaterialSwitch;
-              if (!materialSwitch) return;
-
-              materialSwitch.checkDisabled();
-              materialSwitch.checkToggleState();
-          },
-
-        /**
          * Stops input key propagation
          */
         stopPropagation: function () {

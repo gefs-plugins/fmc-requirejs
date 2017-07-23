@@ -9,7 +9,7 @@
                     <!-- Departure input -->
                     <td>
                         <i class="material-icons">flight_takeoff</i>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':departureAirport}">
                             <input class="mdl-textfield__input dep" data-bind="value: departureAirport">
                             <label class="mdl-textfield__label">Departure</label>
                         </div>
@@ -17,7 +17,7 @@
                     <!-- Arrival input -->
                     <td>
                         <i class="material-icons">flight_land</i>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':arrivalAirport}">
                             <input class="mdl-textfield__input arr" data-bind="value: arrivalAirport">
                             <label class="mdl-textfield__label">Arrival</label>
                         </div>
@@ -25,7 +25,7 @@
                     <!-- Flight num input -->
                     <td>
                         <i class="material-icons">local_airport</i>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':flightNumber}">
                             <input class="mdl-textfield__input fn" data-bind="value: flightNumber">
                             <label class="mdl-textfield__label">Flight #</label>
                         </div>
@@ -56,14 +56,14 @@
                         <td>
                             <!-- Waypoint input -->
                             <span class="fmc-wpt-info" data-bind="text: $data[5]"></span>
-                            <div class="mdl-textfield mdl-js-textfield">
+                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':$data[0]}">
                                 <input class="mdl-textfield__input wpt" data-bind="value: $data[0]">
                                 <label class="mdl-textfield__label">Fix, VOR, ICAO</label>
                             </div>
                         </td>
                         <td>
                             <!-- Latitude input -->
-                            <div class="mdl-textfield mdl-js-textfield">
+                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':$data[1]}">
                                 <input class="mdl-textfield__input lat" type="number" data-bind="value: $data[1]" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
                                 <label class="mdl-textfield__label">Lat.</label>
                                 <span class="mdl-textfield__error">Invalid Latitude</span>
@@ -71,7 +71,7 @@
                         </td>
                         <td>
                             <!-- Longitude input -->
-                            <div class="mdl-textfield mdl-js-textfield">
+                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':$data[2]}">
                                 <input class="mdl-textfield__input lon" type="number" data-bind="value: $data[2]"pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
                                 <label class="mdl-textfield__label">Lon.</label>
                                 <span class="mdl-textfield__error">Invalid Longitude</span>
@@ -79,7 +79,7 @@
                         </td>
                         <td>
                             <!-- Altitude input -->
-                            <div class="mdl-textfield mdl-js-textfield">
+                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':$data[3]}">
                                 <input class="mdl-textfield__input alt" type="number" max=3280000 step=10 data-bind="value: $data[3]">
                                 <label class="mdl-textfield__label">Ft.</label>
                                 <span class="mdl-textfield__error">Invalid Altitude</span>
@@ -96,7 +96,6 @@
                             <button data-bind="click: function(){ $parent.shiftWaypoint($index(), 1) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">arrow_downward</i>
                             </button>
-
                             <button data-bind="click: function (data,event) { $parent.removeWaypoint($index(),data,event) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">delete_forever</i>
                             </button>

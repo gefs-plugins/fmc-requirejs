@@ -7,7 +7,7 @@
                     <!-- T/D dist -->
                     <td>
                         <span class="fmc-arr__input-label">T/D Dist.</span>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label tod-dist-container">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label tod-dist-container" data-bind="css: {'is-dirty': todDist}">
                             <input class="mdl-textfield__input tod-dist" type="number" data-bind="value: todDist" pattern="\d*">
                             <label class="mdl-textfield__label">Nautical Miles (nm)</label>
                             <span class="mdl-textfield__error">Invalid T/D Distance</span>
@@ -17,7 +17,7 @@
                     <!-- Field elevation -->
                     <td>
                         <span class="fmc-arr__input-label">Arrival Field Elev.</span>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css: {'is-dirty': fieldElev}">
                             <input class="mdl-textfield__input field-elev" type="number" data-bind="value: fieldElev" pattern="-?\d*">
                             <label class="mdl-textfield__label">Feet (ft.)</label>
                             <span class="mdl-textfield__error">Invalid Field Elevation</span>
