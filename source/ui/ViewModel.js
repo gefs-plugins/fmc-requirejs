@@ -38,8 +38,7 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             write: function (airport) {
                 flight.departure.airport(airport);
 
-                self.departureRwy();
-                self.STAR();
+                self.departureRwys();
             }
         });
 
@@ -50,8 +49,7 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             write: function (airport) {
                 flight.arrival.airport(airport);
 
-                self.SID();
-                self.arrivalRwy();
+                self.arrivalRwys();
             }
         });
 
@@ -70,20 +68,90 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
         self.todDist = flight.todDist;
         self.todCalc = flight.todCalc;
 
-        self.departureRwy = ko.pureComputed(function () {
-            return get.runway(flight.departure.airport);
+        self.departureRwys = ko.pureComputed(function () {
+            return get.runway(flight.departure.airport());
         });
 
-        self.SID = ko.pureComputed(function () {
-            return get.SID(flight.departure.airport);
+        var _selectedDepartureRwy = ko.observable();
+        self.selectedDepartureRwy = ko.pureComputed({
+            read: function () {
+                return _selectedDepartureRwy();
+            },
+            write: function (index) {
+                var rwyData = self.departureRwys()[index];
+
+                // Sets selected departure runway and data to 'flight'
+                flight.departure.runway = ko.pureComputed(function () {
+                    return rwyData;
+                });
+
+                _selectedDepartureRwy(rwyData ? rwyData.runway : undefined);
+                self.SIDs();
+            }
         });
 
-        self.STAR = ko.pureComputed(function () {
-            return get.STAR(flight.arrival.airport);
+        self.SIDs = ko.pureComputed(function () {
+            return get.SID(flight.departure.airport(), self.selectedDepartureRwy());
         });
 
-        self.arrivalRwy = ko.pureComputed(function () {
-            return get.runway(flight.arrival.airport);
+        var _selectedSID = ko.observable();
+        self.selectedSID = ko.pureComputed({
+            read: function () {
+                return _selectedSID();
+            },
+            write: function (index) {
+                var SID = self.SIDs()[index];
+
+                // Sets selected SID and data to 'flight'
+                flight.departure.SID = ko.pureComputed(function () {
+                    return SID;
+                });
+
+                _selectedSID(SID ? SID.name : undefined);
+            }
+        });
+
+        self.arrivalRwys = ko.pureComputed(function () {
+            return get.runway(flight.arrival.airport());
+        });
+
+        var _selectedArrivalRwy = ko.observable();
+        self.selectedArrivalRwy = ko.pureComputed({
+            read: function () {
+                return _selectedArrivalRwy();
+            },
+            write: function (index) {
+                var rwyData = self.arrivalRwys()[index];
+
+                // Sets selected arrival runway and data to 'flight'
+                flight.arrival.runway = ko.pureComputed(function () {
+                    return rwyData;
+                });
+
+                _selectedArrivalRwy(rwyData ? rwyData.runway : undefined);
+                self.STARs();
+            }
+        });
+
+        self.STARs = ko.pureComputed(function () {
+            return get.STAR(flight.arrival.airport(), self.selectedArrivalRwy());
+        });
+
+        var _selectedSTAR = ko.observable();
+        self.selectedSTAR = ko.pureComputed({
+            read: function () {
+                return _selectedSTAR();
+            },
+            write: function (index) {
+                var STAR = self.STARs()[index];
+
+                // Sets selected STAR and data to 'flight'
+                flight.arrival.STAR = ko.pureComputed(function () {
+                    return STAR;
+                });
+
+                _selectedSTAR(STAR ? STAR.name : undefined);
+            }
         });
 
         // VNAV tab
