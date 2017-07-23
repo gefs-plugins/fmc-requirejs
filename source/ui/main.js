@@ -25,6 +25,7 @@ define([
 		var vm = window.debugVM = new ViewModel();
 		ko.applyBindings(vm, $(modal)[0]);
 		ko.applyBindings(vm, $(btn.fmcBtn)[1]);
+		ko.applyBindings(vm, $('.fmc-prog-info.geofs-f-standard-ui')[0]);
 
 		// Adds one input field on start
 		waypoints.addWaypoint();

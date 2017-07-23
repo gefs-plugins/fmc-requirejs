@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug, flight, log, waypoints) {
+define(['knockout', 'debug', 'flight', 'log', 'waypoints', 'nav/progress'], function (ko, debug, flight, log, waypoints, progress) {
 
     /**
      * ViewModel function for knockout bindings
@@ -65,6 +65,9 @@ define(['knockout', 'debug', 'flight', 'log', 'waypoints'], function (ko, debug,
 
             flight.phase(phase === phaseToText.length - 1 ? 0 : phase + 1);
         };
+
+        // PROG tab
+        this.progInfo = progress.info;
 
         // LOAD tab
         self.loadRouteText = ko.observable();

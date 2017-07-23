@@ -1,15 +1,25 @@
 "use strict";
 
-define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], function (distance, flight, math, waypoints, E, exports) {
+define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], function (ko, distance, flight, math, waypoints, exports) {
 
-	var textarea = E.textarea;
+	exports.timer = null;
 
-	var timer = null;
+	// Progress information
+	exports.info = {
+		flightETE: ko.observable('--:--'),
+		flightETA: ko.observable('--:--'),
+		todETE: ko.observable('--:--'),
+		todETA: ko.observable('--:--'),
+		flightDist: ko.observable('--'),
+		todDist: ko.observable('--'),
+		nextDist: ko.observable('--'),
+		nextETE: ko.observable('--:--')
+	};
 
 	/**
 	 * Updates the plane's progress during flying, set on a timer
 	 */
-	function update () {
+	exports.update = function () {
 		var route = waypoints.route();
 		var nextWaypoint = waypoints.nextWaypoint();
 		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
@@ -39,7 +49,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		}
 
 		print(flightDist, nextDist, times);
-	}
+	};
 
 	/**
 	 * Prints plane's progress to the UI
@@ -48,7 +58,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	 * @param {Number} nextDist The distance to the next waypoint
 	 * @param {Array} times An array of the time: [hours, minutes]
 	 */
-	function print (flightDist, nextDist, times) {
+	exports.print = function (flightDist, nextDist, times) {
 		for (var i = 0; i < times.length; i++) {
 			times[i] = flight.formatTime(times[i]);
 		}
@@ -69,21 +79,13 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		// If times and distances are not defined, print default
 		var DEFAULT_DIST = '--';
 
-		$(textarea.flightETE).text(times[0]);
-		$(textarea.flightETA).text(times[1]);
-		$(textarea.todETE).text(times[2]);
-		$(textarea.todETA).text(times[3]);
-		$(textarea.flightDist).text(flightDist || DEFAULT_DIST);
-		$(textarea.todDist).text(todDist || DEFAULT_DIST);
-		$(textarea.nextDist).text(nextDist || DEFAULT_DIST);
-		$(textarea.nextETE).text(times[4]);
-	}
-
-	// Variables
-	exports.timer = timer;
-
-	// Functions
-	exports.update = update;
-	exports.print = print;
-
+		exports.info.flightETE(times[0]);
+		exports.info.flightETA(times[1]);
+		exports.info.todETE(times[2]);
+		exports.info.todETA(times[3]);
+		exports.info.flightDist(flightDist || DEFAULT_DIST);
+		exports.info.todDist(todDist || DEFAULT_DIST);
+		exports.info.nextDist(nextDist || DEFAULT_DIST);
+		exports.info.nextETE(times[4]);
+	};
 });

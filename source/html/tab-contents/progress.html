@@ -7,10 +7,10 @@
             <div class="fmc-prog-info dest-info">
                 <span class="mdl-chip mdl-chip--contact">
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">Dest</span>
-                    <span class="mdl-chip__text distance-info"><span>--</span>&nbsp;nm</span>
+                    <span class="mdl-chip__text distance-info"><span data-bind="text: progInfo.flightDist"></span>&nbsp;nm</span>
                     <span class="mdl-chip__contact time-info">
-                        <div>ETE:&nbsp;<span class="ete">--:--</span></div>
-                        <div>ETA:&nbsp;<span class="eta">--:--</span></div>
+                        <div>ETE:&nbsp;<span class="ete" data-bind="text: progInfo.flightETE"></span></div>
+                        <div>ETA:&nbsp;<span class="eta" data-bind="text: progInfo.flightETA"></span></div>
                     </span>
                 </span>
             </div>
@@ -19,10 +19,10 @@
             <div class="fmc-prog-info tod-info">
                 <span class="mdl-chip mdl-chip--contact">
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">T/D</span>
-                    <span class="mdl-chip__text distance-info"><span>--</span>&nbsp;nm</span>
+                    <span class="mdl-chip__text distance-info"><span data-bind="text: progInfo.todDist"></span>&nbsp;nm</span>
                     <span class="mdl-chip__contact time-info">
-                        <div>ETE:&nbsp;<span class="ete">--:--</span></div>
-                        <div>ETA:&nbsp;<span class="eta">--:--</span></div>
+                        <div>ETE:&nbsp;<span class="ete" data-bind="text: progInfo.todETE"></span></div>
+                        <div>ETA:&nbsp;<span class="eta" data-bind="text: progInfo.todETA"></span></div>
                     </span>
                 </span>
             </div>
@@ -34,8 +34,8 @@
                         Next Waypoint
                         <i class="material-icons">room</i>
                     </span>
-                    <span class="mdl-chip__text distance-info"><span>--</span>&nbsp;nm</span>
-                    <span class="mdl-chip__contact time-info">--:--</span>
+                    <span class="mdl-chip__text distance-info"><span data-bind="text: progInfo.nextDist"></span>&nbsp;nm</span>
+                    <span class="mdl-chip__contact time-info" data-bind="text: progInfo.nextETE"></span>
                 </span>
             </div>
 
