@@ -51,7 +51,7 @@
     <!-- Modal actions: interactive -->
     <div class="fmc-modal__actions">
 		<button class="mdl-button mdl-js-button mdl-button--raised interactive save-wpt-data wpt-tab is-active" data-bind="click: saveWaypoints">Save Waypoints</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive retrieve-wpt wpt-tab is-active" data-bind="click: retrieveWaypoints">Retrieve Waypoints</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive retrieve-wpt wpt-tab is-active" data-bind="click: retrieveWaypoints.bind($data,undefined)">Retrieve Waypoints</button>
         <button action="add-wpt" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored interactive wpt-tab is-active" data-bind="click: addWaypoint">
             <i class="material-icons">add</i>
         </button>

@@ -12,6 +12,7 @@ define([
 	var route = ko.observableArray();
 	var nextWaypoint = ko.observable(null);
 
+
 	/**
 	 * Route object to distinguish between each route item
 	 *
@@ -19,15 +20,64 @@ define([
 	 * @constructor
 	 */
 	var Route = function () {
-		this.data = [
-			ko.observable(), // FIX/VOR/ICAO
-			ko.observable(), // Latitude
-			ko.observable(), // Longitude
-			ko.observable(), // Alt. Restriction
-			ko.observable(false), // If valid waypoint with coords
-			ko.observable('') // Waypoint information
-		];
+
+		var self = this;
+
+		// Waypoint name
+		var _wpt = ko.observable();
+		self.wpt = ko.pureComputed({
+			read: function () {
+				return _wpt();
+			},
+			write: function (val) {
+				_wpt(val);
+
+				var coords = get.waypoint(val);
+				var isValid = coords && coords[0] && coords[1];
+
+				self.lat(isValid ? coords[0] : undefined, isValid);
+				self.lon(isValid ? coords[1] : undefined, isValid);
+				self.info(isValid ? coords[2] : undefined);
+			}
+		});
+
+		// Latitude
+		var _lat = ko.observable();
+		self.lat = ko.pureComputed({
+			read: function () {
+				return _lat();
+			},
+			write: function (val, isValid) {
+				val = formatCoords(val);
+				_lat(!isNaN(val) ? val : undefined);
+				self.valid(Boolean(isValid));
+			}
+		});
+
+		// longitude
+		var _lon = ko.observable();
+		self.lon = ko.pureComputed({
+			read: function () {
+				return _lon();
+			},
+			write: function (val, isValid) {
+				val = formatCoords(val);
+				_lon(!isNaN(val) ? val : undefined);
+				self.valid(Boolean(isValid));
+			}
+		});
+
+		// Restriction altitude
+		self.alt = ko.observable();
+
+		// Is waypoint valid
+		self.valid = ko.observable(false);
+
+		// Waypoint info
+		self.info = ko.observable();
+
 	};
+
 
 	/**
 	 * Defines method to move elements in the route array
@@ -61,8 +111,8 @@ define([
 		var departureVal = flight.departure.airport();
 		if (departureVal) result.push(departureVal);
 
-		route().forEach(function (wpt) {
-			result.push(wpt[0]());
+		route().forEach(function (rte) {
+			result.push(rte.wpt());
 		});
 
 		var arrivalVal = flight.arrival.airport();
@@ -91,15 +141,17 @@ define([
 		var normalizedRoute = [];
 
 		for (var i = 0; i < route().length; i++) {
-			var singleRoute = [];
-			route()[i].forEach(function (element) {
-				singleRoute.push(element());
-			});
-
-			normalizedRoute.push(singleRoute);
+			normalizedRoute.push([
+				route()[i].wpt(),
+				route()[i].lat(),
+				route()[i].lon(),
+				route()[i].alt(),
+				route()[i].valid(),
+				route()[i].info()
+			]);
 		}
 
-		return JSON.stringify ([
+		return JSON.stringify([
 			flight.departure.airport(),
 			flight.arrival.airport(),
 			flight.number(),
@@ -114,6 +166,8 @@ define([
 	 * @returns {Number} Coordinate in decimal format
 	 */
 	function formatCoords (a) {
+		a = String(a);
+
 		if (a.indexOf(' ') > -1) {
 			var array = a.split(' ');
 			var d = Number(array[0]);
@@ -144,7 +198,7 @@ define([
 		}
 
 		var isWaypoints = true;
-		var a, str = [];
+		var a, b, str = [];
 
 		str = s.trim().toUpperCase().split(' ');
 
@@ -166,7 +220,7 @@ define([
 		route.removeAll();
 
 		// Departure airport input/clear
-		if (departure) {
+		if (departure) {debugger;
 			var wpt = str[0];
 			flight.departure.airport(wpt);
 			a = 1;
@@ -175,24 +229,28 @@ define([
 			flight.departure.airport(undefined);
 		}
 
-		// Adds all waypoints into waypoint input area
-		for (var i = 0; i + a < str.length; i++) {
-			addWaypoint();
-			route()[i][0](str[i]);
-		}
-
-		// Arrival airpot input/clear
+		// Arrival airport input/clear
 		if (arrival) {
 			var wpt = str[str.length - 1];
 			flight.arrival.airport(wpt);
-		} else flight.arrival.airport(undefined);
+			b = 1;
+		} else {
+			b = 0;
+			flight.arrival.airport(undefined);
+		}
+
+		// Adds all waypoints into waypoint input area
+		for (var i = a; i < str.length - b; i++) {
+			addWaypoint();
+			route()[i - a].wpt(str[i]);
+		}
 	}
 
 	/**
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
 	function addWaypoint () {
-		route.push(new Route().data);
+		route.push(new Route());
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		debug.stopPropagation();
 	}
@@ -225,11 +283,11 @@ define([
 		if (n !== false && nextWaypoint() !== n) {
 			if (n < route().length) {
 				nextWaypoint(n);
-				var wpt = route()[nextWaypoint()];
+				var rte = route()[nextWaypoint()];
 
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
-				gc.latitude(wpt[1]());
-				gc.longitude(wpt[2]());
+				gc.latitude(rte.lat());
+				gc.longitude(rte.lon());
 				autopilot.currentMode(1); // Switches to Lat/Lon mode
 
 				progress.update(); // Updates progress: prints general progress info and next waypoint info
@@ -260,7 +318,7 @@ define([
 	 */
 	function printWaypointInfo (index, info) {
 		if (!info) info = '';
-		route()[index][5](info);
+		route()[index].info(info);
 	}
 
 	/**
@@ -271,7 +329,7 @@ define([
 	 */
 	function getNextWaypointWithAltRestriction () {
 		for (var i = nextWaypoint(); i < route().length; i++) {
-			if (route()[i]() && route()[i][3]()) return i;
+			if (route()[i] && route()[i].alt()) return i;
 		}
 		return -1;
 	}
@@ -280,7 +338,7 @@ define([
 	 * Saves the waypoints data into localStorage
 	 */
 	function saveData () {
-		if (route().length < 1 || !route()[0][0]()) {
+		if (route().length < 1 || !route()[0].wpt()) {
 			log.warn("There is no route to save");
 		} else {
 			localStorage.removeItem('fmcWaypoints');
@@ -293,7 +351,7 @@ define([
 	 *
 	 * @param {String} arg The generated route
 	 */
-	function loadFromSave (arg) {
+	function loadFromSave (arg) {debugger;
 
 	/**
 	 * The argument passed in [optional] or the localStorage is a
@@ -319,7 +377,7 @@ define([
 
 			// JSON.stringify turns undefined into null; this loop turns it back
 			rte.forEach(function (wpt) {
-				if (!wpt[3] || wpt[3] === null) wpt[3] = undefined;
+				if (!wpt.alt || wpt.alt === null) wpt.alt = undefined;
 			});
 
 			if (arr[0]) flight.departure.airport(arr[0]);
@@ -330,16 +388,17 @@ define([
 				addWaypoint();
 
 				// Puts in the waypoint
-				if (rte[i][0]) route()[i][0](rte[i][0]);
+				if (rte[i][0]) route()[i].wpt(rte[i][0]);
 
 				// If the waypoint is not eligible or a duplicate
-				if (!rte[i][4] || !route()[i][1]()) {
-					if (rte[i][1]) route()[i][1](rte[i][1]); // Puts in the lat.
-					if (rte[i][2]) route()[i][3](rte[i][2]); // Puts in the lon.
+				if (!rte[i][4] || !route()[i].lat()) {
+					if (rte[i][1]) route()[i].lat(rte[i][1]); // Puts in the lat.
+					if (rte[i][2]) route()[i].lon(rte[i][2]); // Puts in the lon.
 				}
 
-				if (rte[i][3]) // If there is an altitude restriction
-					route()[i][3](rte[i][3]);
+				route()[i].alt(rte[i][3]); // Restriction altitude
+
+				route()[i].info(rte[i][5]); // Waypoint info
 			}
 			// Auto-saves the data once again
 			saveData();
@@ -352,7 +411,6 @@ define([
 	 *
 	 * @param {Number} oldIndex Index of this waypoint
 	 * @param {Number} value Direction (+/-) and quantity moved
-	 * FIXME Potential index confusion
 	 */
 	function shiftWaypoint (oldIndex, value) {
 		debug.log("Waypoint #" + (oldIndex + 1) + "(index=" + oldIndex + ") shifted " + value);

@@ -59,55 +59,6 @@ define([
 			$that.removeClass(c);
 			$this.addClass(c);
 		});
-		/*
-		// Waypoint list input actions: update `route` array
-		$(container.wptList).on('change', input.wpt, function () {
-			var index = $(this).parents().eq(2).index() - 1;
-
-			if (!$(this).parent().hasClass('is-invalid')) {
-				var wpt = $(this).val().trim().toUpperCase();
-				var coords = waypoints.getCoords(wpt);
-				if (!coords) {
-					$(this).parents().eq(2).find(input.lat).val('').change().parent().removeClass('is-dirty');
-					$(this).parents().eq(2).find(input.lon).val('').change().parent().removeClass('is-dirty');
-					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
-					waypoints.route[index] = [wpt, undefined, undefined, undefined, false, ''];
-				} else {
-					debug.input($(this).parents().eq(2).find(input.lat).val(coords[0]).change());
-					debug.input($(this).parents().eq(2).find(input.lon).val(coords[1]).change());
-					$(this).parents().eq(2).find(input.alt).val('').change().parent().removeClass('is-dirty');
-					waypoints.route[index] = [wpt, coords[0], coords[1], undefined, true, ''];
-					waypoints.printWaypointInfo(index, coords[2]);
-				}
-			}
-		}).on('change', input.lat, function () {
-			var index = $(this).parents().eq(2).index() - 1;
-
-			// If lat input is invalid
-			if ($(this).parent().hasClass('is-invalid') || !$(this).val() || $(this).val() === '') {
-				waypoints.route[index][1] = undefined;
-			} else {
-				waypoints.route[index][1] = waypoints.formatCoords($(this).val());
-				waypoints.route[index][4] = false;
-				waypoints.route[index][5] = '';
-			}
-		}).on('change', input.lon, function () {
-			var index = $(this).parents().eq(2).index() - 1;
-
-			// If lon input is invalid
-			if ($(this).parent().hasClass('is-invalid') || !$(this).val() || $(this).val() === '') {
-				waypoints.route[index][2] = undefined;
-			} else {
-				waypoints.route[index][2] = waypoints.formatCoords($(this).val());
-				waypoints.route[index][4] = false;
-				waypoints.route[index][5] = '';
-			}
-		}).on('change', input.alt, function () {
-			var index = $(this).parents().eq(2).index() - 1;
-
-			if (!$(this).parent().hasClass('is-invalid')) waypoints.route[index][3] = Number($(this).val());
-		 	else waypoints.route[index][3] = undefined;
-		});*/
 
 		// Disables editing on the generated route textarea
 		$(textarea.generateRte).prop('disabled', true);
