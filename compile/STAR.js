@@ -52,6 +52,7 @@ function parseFile (fileContent, airportName) {
             name: undefined,
             runway: undefined,
             transition: undefined,
+            connecting: undefined,
             waypoints: []
         };
 
@@ -71,7 +72,7 @@ function parseFile (fileContent, airportName) {
 
         if (name) obj.name = name;
         if (RWY_REGEXP.test(runway)) obj.runway = runway;
-        else if (runway === 'ALL') obj.runway = '*';
+        else if (runway === 'ALL') obj.connecting = true;
         else if (waypoints[runway] || navaids[runway]) obj.transition = runway;
 
         STAR[airportName].push(obj);
