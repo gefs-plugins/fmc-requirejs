@@ -12,14 +12,22 @@ define([
 	var route = ko.observableArray();
 	var nextWaypoint = ko.observable(null);
 
-	var DEFAULT_ROUTE = [
-		ko.observable(), // FIX/VOR/ICAO
-		ko.observable(), // Latitude
-		ko.observable(), // Longitude
-		ko.observable(), // Alt. Restriction
-		ko.observable(false), // If valid waypoint with coords
-		ko.observable('') // Waypoint information
-	];
+	/**
+	 * Route object to distinguish between each route item
+	 *
+	 * @private
+	 * @constructor
+	 */
+	var Route = function () {
+		this.data = [
+			ko.observable(), // FIX/VOR/ICAO
+			ko.observable(), // Latitude
+			ko.observable(), // Longitude
+			ko.observable(), // Alt. Restriction
+			ko.observable(false), // If valid waypoint with coords
+			ko.observable('') // Waypoint information
+		];
+	};
 
 	/**
 	 * Defines method to move elements in the route array
@@ -184,7 +192,7 @@ define([
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
 	function addWaypoint () {
-		route.push(DEFAULT_ROUTE);
+		route.push(new Route().data);
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		debug.stopPropagation();
 	}
@@ -377,7 +385,6 @@ define([
 	// Variables
 	exports.route = route;
 	exports.nextWaypoint = nextWaypoint;
-	exports.DEFAULT_ROUTE = DEFAULT_ROUTE;
 
 	// Functions
 	exports.move = move;
