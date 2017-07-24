@@ -8,34 +8,30 @@
 
 (function () {
 
-	// Error function if FMC is loaded without Autopilot++
-	function error () {
-		console.error('You must have Autopilot++ installed in order to use FMC.');
+	// Error if FMC is loaded without Autopilot++ or with outdated Autopilot++
+	function errorNotCompatible () {
+		console.error('You must have Autopilot++ {>= v0.10.6} installed in order to use FMC.');
 	}
 
-	// Check if geofs.init has already been called
-	if (window.geofs && geofs.canvas) {
-		if (window.autopilot_pp)
-			require(['ui/main']);
-		else error();
-
-		return;
+	// Check if Autopilot++ is installed (version >= v0.10.6)
+	function hasAutopilot () {
+		if (window.autopilot_pp) {
+			var version = autopilot_pp.version.split('.');
+			if ((+version[1] === 10 && +version[2] >= 6) || +version[1] > 10) return true;
+		}
+		return false;
 	}
 
+	// Check if game has completed loading
 	var timer = setInterval(function () {
-		if (!window.geofs || !geofs.init) return;
+		if (!(window.geofs && geofs.aircraft &&
+			geofs.aircraft.instance &&
+			geofs.aircraft.instance.object3d)) return;
+
 		clearInterval(timer);
 
-		if (geofs.canvas && window.autopilot_pp) require(['ui/main']);
-		else if (!window.autopilot_pp) error();
-		else {
-			var oldInit = geofs.init;
-
-			geofs.init = function () {
-				oldInit();
-				require(['ui/main']);
-			};
-		}
+		if (!hasAutopilot()) errorNotCompatible();
+		else require(['ui/main']);
 	}, 4);
 
 })();

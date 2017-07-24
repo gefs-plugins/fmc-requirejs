@@ -8,7 +8,9 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
     function ViewModel () {
         var self = this;
 
-         // General modal actions
+        /*************************
+         * General Modal Actions *
+         *************************/
         var _opened = ko.observable(false);
         self.opened = ko.pureComputed({
             read: function () {
@@ -30,7 +32,9 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
     		}
     	});
 
-        // RTE tab
+        /***********
+         * RTE Tab *
+         ***********/
         self.departureAirport = ko.pureComputed({
             read: function () {
                 return flight.departure.airport();
@@ -63,15 +67,19 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
         self.shiftWaypoint = waypoints.shiftWaypoint;
         self.removeWaypoint = waypoints.removeWaypoint;
 
-        // DEP/ARR tab
+        /***************
+         * DEP/ARR Tab *
+         ***************/
         self.fieldElev = flight.fieldElev;
         self.todDist = flight.todDist;
         self.todCalc = flight.todCalc;
 
+        // List of departure runways based on departure airport
         self.departureRwys = ko.pureComputed(function () {
             return get.runway(flight.departure.airport());
         });
 
+        // Selected departure runway
         var _selectedDepartureRwy = ko.observable();
         self.selectedDepartureRwy = ko.pureComputed({
             read: function () {
@@ -90,10 +98,12 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             }
         });
 
+        // List of SIDs based on departure airport and runway
         self.SIDs = ko.pureComputed(function () {
             return get.SID(flight.departure.airport(), self.selectedDepartureRwy());
         });
 
+        // Selected SID
         var _selectedSID = ko.observable();
         self.selectedSID = ko.pureComputed({
             read: function () {
@@ -111,10 +121,12 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             }
         });
 
+        // List of arrival runways based on arrival airport
         self.arrivalRwys = ko.pureComputed(function () {
             return get.runway(flight.arrival.airport());
         });
 
+        // Selected arrival runway
         var _selectedArrivalRwy = ko.observable();
         self.selectedArrivalRwy = ko.pureComputed({
             read: function () {
@@ -133,10 +145,13 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             }
         });
 
+        // List of STARs based on arrival airport and runway
+        // FIXME: STARs do not necessarily need a runway at first
         self.STARs = ko.pureComputed(function () {
             return get.STAR(flight.arrival.airport(), self.selectedArrivalRwy());
         });
 
+        // Selected STAR
         var _selectedSTAR = ko.observable();
         self.selectedSTAR = ko.pureComputed({
             read: function () {
@@ -154,7 +169,9 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             }
         });
 
-        // VNAV tab
+        /************
+         * VNAV Tab *
+         ************/
         self.vnavEnabled = flight.vnavEnabled;
         self.cruiseAlt = flight.cruiseAlt;
         self.spdControl = flight.spdControl;
@@ -172,7 +189,9 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             flight.phase(phase === phaseToText.length - 1 ? 0 : phase + 1);
         };
 
-        // PROG tab
+        /************
+         * PROG Tab *
+         ************/
         self.progInfo = progress.info;
 
         // LOAD tab
@@ -193,7 +212,9 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
             }
         });
 
-        // LOG tab
+        /***********
+         * LOG Tab *
+         ***********/
         self.logData = log.data;
         self.removeLogData = log.removeData;
 

@@ -48,7 +48,7 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 			}
 		}
 
-		print(flightDist, nextDist, times);
+		exports.print(flightDist, nextDist, times);
 	};
 
 	/**

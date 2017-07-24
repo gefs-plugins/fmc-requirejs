@@ -89,7 +89,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
 					var totalDist = distance.target(cruiseAlt - currentAlt) + distance.target(targetAlt - cruiseAlt);
-					debug.log("totalDist: " + totalDist);
+					debug.log('totalDist: ' + totalDist);
 
 					// Checks to see if the altitude restriction is on the climbing phase or descent phase
 					if (nextDist < totalDist) {

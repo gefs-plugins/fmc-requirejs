@@ -25,8 +25,8 @@ define(['ui/elements'], function (E) {
         /**
          * Logs debug statement into console when needed if not PRODUCTION
          */
-         log: function (text) {
-             if (!PRODUCTION) console.log(text);
-         }
+        log: function (text) {
+            if (!PRODUCTION) console.log(text);
+        }
     };
 });

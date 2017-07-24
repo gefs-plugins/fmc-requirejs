@@ -19,7 +19,7 @@ define(['distance', 'flight', 'waypoints', 'exports'], function (distance, fligh
 		}
 
 		clearInterval(exports.timer);
-		if (d < geofs.aircraft.instance.animationValue.kias / 60) exports.timer = setInterval(exports.update, 500);
+		if (d < geofs.aircraft.instance.animationValue.ktas / 60) exports.timer = setInterval(exports.update, 500);
 		else exports.timer = setInterval(exports.update, 5000);
 	};
 });
