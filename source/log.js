@@ -55,7 +55,7 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 	 * Clears the log
 	 */
 	exports.removeData = function () {
-		exports.data.destroyAll();
+		exports.data.removeAll();
 	};
 
 });

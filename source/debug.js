@@ -10,8 +10,7 @@ define(['ui/elements'], function (E) {
         event.stopImmediatePropagation();
     }
 
-
-     return {
+    return {
         /**
          * Stops input key propagation
          */

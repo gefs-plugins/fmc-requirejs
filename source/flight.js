@@ -291,7 +291,7 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 	exports.fieldElev = fieldElev;
 
 	// Functions
-	exports.flightParams = getFlightParameters;
+	exports.parameters = getFlightParameters;
 	exports.formatTime = formatTime;
 	exports.checkZeros = checkZeros;
 	exports.timeCheck = timeCheck;

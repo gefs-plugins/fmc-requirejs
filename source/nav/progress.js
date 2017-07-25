@@ -24,15 +24,15 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 		var nextWaypoint = waypoints.nextWaypoint();
 		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
 		var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
-		var lat2 = flight.arrival[1] || null;
-		var lon2 = flight.arrival[2] || null;
+		var lat2 = flight.arrival.coords()[0] || null;
+		var lon2 = flight.arrival.coords()[1] || null;
 		var times = [[], [], [], [], []]; // flightETE, flightETA, todETE, todETA, nextETE
-		var nextDist = nextWaypoint === null ? 0 : math.getDistance(lat1, lon1, route[nextWaypoint][1], route[nextWaypoint][2]);
+		var nextDist = nextWaypoint === null ? 0 : math.getDistance(lat1, lon1, route[nextWaypoint].lat(), route[nextWaypoint].lon());
 		var flightDist;
 
 		// Checks if the whole route is complete
 		for (var i = 0, valid = true; i < route.length; i++) {
-			if (!route[i][1] || !route[i][2]) valid = false;
+			if (!route[i].lat() || !route[i].lon()) valid = false;
 		}
 		if (valid) flightDist = distance.route(route.length);
 		else flightDist = math.getDistance(lat1, lon1, lat2, lon2);
@@ -43,7 +43,7 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 			times[1] = flight.getETA(times[0][0], times[0][1]);
 			times[4] = flight.getETE(nextDist, false);
 			if ((flightDist - flight.todDist) > 0) {
-				times[2] = flight.getETE((flightDist - flight.todDist), false);
+				times[2] = flight.getETE((flightDist - flight.todDist()), false);
 				times[3] = flight.getETA(times[2][0], times[2][1]);
 			}
 		}
@@ -69,7 +69,7 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 		} else flightDist = Math.round(flightDist);
 
 		// If T/D is entered and T/D has not been passed
-		if (flight.todDist && flight.todDist < flightDist) var todDist = flightDist - flight.todDist;
+		if (flight.todDist() && flight.todDist() < flightDist) var todDist = flightDist - flight.todDist();
 
 		// Formats nextDist
 		if (nextDist < 10) {

@@ -12,11 +12,9 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 		 * Controls VNAV, plane's vertical navigation, set on a timer
 		 */
 		update: function () {
-			if (!flight.VNAV) return;
-
 			var route = waypoints.route();
 
-			var params = flight.flightParams();
+			var params = flight.parameters();
 
 			var next = waypoints.nextWptAltRes();
 			var hasRestriction = next !== -1;
@@ -43,13 +41,13 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 			 **********************/
 			var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
 			var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
-			var lat2 = flight.arrival()[1] || null;
-			var lon2 = flight.arrival()[2] || null;
+			var lat2 = flight.arrival.coords()[0] || null;
+			var lon2 = flight.arrival.coords()[1] || null;
 			var flightDist;
 
 			// Checks if the whole route is complete
 			for (var i = 0, valid = true; i < route.length; i++) {
-				if (!route[i][1] || !route[i][2]) valid = false;
+				if (!route[i].lat() || !route[i].lon()) valid = false;
 			}
 			if (valid) flightDist = distance.route(route.length);
 			else flightDist = math.getDistance(lat1, lon1, lat2, lon2);

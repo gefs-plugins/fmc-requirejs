@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], function (ko, debug, flight, get, log, waypoints, progress) {
+define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'nav/progress'], function (ko, debug, flight, get, log, waypoints, lnav, progress) {
 
     /**
      * ViewModel function for knockout bindings
@@ -63,7 +63,12 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/progress'
         self.saveWaypoints = waypoints.saveData;
         self.retrieveWaypoints = waypoints.loadFromSave;
         self.addWaypoint = waypoints.addWaypoint;
-        self.activateWaypoint = waypoints.activateWaypoint;
+
+        self.activateWaypoint = function (index) {
+            waypoints.activateWaypoint(index);
+            lnav.update();
+        };
+
         self.shiftWaypoint = waypoints.shiftWaypoint;
         self.removeWaypoint = waypoints.removeWaypoint;
 
