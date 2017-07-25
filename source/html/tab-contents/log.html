@@ -1,0 +1,33 @@
+<!-- LOG tab contents -->
+<section class="mdl-layout__tab-panel fmc-log">
+    <div class="page-content">
+        <div class="fmc-log-container">
+            <table class="mdl-data-table mdl-js-data-table">
+                <tbody>
+                    <tr class="log-header">
+                        <th class="time-col">Time</th>
+                        <th class="spd-col">Spd.</th>
+                        <th class="hdg-col">Hdg.</th>
+                        <th class="alt-col">Alt.</th>
+                        <th class="lat-col">Lat.</th>
+                        <th class="lon-col">Lon.</th>
+                        <th class="fps-col">FPS</th>
+                        <th class="oth-col">Other</th>
+                    </tr>
+                </tbody>
+                <tbody data-bind="foreach: logData">
+                    <tr class="log-data">
+                        <td data-bind="text: $data[0]"></td>
+                        <td data-bind="text: $data[1]"></td>
+                        <td data-bind="text: $data[2]"></td>
+                        <td data-bind="text: $data[3]"></td>
+                        <td data-bind="text: $data[4]"></td>
+                        <td data-bind="text: $data[5]"></td>
+                        <td data-bind="text: $data[6]"></td>
+                        <td data-bind="text: $data[7]"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

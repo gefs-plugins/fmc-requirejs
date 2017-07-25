@@ -1,14 +1,14 @@
 <!-- FMC Modal Dialog -->
-<div class="fmc-modal mdl-dialog">
+<div class="fmc-modal mdl-dialog" data-bind="css: { opened: opened }">
     <div class="fmc-modal__close">
-        <button class="mdl-button mdl-js-button mdl-button--icon close">
+        <button class="mdl-button mdl-js-button mdl-button--icon close" data-bind="click: opened.bind($data, false)">
             <i class="material-icons">clear</i>
         </button>
     </div>
     <div class="fmc-modal__title">
         <h4><strong>Flight Management Computer</strong></h4>
     </div>
-    <div class="fmc-modal__warning"></div>
+    <div class="fmc-modal__warning" data-bind="text: modalWarning"></div>
 
     <!-- FMC Modal layout -->
     <div class="fmc-modal__layout-container">
@@ -50,27 +50,27 @@
 
     <!-- Modal actions: interactive -->
     <div class="fmc-modal__actions">
-		<button class="mdl-button mdl-js-button mdl-button--raised interactive save-wpt-data wpt-tab is-active">Save Waypoints</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive retrieve-wpt wpt-tab is-active">Retrieve Waypoints</button>
-        <button action="add-wpt" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored interactive wpt-tab is-active ">
+		<button class="mdl-button mdl-js-button mdl-button--raised interactive save-wpt-data wpt-tab is-active" data-bind="click: saveWaypoints">Save Waypoints</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive retrieve-wpt wpt-tab is-active" data-bind="click: retrieveWaypoints.bind($data,undefined)">Retrieve Waypoints</button>
+        <button action="add-wpt" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored interactive wpt-tab is-active" data-bind="click: addWaypoint">
             <i class="material-icons">add</i>
         </button>
         <div class="fmc-auto-tod-container interactive arr-tab">
-            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="auto-tod">
-                <input type="checkbox" id="auto-tod" class="mdl-switch__input">
+            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="auto-tod" data-bind="css: {'is-checked': todCalc}">
+                <input type="checkbox" id="auto-tod" class="mdl-switch__input" data-bind="checked: todCalc">
                 <span class="mdl-switch__label">Automatically Calculate T/D</span>
             </label>
         </div>
         <div class="fmc-vnav-phase-container interactive vnav-tab">
             <span>Phase</span>
-            <button class="mdl-button mdl-js-button mdl-button--raised toggle-phase">climb</button>
-            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase">
+            <button class="mdl-button mdl-js-button mdl-button--raised toggle-phase" data-bind="text: currentPhaseText, click: nextPhase"></button>
+            <button class="mdl-button mdl-js-button mdl-button--raised lock-phase" data-bind="click: phaseLocked.bind($data, !phaseLocked()), css: {locked: phaseLocked}">
                 <i class="material-icons">lock</i>
             </button>
         </div>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive clear-rte load-tab">Clear</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive generate-rte load-tab">Generate Route</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab">Remove Log Data</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive clear-rte load-tab" data-bind="click: generateRoute.bind($data,false)">Clear</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive generate-rte load-tab" data-bind="click: generateRoute.bind($data,true)">Generate Route</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised interactive remove-log-data log-tab" data-bind="click: removeLogData">Remove Log Data</button>
 
     </div>
 </div>

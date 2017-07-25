@@ -1,6 +1,6 @@
 "use strict";
 
-define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/elements'], function (debug, distance, flight, math, waypoints, progress, E) {
+define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, distance, flight, math, waypoints) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes;
@@ -12,19 +12,17 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/
 		 * Controls VNAV, plane's vertical navigation, set on a timer
 		 */
 		update: function () {
-			if (!flight.VNAV) return;
+			var route = waypoints.route();
 
-			var route = waypoints.route;
-
-			var params = flight.flightParams();
+			var params = flight.parameters();
 
 			var next = waypoints.nextWptAltRes();
 			var hasRestriction = next !== -1;
 
-			var todDist = flight.todDist;
-			var cruiseAlt = flight.cruiseAlt;
-			var fieldElev = flight.fieldElev;
-			var todCalc = flight.todCalc;
+			var todDist = flight.todDist();
+			var cruiseAlt = flight.cruiseAlt();
+			var fieldElev = flight.fieldElev();
+			var todCalc = flight.todCalc();
 
 			var currentAlt = geofs.aircraft.instance.animationValue.altitude;
 			var targetAlt, deltaAlt, nextDist, targetDist;
@@ -43,53 +41,53 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/
 			 **********************/
 			var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
 			var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
-			var lat2 = flight.arrival[1] || null;
-			var lon2 = flight.arrival[2] || null;
+			var lat2 = flight.arrival.coords()[0] || null;
+			var lon2 = flight.arrival.coords()[1] || null;
 			var flightDist;
 
 			// Checks if the whole route is complete
 			for (var i = 0, valid = true; i < route.length; i++) {
-				if (!route[i][1] || !route[i][2]) valid = false;
+				if (!route[i].lat() || !route[i].lon()) valid = false;
 			}
 			if (valid) flightDist = distance.route(route.length);
 			else flightDist = math.getDistance(lat1, lon1, lat2, lon2);
 
 			// Invalid distance, phase resets to default = climb
-			if (isNaN(flightDist)) progress.updatePhase(0);
+			if (isNaN(flightDist)) flight.phase(0);
 
 			// Total route dist is less than T/D distance, phase = descent
-			else if (flightDist < todDist) progress.updatePhase(2);
+			else if (flightDist < todDist) flight.phase(2);
 
 			// If current altitude is close to the cruise altitude, phase = cruise
-			else if (Math.abs(cruiseAlt - currentAlt) <= 100) progress.updatePhase(1);
+			else if (Math.abs(cruiseAlt - currentAlt) <= 100) flight.phase(1);
 
 			// If current altitude is less than cruise altitude, phase = climb
-			else if (currentAlt < cruiseAlt) progress.updatePhase(0);
+			else if (currentAlt < cruiseAlt) flight.phase(0);
 
 			// If current altitude is greater than cruise altitude
 			// This means that cruise altitude is lowered during cruise
 			// Phase still is cruise, but assign V/S value
 			else if (currentAlt > cruiseAlt) {
-				progress.updatePhase(1);
+				flight.phase(1);
 				vs = -1000;
 			}
 
 			// Else, resets to default phase = climb
-			else progress.updatePhase(0);
+			else flight.phase(0);
 
 			// ==============================
 
-			if (flight.spdControl) spd = params[0];
+			if (flight.spdControl()) spd = params[0];
 
-			var phase = flight.phase;
+			var phase = flight.phase();
 
 			// If the aircraft is climbing
-			if (phase === 'climb') {
+			if (phase === 0) {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
 					var totalDist = distance.target(cruiseAlt - currentAlt) + distance.target(targetAlt - cruiseAlt);
-					debug.log("totalDist: " + totalDist);
+					debug.log('totalDist: ' + totalDist);
 
 					// Checks to see if the altitude restriction is on the climbing phase or descent phase
 					if (nextDist < totalDist) {
@@ -110,7 +108,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/
 			}
 
 			// If the aircraft is on descent
-			else if (phase == 'descent') {
+			else if (phase === 2) {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -132,7 +130,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/
 			}
 
 			// Calculates Top of Descent
-			if (phase === 'cruise' && (todCalc || !todDist)) {
+			if (phase === 1 && (todCalc || !todDist)) {
 				if (hasRestriction) {
 					todDist = distance.route(route.length) - nextDist;
 					todDist += distance.target(targetAlt - cruiseAlt);
@@ -140,7 +138,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/
 					todDist = distance.target(fieldElev - cruiseAlt);
 				}
 				todDist = Math.round(todDist);
-				debug.input($(E.input.todDist).val(todDist).change());
+				flight.todDist(todDist);
 				debug.log('TOD changed to ' + todDist);
 			}
 
@@ -148,9 +146,6 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints', 'nav/progress', 'ui/
 			if (spd) apModes.speed.value(spd);
 			if (vs) apModes.vs.value(vs);
 			if (alt) apModes.altitude.value(alt);
-
-			// Updates todDist
-			flight.todDist = todDist;
 		}
 	};
 });

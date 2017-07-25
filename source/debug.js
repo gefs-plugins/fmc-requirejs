@@ -10,17 +10,7 @@ define(['ui/elements'], function (E) {
         event.stopImmediatePropagation();
     }
 
-
-     return {
-        /**
-        * Fixes MDL input changes that use .change() function
-        *
-        * @param {jQuery} e jQuery element
-        */
-        input: function (e) {
-            e.parent().addClass('is-dirty');
-        },
-
+    return {
         /**
          * Stops input key propagation
          */
@@ -34,8 +24,8 @@ define(['ui/elements'], function (E) {
         /**
          * Logs debug statement into console when needed if not PRODUCTION
          */
-         log: function (text) {
-             if (!PRODUCTION) console.log(text);
-         }
+        log: function (text) {
+            if (!PRODUCTION) console.log(text);
+        }
     };
 });

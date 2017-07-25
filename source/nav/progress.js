@@ -1,30 +1,38 @@
 "use strict";
 
-define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], function (distance, flight, math, waypoints, E, exports) {
+define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], function (ko, distance, flight, math, waypoints, exports) {
 
-	var container = E.container,
-		btn = E.btn,
-		textarea = E.textarea;
+	exports.timer = null;
 
-	var timer = null;
+	// Progress information
+	exports.info = {
+		flightETE: ko.observable('--:--'),
+		flightETA: ko.observable('--:--'),
+		todETE: ko.observable('--:--'),
+		todETA: ko.observable('--:--'),
+		flightDist: ko.observable('--'),
+		todDist: ko.observable('--'),
+		nextDist: ko.observable('--'),
+		nextETE: ko.observable('--:--')
+	};
 
 	/**
 	 * Updates the plane's progress during flying, set on a timer
 	 */
-	function update () {
-		var route = waypoints.route;
-		var nextWaypoint = waypoints.nextWaypoint;
+	exports.update = function () {
+		var route = waypoints.route();
+		var nextWaypoint = waypoints.nextWaypoint();
 		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
 		var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
-		var lat2 = flight.arrival[1] || null;
-		var lon2 = flight.arrival[2] || null;
+		var lat2 = flight.arrival.coords()[0] || null;
+		var lon2 = flight.arrival.coords()[1] || null;
 		var times = [[], [], [], [], []]; // flightETE, flightETA, todETE, todETA, nextETE
-		var nextDist = nextWaypoint === null ? 0 : math.getDistance(lat1, lon1, route[nextWaypoint][1], route[nextWaypoint][2]);
+		var nextDist = nextWaypoint === null ? 0 : math.getDistance(lat1, lon1, route[nextWaypoint].lat(), route[nextWaypoint].lon());
 		var flightDist;
 
 		// Checks if the whole route is complete
 		for (var i = 0, valid = true; i < route.length; i++) {
-			if (!route[i][1] || !route[i][2]) valid = false;
+			if (!route[i].lat() || !route[i].lon()) valid = false;
 		}
 		if (valid) flightDist = distance.route(route.length);
 		else flightDist = math.getDistance(lat1, lon1, lat2, lon2);
@@ -35,39 +43,13 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 			times[1] = flight.getETA(times[0][0], times[0][1]);
 			times[4] = flight.getETE(nextDist, false);
 			if ((flightDist - flight.todDist) > 0) {
-				times[2] = flight.getETE((flightDist - flight.todDist), false);
+				times[2] = flight.getETE((flightDist - flight.todDist()), false);
 				times[3] = flight.getETA(times[2][0], times[2][1]);
 			}
 		}
 
-		print(flightDist, nextDist, times);
-	}
-
-	/**
-	 * Updates plane's phase of flying: climb, cruise, or descent
-	 *
-	 * @description Phase contains "climb," "cruise," and "descent"
-	 *
-	 * @param {Number} phaseId The ID of the flight phase
-	 */
-	function updatePhase (phaseId) {
-		// If phase is locked, ignore
-		if ($(container.vnavPhase).find(btn.lockPhase).hasClass('locked')) return;
-
-		var phaseToText = ['climb', 'cruise', 'descent'];
-
-		if (phaseId !== undefined) {
-			flight.phase = phaseToText[phaseId];
-		} else {
-			for (var index = 0; index < phaseToText.length; index++) {
-				if (flight.phase === phaseToText[index]) break;
-			}
-
-			flight.phase = phaseToText[index === phaseToText.length - 1 ? 0 : index + 1];
-		}
-
-		$(btn.togglePhase).text(flight.phase);
-	}
+		exports.print(flightDist, nextDist, times);
+	};
 
 	/**
 	 * Prints plane's progress to the UI
@@ -76,7 +58,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 	 * @param {Number} nextDist The distance to the next waypoint
 	 * @param {Array} times An array of the time: [hours, minutes]
 	 */
-	function print (flightDist, nextDist, times) {
+	exports.print = function (flightDist, nextDist, times) {
 		for (var i = 0; i < times.length; i++) {
 			times[i] = flight.formatTime(times[i]);
 		}
@@ -87,7 +69,7 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		} else flightDist = Math.round(flightDist);
 
 		// If T/D is entered and T/D has not been passed
-		if (flight.todDist && flight.todDist < flightDist) var todDist = flightDist - flight.todDist;
+		if (flight.todDist() && flight.todDist() < flightDist) var todDist = flightDist - flight.todDist();
 
 		// Formats nextDist
 		if (nextDist < 10) {
@@ -97,22 +79,13 @@ define(['distance', 'flight', 'math', 'waypoints', 'ui/elements', 'exports'], fu
 		// If times and distances are not defined, print default
 		var DEFAULT_DIST = '--';
 
-		$(textarea.flightETE).text(times[0]);
-		$(textarea.flightETA).text(times[1]);
-		$(textarea.todETE).text(times[2]);
-		$(textarea.todETA).text(times[3]);
-		$(textarea.flightDist).text(flightDist || DEFAULT_DIST);
-		$(textarea.todDist).text(todDist || DEFAULT_DIST);
-		$(textarea.nextDist).text(nextDist || DEFAULT_DIST);
-		$(textarea.nextETE).text(times[4]);
-	}
-
-	// Variables
-	exports.timer = timer;
-
-	// Functions
-	exports.update = update;
-	exports.updatePhase = updatePhase;
-	exports.print = print;
-
+		exports.info.flightETE(times[0]);
+		exports.info.flightETA(times[1]);
+		exports.info.todETE(times[2]);
+		exports.info.todETA(times[3]);
+		exports.info.flightDist(flightDist || DEFAULT_DIST);
+		exports.info.todDist(todDist || DEFAULT_DIST);
+		exports.info.nextDist(nextDist || DEFAULT_DIST);
+		exports.info.nextETE(times[4]);
+	};
 });

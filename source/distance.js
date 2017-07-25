@@ -11,26 +11,32 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 	 */
 	exports.route = function (end) {
 
-		var arrival = flight.arrival;
-		var start = waypoints.nextWaypoint || 0;
-		var route = waypoints.route;
+		var departure = flight.departure.coords();
+		var arrival = flight.arrival.coords();
+		var start = waypoints.nextWaypoint() || 0;
+		var route = waypoints.route();
 		var pos = geofs.aircraft.instance.llaLocation;
 
 		// If there is no route
-		if (route.length === 0) return 0;
+		if (route.length === 0) {
+			// If departure and arrival airports are present
+			if (flight.departure.airport() && flight.arrival.airport())
+				return math.getDistance(departure[0], departure[1], arrival[0], arrival[1]);
+			else return 0;
+		}
 
 		// If there is not an activated waypoint
-		if (waypoints.nextWaypoint === null) {
+		if (waypoints.nextWaypoint() === null) {
 			// If arrival airport is present and current coords are defined
-			if (arrival[0] && pos[0])
-				return math.getDistance(pos[0], pos[1], arrival[1], arrival[2]);
+			if (flight.arrival.airport() && pos[0])
+				return math.getDistance(pos[0], pos[1], arrival[0], arrival[1]);
 
 			// If there are only current coords
 			if (pos[0])
-				return math.getDistance(pos[0], pos[1], route[route.length - 1][1], route[route.length - 1][2]);
+				return math.getDistance(pos[0], pos[1], route[route.length - 1].lat(), route[route.length - 1].lon());
 
 			// If neither is present
-			return math.getDistance(route[0][1], route[0][2], route[route.length - 1][1], route[route.length - 1][2]);
+			return math.getDistance(route[0].lat(), route[0].lon(), route[route.length - 1].lat(), route[route.length - 1].lon());
 		}
 
 		// If there is a waypoint activated
@@ -38,17 +44,17 @@ define(['flight', 'math', 'waypoints', 'exports'], function (flight, math, waypo
 			var total = 0;
 
 			// Calculates current location to next waypoint
-			if (pos[0]) total += math.getDistance(pos[0], pos[1], route[start][1], route[start][2]);
+			if (pos[0]) total += math.getDistance(pos[0], pos[1], route[start].lat(), route[start].lon());
 
 			// Loops from start to end to get total distance
 			for (var i = start + 1; i < end && i < route.length; i++) {
-				total += math.getDistance(route[i-1][1], route[i-1][2], route[i][1], route[i][2]);
+				total += math.getDistance(route[i-1].lat(), route[i-1].lon(), route[i].lat(), route[i].lon());
 			}
 
 			// If waypoint is the last one in the list, compute distance to arrival airport also
 			if (end === route.length) {
-				if (arrival[0])
-					total += math.getDistance(route[end - 1][1], route[end - 1][2], arrival[1], arrival[2]);
+				if (flight.arrival.airport())
+					total += math.getDistance(route[end - 1].lat(), route[end - 1].lon(), arrival[0], arrival[1]);
 			}
 
 			return total;

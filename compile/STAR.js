@@ -12,19 +12,23 @@ var RWY_REGEXP = /^\d\d[LCR]?$/;
 var waypoints = require('./compiled-data/waypoints.json');
 var navaids = require('./compiled-data/navaids.json');
 
+var promises = [];
 var fileList = require('./constants').readDir(PATH);
 var STAR = {};
 
 fileList.forEach(function (file) {
-    var airportName = file.substring(0, file.indexOf('.txt'));
+    promises.push(new Promise(function (resolve, reject) {
+        var airportName = file.substring(0, file.indexOf('.txt'));
 
-    fs.readFileAsync(PATH + file, 'utf-8')
-        .then(function (data) { parseFile(data, airportName); })
-        .then(writeFile);
+        fs.readFileAsync(PATH + file, 'utf-8')
+            .then(function (data) { parseFile(data, airportName); })
+            .then(resolve);
+    }));
 });
 
+Promise.all(promises).then(writeFile);
 
-// --
+// Callback functions
 function parseFile (fileContent, airportName) {
     // Splits each block (may contain SID, STAR, Final...)
     var temp = fileContent.split('\r\n\r\n');
@@ -48,6 +52,7 @@ function parseFile (fileContent, airportName) {
             name: undefined,
             runway: undefined,
             transition: undefined,
+            connecting: undefined,
             waypoints: []
         };
 
@@ -67,7 +72,7 @@ function parseFile (fileContent, airportName) {
 
         if (name) obj.name = name;
         if (RWY_REGEXP.test(runway)) obj.runway = runway;
-        else if (runway === 'ALL') obj.runway = '*';
+        else if (runway === 'ALL') obj.connecting = true;
         else if (waypoints[runway] || navaids[runway]) obj.transition = runway;
 
         STAR[airportName].push(obj);

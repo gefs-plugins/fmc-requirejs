@@ -1,8 +1,8 @@
 "use strict";
 
 define([
-	'./elements', 'minify!html/static/button.html', 'minify!html/static/externaldist.html',
-	'minify!html/static/modal.html', 'html/static/tab-contents/main', 'style/main'
+	'./elements', 'minify!html/button.html', 'minify!html/externaldist.html',
+	'minify!html/modal.html', 'html/tab-contents/main', 'style/main'
 ], function (E, button, externalDist, modal, tabContents, mainCSS) {
 	// Main FMC stylesheet
 	$('<style>').addClass('fmc-stylesheet').text(mainCSS).appendTo('head');

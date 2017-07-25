@@ -1,33 +1,139 @@
 "use strict";
 
-define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
+define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function (ko, lnav, vnav, vnavProfile, exports) {
 
 	// Autopilot++ Dependencies
-	var apModes = autopilot_pp.require('autopilot').modes;
+	var apModes = autopilot_pp.require('autopilot').modes,
+		icao = autopilot_pp.require('json!data/icaoairports.json');
 
 	// Top Of Descent distance
-	var todDist = 0;
+	var todDist = ko.observable();
 
 	// If VNAV is enabled
-	var VNAV = false;
+	var _vnavEnabled = ko.observable(false);
+	var vnavEnabled = ko.pureComputed({
+		read: function () {
+			return _vnavEnabled();
+		},
+		write: function (boolean) {
+			var set = _vnavEnabled;
+
+			if (!cruiseAlt()) set(false);
+
+			else if (boolean) {
+				vnav.timer = setInterval(function () { vnav.update(); }, 5000);
+				set(true);
+			} else {
+				clearInterval(vnav.timer);
+				vnav.timer = null;
+				set(false);
+			}
+		}
+	});
 
 	// Speed control
-	var spdControl = true;
+	var spdControl = ko.observable(true);
+
+	// Departure airport name and coords
+	var _departureAirport = ko.observable();
+	var _departureCoords = ko.observable([]);
+	var departure = {
+		airport: ko.pureComputed({
+			read: function () {
+				return _departureAirport();
+			},
+			write: function (airport) {
+				var coords = icao[airport];
+
+				if (!coords) {
+					_departureAirport(undefined);
+					_departureCoords([]);
+				}
+				else {
+					_departureAirport(airport);
+					_departureCoords(coords);
+				}
+				lnav.update();
+			}
+		}),
+		coords: ko.pureComputed(function () {
+			return _departureCoords();
+		})
+	};
 
 	// Arrival airport name and coords
-	var arrival = [];
+	var _arrivalAirport = ko.observable();
+	var _arrivalCoords = ko.observable([]);
+	var arrival = {
+		airport: ko.pureComputed({
+			read: function () {
+				return _arrivalAirport();
+			},
+			write: function (airport) {
+				var coords = icao[airport];
+
+				if (!coords) {
+					_arrivalAirport(undefined);
+					_arrivalCoords([]);
+				}
+				else {
+					_arrivalAirport(airport);
+					_arrivalCoords(coords);
+				}
+				lnav.update();
+			}
+		}),
+		coords: ko.pureComputed(function () {
+			return _arrivalCoords();
+		})
+	};
+
+	// Flight Number
+	var flightNumber = ko.observable();
 
 	// Cruise altitude
-	var cruiseAlt;
+	var _cruiseAlt = ko.observable();
+	var cruiseAlt = ko.pureComputed({
+		read: function () {
+			return _cruiseAlt();
+		},
+		write: function (val) {
+			var set = _cruiseAlt;
+
+			if (!val) {
+				set(undefined);
+				vnavEnabled(false);
+			} else set(val);
+		}
+	});
 
 	// Flight phase
-	var phase = 'climb';
+	var _phase = ko.observable(0);
+	var phase = ko.pureComputed({
+		read: function () {
+			return _phase();
+		},
+		write: function (index) {
+			if (phaseLocked() || index > 3) return;
+			_phase(index);
+		},
+	});
+
+	var _phaseLocked = ko.observable(false);
+	var phaseLocked = ko.pureComputed({
+		read: function () {
+			return _phaseLocked();
+		},
+		write: function (boolean, viewmodel) { // jshint unused:false
+			_phaseLocked(boolean);
+		}
+	});
 
 	// Automatic TOD calculation
-	var todCalc = false;
+	var todCalc = ko.observable(false);
 
 	// Arrival Airport field altitude
-	var fieldElev = 0;
+	var fieldElev = ko.observable();
 
 	/**
 	 * Gets each plane's flight parameters, for VNAV
@@ -42,7 +148,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 		apModes.speed.isMach(false);
 
 		// CLIMB
-		if (phase == 'climb') {
+		if (phase() === 0) {
 			var profile = getVNAVProfile().climb;
 
 			for (var i = 0, index = 0; i < profile.length; i++) {
@@ -59,7 +165,7 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 		}
 
 		// DESCENT
-		else if (phase == 'descent') {
+		else if (phase() === 2) {
 			var profile = getVNAVProfile().descent;
 
 			for (var i = 0, index = 0; i < profile.length; i++) {
@@ -173,16 +279,19 @@ define(['vnav-profile', 'exports'], function (vnavProfile, exports) {
 
 	// Variables
 	exports.todDist = todDist;
-	exports.VNAV = VNAV;
+	exports.vnavEnabled = vnavEnabled;
 	exports.spdControl = spdControl;
+	exports.departure = departure;
 	exports.arrival = arrival;
+	exports.number = flightNumber;
 	exports.cruiseAlt = cruiseAlt;
 	exports.phase = phase;
+	exports.phaseLocked = phaseLocked;
 	exports.todCalc = todCalc;
 	exports.fieldElev = fieldElev;
 
 	// Functions
-	exports.flightParams = getFlightParameters;
+	exports.parameters = getFlightParameters;
 	exports.formatTime = formatTime;
 	exports.checkZeros = checkZeros;
 	exports.timeCheck = timeCheck;
