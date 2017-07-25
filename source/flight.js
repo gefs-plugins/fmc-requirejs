@@ -36,6 +36,7 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 
 	// Departure airport name and coords
 	var _departureAirport = ko.observable();
+	var _departureCoords = ko.observable([]);
 	var departure = {
 		airport: ko.pureComputed({
 			read: function () {
@@ -46,20 +47,23 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 
 				if (!coords) {
 					_departureAirport(undefined);
-					departure.coords = [];
+					_departureCoords([]);
 				}
 				else {
 					_departureAirport(airport);
-					departure.coords = coords;
+					_departureCoords(coords);
 				}
 				lnav.update();
 			}
 		}),
-		coords: []
+		coords: ko.pureComputed(function () {
+			return _departureCoords();
+		})
 	};
 
 	// Arrival airport name and coords
 	var _arrivalAirport = ko.observable();
+	var _arrivalCoords = ko.observable([]);
 	var arrival = {
 		airport: ko.pureComputed({
 			read: function () {
@@ -70,16 +74,18 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 
 				if (!coords) {
 					_arrivalAirport(undefined);
-					arrival.coords = [];
+					_arrivalCoords([]);
 				}
 				else {
 					_arrivalAirport(airport);
-					arrival.coords = coords;
+					_arrivalCoords(coords);
 				}
 				lnav.update();
 			}
 		}),
-		coords: []
+		coords: ko.pureComputed(function () {
+			return _arrivalCoords();
+		})
 	};
 
 	// Flight Number
