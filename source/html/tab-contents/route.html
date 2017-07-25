@@ -87,7 +87,7 @@
                         </td>
                         <td>
                             <!-- Action buttons -->
-                            <button data-bind="click: function(){ $parent.activateWaypoint($index()) }, css: {'mdl-button--accent': $parent.nextWaypoint() === $index(), 'mdl-button--colored': $parent.nextWaypoint() !== $index()}" class="mdl-button mdl-js-button mdl-button--icon">
+                            <button data-bind="click: function(){ $parent.activateWaypoint($index()) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--accent">
                                 <i class="material-icons" data-bind="text: $parent.nextWaypoint() === $index() ? 'check_circle' : 'check'"></i>
                             </button>
                             <button data-bind="click: function(){ $parent.shiftWaypoint($index(), -1) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
@@ -96,7 +96,7 @@
                             <button data-bind="click: function(){ $parent.shiftWaypoint($index(), 1) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">arrow_downward</i>
                             </button>
-                            <button data-bind="click: function (data,event) { $parent.removeWaypoint($index(),data,event) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                            <button data-bind="click: function(data,event){ $parent.removeWaypoint($index(),data,event) }" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
                                 <i class="material-icons">delete_forever</i>
                             </button>
                         </td>
