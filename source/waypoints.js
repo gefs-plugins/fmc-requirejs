@@ -152,9 +152,9 @@ define([
 		}
 
 		return JSON.stringify([
-			flight.departure.airport(),
-			flight.arrival.airport(),
-			flight.number(),
+			flight.departure.airport() || '',
+			flight.arrival.airport() || '',
+			flight.number() || '',
 			normalizedRoute
 		]);
 	}
@@ -191,6 +191,8 @@ define([
 			return;
 		}
 
+		s = s.trim(); // Removes leading or trailing whitespace for more accurate loading
+
 		// If it is a generated route
 		if (s.indexOf('["') === 0) {
 			loadFromSave(s);
@@ -200,7 +202,7 @@ define([
 		var isWaypoints = true;
 		var a, b, str = [];
 
-		str = s.trim().toUpperCase().split(' ');
+		str = s.toUpperCase().split(' ');
 
 		// Check if inputs are valid
 		for (var i = 0; i < str.length; i++)
@@ -220,7 +222,7 @@ define([
 		route.removeAll();
 
 		// Departure airport input/clear
-		if (departure) {debugger;
+		if (departure) {
 			var wpt = str[0];
 			flight.departure.airport(wpt);
 			a = 1;
@@ -382,9 +384,9 @@ define([
 				}
 			}
 
-			if (arr[0]) flight.departure.airport(arr[0]);
-			if (arr[1]) flight.arrival.airport(arr[1]);
-			if (arr[2]) flight.number(arr[2]);
+			flight.departure.airport(arr[0]);
+			flight.arrival.airport(arr[1]);
+			flight.number(arr[2]);
 
 			for (var i = 0; i < rte.length; i++) {
 				addWaypoint();
@@ -394,8 +396,8 @@ define([
 
 				// If the waypoint is not eligible or a manual input
 				if (!rte[i][4] || !route()[i].lat()) {
-					if (rte[i][1]) route()[i].lat(rte[i][1]); // Puts in the lat.
-					if (rte[i][2]) route()[i].lon(rte[i][2]); // Puts in the lon.
+					route()[i].lat(rte[i][1]); // Puts in the lat.
+					route()[i].lon(rte[i][2]); // Puts in the lon.
 				}
 
 				route()[i].alt(rte[i][3]); // Restriction altitude
