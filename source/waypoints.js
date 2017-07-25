@@ -298,7 +298,7 @@ define([
 					gc.latitude(flight.arrival.coords[1]);
 					gc.longitude(flight.arrival.coords[2]);
 				}
-				nextWaypoint(-1);
+				nextWaypoint(null);
 			}
 		} else {
 			nextWaypoint(null);
@@ -351,7 +351,7 @@ define([
 	 *
 	 * @param {String} arg The generated route
 	 */
-	function loadFromSave (arg) {debugger;
+	function loadFromSave (arg) {
 
 	/**
 	 * The argument passed in [optional] or the localStorage is a
@@ -376,9 +376,11 @@ define([
 			var rte = arr[3];
 
 			// JSON.stringify turns undefined into null; this loop turns it back
-			rte.forEach(function (wpt) {
-				if (!wpt.alt || wpt.alt === null) wpt.alt = undefined;
-			});
+			for (var i = 0; i < rte.length; i++) {
+				for (var j = 0; j < rte[i].length; j++) {
+					if (rte[i][j] === null) rte[i][j] = undefined;
+				}
+			}
 
 			if (arr[0]) flight.departure.airport(arr[0]);
 			if (arr[1]) flight.arrival.airport(arr[1]);
@@ -390,7 +392,7 @@ define([
 				// Puts in the waypoint
 				if (rte[i][0]) route()[i].wpt(rte[i][0]);
 
-				// If the waypoint is not eligible or a duplicate
+				// If the waypoint is not eligible or a manual input
 				if (!rte[i][4] || !route()[i].lat()) {
 					if (rte[i][1]) route()[i].lat(rte[i][1]); // Puts in the lat.
 					if (rte[i][2]) route()[i].lon(rte[i][2]); // Puts in the lon.
@@ -440,6 +442,7 @@ define([
 		}
 
 	}
+
 	// Variables
 	exports.route = route;
 	exports.nextWaypoint = nextWaypoint;
