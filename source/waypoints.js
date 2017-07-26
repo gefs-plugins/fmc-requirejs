@@ -345,7 +345,6 @@ define([
 				gc.longitude(rte.lon());
 				autopilot.currentMode(1); // Switches to Lat/Lon mode
 
-				progress.update(); // Updates progress: prints general progress info and next waypoint info
 				debug.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
 			} else {
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
@@ -361,6 +360,8 @@ define([
 			gc.longitude(undefined);
 			autopilot.currentMode(0);
 		}
+
+		progress.update();
 	}
 
 	/**
