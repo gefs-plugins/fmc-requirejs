@@ -1,4 +1,4 @@
-"use strict"; // FIXME
+"use strict";
 
 define([
 	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress', 'exports'
@@ -54,7 +54,7 @@ define([
 			}
 		});
 
-		// longitude
+		// Longitude
 		var _lon = ko.observable();
 		self.lon = ko.pureComputed({
 			read: function () {
@@ -76,7 +76,59 @@ define([
 		// Waypoint info
 		self.info = ko.observable();
 
+		// Distance from previous waypoint
+		self.distFromPrev = ko.pureComputed(function () {
+			return getInfoFromPrev(self)[0];
+		});
+
+		// Bearing from previous waypoint
+		self.brngFromPrev = ko.pureComputed(function () {
+			return getInfoFromPrev(self)[1];
+		});
+
 	};
+
+	/**
+	 * Computes heading and bearing information from previous waypoint to current
+	 *
+	 * @param {Route} self Current `Route` object
+	 * @returns {Array} [distance, bearing]
+	 *
+	 * @private
+	 */
+	function getInfoFromPrev (self) {
+		// Find which index this Route is
+		for (var index = 0; index < route().length; index++) {
+			if (self === route()[index]) break;
+		}
+
+		var distance, bearing;
+
+		if (index === 0) {
+			var pos = geofs.aircraft.instance.llaLocation;
+
+			distance = math.getDistance(pos[0], pos[1], self.lat(), self.lon());
+			bearing = math.getBearing(pos[0], pos[1], self.lat(), self.lon());
+		} else if (index) {
+			var prev = route()[index - 1];
+
+			distance = math.getDistance(prev.lat(), prev.lon(), self.lat(), self.lon());
+			bearing = math.getBearing(prev.lat(), prev.lon(), self.lat(), self.lon());
+		}
+
+		return [ Math.round(distance * 10) / 10 || undefined, Math.round(formatBrng(bearing)) || undefined ];
+	}
+
+	/**
+	 * @private
+	 * Formats bearing: turns into heading 360
+	 *
+	 * @param {Number} brng The bearing to be converted
+	 * @returns {Number} Bearing in terms of 360 degrees
+	 */
+	function formatBrng (brng) {
+		return +brng <= 0 ? +brng + 360 : +brng;
+	}
 
 
 	/**
@@ -84,6 +136,8 @@ define([
 	 *
 	 * @param {Number} index1 The start index
 	 * @param {Number} index2 The end/target index
+	 *
+	 * @private
 	 */
 	function move (index1, index2) {
 		var tempRoute = route();
@@ -265,7 +319,6 @@ define([
 	 * @param {Object} [event] Passed in by knockout
 	 */
 	function removeWaypoint (n, data, event) { // jshint unused:false
-		// debugger;
 		if (event.shiftKey) route.removeAll(); // Shift-click: removes all waypoints
 		else route.splice(n, 1);
 
@@ -450,7 +503,6 @@ define([
 	exports.nextWaypoint = nextWaypoint;
 
 	// Functions
-	exports.move = move;
 	exports.makeFixesArray = makeFixesArray;
 	exports.toFixesString = toFixesString;
 	exports.toRouteString = toRouteString;

@@ -1,13 +1,31 @@
-<!-- ILS tab contents -->
+<!-- LEGS tab contents -->
 <section class="mdl-layout__tab-panel fmc-legs">
     <div class="page-content">
         <div class="fmc-legs-container">
-            <table class="mdl-data-table mdl-js-data-table">
-                <tr>
-                    <th>Waypoint</th>
-                    <th>Dist</th>
-                    <th>Hdg</th>
-                </tr>
+            <table>
+
+                <tbody>
+                    <tr>
+                        <th>Waypoint</th>
+                        <th>Dist</th>
+                        <th>Brng</th>
+                    </tr>
+                </tbody>
+
+                <tbody data-bind="foreach: route">
+                    <tr data-bind="visible: $parent.nextWaypoint() == null || $index() >= $parent.nextWaypoint()">
+                        <td data-bind="text: wpt, css: {activated: $parent.nextWaypoint() === $index()}"></td>
+                        <td>
+                            <span data-bind="text: distFromPrev"></span>
+                            <span data-bind="text: distFromPrev() == undefined ? '' : ' NM'"></span>
+                        </td>
+                        <td>
+                            <span data-bind="text: brngFromPrev"></span>
+                            <span data-bind="text: brngFromPrev() == undefined ? '' : '\xB0'"></span>
+                        </td>
+                    </tr>
+                </tbody>
+
             </table>
         </div>
     </div>
