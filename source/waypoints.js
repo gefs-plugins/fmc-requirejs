@@ -348,9 +348,9 @@ define([
 				debug.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
 			} else {
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
-				if (flight.arrival.coords[1]) {
-					gc.latitude(flight.arrival.coords[1]);
-					gc.longitude(flight.arrival.coords[2]);
+				if (flight.arrival.coords()[1]) {
+					gc.latitude(flight.arrival.coords()[1]);
+					gc.longitude(flight.arrival.coords()[2]);
 				}
 				nextWaypoint(null);
 			}
