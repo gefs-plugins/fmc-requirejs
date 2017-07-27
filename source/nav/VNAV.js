@@ -12,6 +12,8 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 		 * Controls VNAV, plane's vertical navigation, set on a timer
 		 */
 		update: function () {
+			if (!flight.vnavEnabled()) return;
+
 			var route = waypoints.route();
 
 			var params = flight.parameters();
@@ -27,7 +29,7 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 			var currentAlt = geofs.aircraft.instance.animationValue.altitude;
 			var targetAlt, deltaAlt, nextDist, targetDist;
 			if (hasRestriction) {
-				targetAlt = route[next][3];
+				targetAlt = route[next].alt();
 				deltaAlt = targetAlt - currentAlt;
 				nextDist = distance.route(next);
 				targetDist = distance.target(deltaAlt);

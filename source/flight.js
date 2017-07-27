@@ -103,7 +103,7 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 			if (!val) {
 				set(undefined);
 				vnavEnabled(false);
-			} else set(val);
+			} else set(+val);
 		}
 	});
 

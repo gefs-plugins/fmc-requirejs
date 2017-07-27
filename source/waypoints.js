@@ -88,6 +88,12 @@ define([
 
 	};
 
+	// Makes llaLocation an observable for automatic data updates
+	var llaLocation = ko.observable();
+	setInterval(function () {
+		llaLocation(geofs.aircraft.instance.llaLocation);
+	}, 1000);
+
 	/**
 	 * Computes heading and bearing information from previous waypoint to current
 	 *
@@ -108,7 +114,7 @@ define([
 		// if waypoint is at the start of the list or
 		// if current waypoint is activated
 		if (index === 0 || index === nextWaypoint()) {
-			var pos = geofs.aircraft.instance.llaLocation;
+			var pos = llaLocation() || [];
 
 			distance = utils.getDistance(pos[0], pos[1], self.lat(), self.lon());
 			bearing = utils.getBearing(pos[0], pos[1], self.lat(), self.lon());
