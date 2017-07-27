@@ -8,10 +8,10 @@
                     <tr data-bind="visible: $parent.nextWaypoint() == null || $index() >= $parent.nextWaypoint()">
                         <td data-bind="text: wpt, css: {activated: $parent.nextWaypoint() === $index()}"></td>
                         <td>
-                            <span data-bind="text: distFromPrev() == undefined ? '' : distFromPrev()+' NM'"></span>
+                            <span data-bind="text: distFromPrev() == null ? '' : distFromPrev()+' NM'"></span>
                         </td>
                         <td>
-                            <span data-bind="text: brngFromPrev() == undefined ? '' : brngFromPrev()+'\xB0'"></span>
+                            <span data-bind="text: brngFromPrev() == null ? '' : brngFromPrev()+'\xB0'"></span>
                         </td>
                     </tr>
                 </tbody>

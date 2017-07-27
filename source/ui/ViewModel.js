@@ -63,12 +63,7 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         self.saveWaypoints = waypoints.saveData;
         self.retrieveWaypoints = waypoints.loadFromSave;
         self.addWaypoint = waypoints.addWaypoint;
-
-        self.activateWaypoint = function (index) {
-            waypoints.activateWaypoint(index);
-            lnav.update();
-        };
-
+        self.activateWaypoint = waypoints.activateWaypoint;
         self.shiftWaypoint = waypoints.shiftWaypoint;
         self.removeWaypoint = waypoints.removeWaypoint;
 

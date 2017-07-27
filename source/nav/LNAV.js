@@ -10,6 +10,7 @@ define(['distance', 'flight', 'waypoints', 'exports'], function (distance, fligh
 	exports.update = function () {
 		if (waypoints.nextWaypoint() === null || !flight.arrival.airport()) {
 			clearInterval(exports.timer);
+			exports.timer = null;
 			return;
 		}
 

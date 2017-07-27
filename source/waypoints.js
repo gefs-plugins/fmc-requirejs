@@ -1,8 +1,8 @@
 "use strict";
 
 define([
-	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress', 'exports'
-], function (ko, debug, math, get, flight, log, progress, exports) {
+	'knockout', 'debug', 'get', 'flight', 'log', 'utils', 'nav/lnav', 'nav/progress', 'exports'
+], function (ko, debug, get, flight, log, utils, lnav, progress, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -104,32 +104,26 @@ define([
 
 		var distance, bearing;
 
-		if (index === 0) {
+		// Calculates info from current location
+		// if waypoint is at the start of the list or
+		// if current waypoint is activated
+		if (index === 0 || index === nextWaypoint()) {
 			var pos = geofs.aircraft.instance.llaLocation;
 
-			distance = math.getDistance(pos[0], pos[1], self.lat(), self.lon());
-			bearing = math.getBearing(pos[0], pos[1], self.lat(), self.lon());
-		} else if (index) {
-			var prev = route()[index - 1];
-
-			distance = math.getDistance(prev.lat(), prev.lon(), self.lat(), self.lon());
-			bearing = math.getBearing(prev.lat(), prev.lon(), self.lat(), self.lon());
+			distance = utils.getDistance(pos[0], pos[1], self.lat(), self.lon());
+			bearing = utils.getBearing(pos[0], pos[1], self.lat(), self.lon());
 		}
 
-		return [ Math.round(distance * 10) / 10 || undefined, Math.round(formatBrng(bearing)) || undefined ];
-	}
+		// Else, calculates info from preceeding waypoint
+		else if (index) {
+			var prev = route()[index - 1];
 
-	/**
-	 * @private
-	 * Formats bearing: turns into heading 360
-	 *
-	 * @param {Number} brng The bearing to be converted
-	 * @returns {Number} Bearing in terms of 360 degrees
-	 */
-	function formatBrng (brng) {
-		return +brng <= 0 ? +brng + 360 : +brng;
-	}
+			distance = utils.getDistance(prev.lat(), prev.lon(), self.lat(), self.lon());
+			bearing = utils.getBearing(prev.lat(), prev.lon(), self.lat(), self.lon());
+		}
 
+		return [ Math.round(distance * 10) / 10 || null, Math.round(bearing) || null ];
+	}
 
 	/**
 	 * Defines method to move elements in the route array
@@ -361,6 +355,7 @@ define([
 			autopilot.currentMode(0);
 		}
 
+		lnav.update();
 		progress.update();
 	}
 
