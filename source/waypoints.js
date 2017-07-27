@@ -1,8 +1,8 @@
-"use strict"; // FIXME
+"use strict";
 
 define([
-	'knockout', 'debug', 'math', 'get', 'flight', 'log', 'nav/progress', 'exports'
-], function (ko, debug, math, get, flight, log, progress, exports) {
+	'knockout', 'debug', 'get', 'flight', 'log', 'utils', 'nav/lnav', 'nav/progress', 'exports'
+], function (ko, debug, get, flight, log, utils, lnav, progress, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -55,7 +55,7 @@ define([
 			}
 		});
 
-		// longitude
+		// Longitude
 		var _lon = ko.observable();
 		self.lon = ko.pureComputed({
 			read: function () {
@@ -77,14 +77,68 @@ define([
 		// Waypoint info
 		self.info = ko.observable();
 
+		// Distance from previous waypoint
+		self.distFromPrev = ko.pureComputed(function () {
+			return getInfoFromPrev(self)[0];
+		});
+
+		// Bearing from previous waypoint
+		self.brngFromPrev = ko.pureComputed(function () {
+			return getInfoFromPrev(self)[1];
+		});
+
 	};
 
+	// Makes llaLocation an observable for automatic data updates
+	var llaLocation = ko.observable();
+	setInterval(function () {
+		llaLocation(geofs.aircraft.instance.llaLocation);
+	}, 1000);
+
+	/**
+	 * Computes heading and bearing information from previous waypoint to current
+	 *
+	 * @param {Route} self Current `Route` object
+	 * @returns {Array} [distance, bearing]
+	 *
+	 * @private
+	 */
+	function getInfoFromPrev (self) {
+		// Find which index this Route is
+		for (var index = 0; index < route().length; index++) {
+			if (self === route()[index]) break;
+		}
+
+		var distance, bearing;
+
+		// Calculates info from current location
+		// if waypoint is at the start of the list or
+		// if current waypoint is activated
+		if (index === 0 || index === nextWaypoint()) {
+			var pos = llaLocation() || [];
+
+			distance = utils.getDistance(pos[0], pos[1], self.lat(), self.lon());
+			bearing = utils.getBearing(pos[0], pos[1], self.lat(), self.lon());
+		}
+
+		// Else, calculates info from preceeding waypoint
+		else if (index) {
+			var prev = route()[index - 1];
+
+			distance = utils.getDistance(prev.lat(), prev.lon(), self.lat(), self.lon());
+			bearing = utils.getBearing(prev.lat(), prev.lon(), self.lat(), self.lon());
+		}
+
+		return [ Math.round(distance * 10) / 10 || null, Math.round(bearing) || null ];
+	}
 
 	/**
 	 * Defines method to move elements in the route array
 	 *
 	 * @param {Number} index1 The start index
 	 * @param {Number} index2 The end/target index
+	 *
+	 * @private
 	 */
 	function move (index1, index2) {
 		var tempRoute = route();
@@ -266,7 +320,6 @@ define([
 	 * @param {Object} [event] Passed in by knockout
 	 */
 	function removeWaypoint (n, data, event) { // jshint unused:false
-		// debugger;
 		if (event.shiftKey) route.removeAll(); // Shift-click: removes all waypoints
 		else route.splice(n, 1);
 
@@ -293,13 +346,12 @@ define([
 				gc.longitude(rte.lon());
 				autopilot.currentMode(1); // Switches to Lat/Lon mode
 
-				progress.update(); // Updates progress: prints general progress info and next waypoint info
 				debug.log('Waypoint # ' + Number(n + 1) + ' activated | index: ' + n);
 			} else {
 				// FIXME once waypoint mode is fixed, convert to waypoint mode
-				if (flight.arrival.coords[1]) {
-					gc.latitude(flight.arrival.coords[1]);
-					gc.longitude(flight.arrival.coords[2]);
+				if (flight.arrival.coords()[1]) {
+					gc.latitude(flight.arrival.coords()[1]);
+					gc.longitude(flight.arrival.coords()[2]);
 				}
 				nextWaypoint(null);
 			}
@@ -309,6 +361,9 @@ define([
 			gc.longitude(undefined);
 			autopilot.currentMode(0);
 		}
+
+		lnav.update();
+		progress.update();
 	}
 
 	/**
@@ -403,7 +458,7 @@ define([
 
 				route()[i].alt(rte[i][3]); // Restriction altitude
 
-				route()[i].info(rte[i][5]); // Waypoint info
+				if (!route()[i].info()) route()[i].info(rte[i][5]); // Waypoint info
 			}
 			// Auto-saves the data once again
 			saveData();
@@ -451,7 +506,6 @@ define([
 	exports.nextWaypoint = nextWaypoint;
 
 	// Functions
-	exports.move = move;
 	exports.makeFixesArray = makeFixesArray;
 	exports.toFixesString = toFixesString;
 	exports.toRouteString = toRouteString;

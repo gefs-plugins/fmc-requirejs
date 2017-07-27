@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight, exports) {
+define(['knockout', 'ui/elements', 'utils', 'exports'], function (ko, E, utils, exports) {
 
 	var animationValue = geofs.aircraft.instance.animationValue;
 
@@ -25,7 +25,7 @@ define(['knockout', 'ui/elements', 'flight', 'exports'], function (ko, E, flight
 			var date = new Date();
 			var h = date.getUTCHours();
 			var m = date.getUTCMinutes();
-			var time = flight.formatTime(flight.timeCheck(h, m));
+			var time = utils.formatTime(utils.timeCheck(h, m));
 			other = other || "--";
 
 			var dataArray = [ time, spd, hdg, alt, lat, lon, fps, other ];

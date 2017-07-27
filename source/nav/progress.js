@@ -1,6 +1,8 @@
 "use strict";
 
-define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], function (ko, distance, flight, math, waypoints, exports) {
+define([
+	'knockout', 'distance', 'flight', 'utils', 'waypoints', 'exports'
+], function (ko, distance, flight, utils, waypoints, exports) {
 
 	exports.timer = null;
 
@@ -22,12 +24,13 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 	exports.update = function () {
 		var route = waypoints.route();
 		var nextWaypoint = waypoints.nextWaypoint();
-		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
-		var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
-		var lat2 = flight.arrival.coords()[0] || null;
-		var lon2 = flight.arrival.coords()[1] || null;
+		var lat1 = geofs.aircraft.instance.llaLocation[0];
+		var lon1 = geofs.aircraft.instance.llaLocation[1];
+		var lat2 = flight.arrival.coords()[0];
+		var lon2 = flight.arrival.coords()[1];
 		var times = [[], [], [], [], []]; // flightETE, flightETA, todETE, todETA, nextETE
-		var nextDist = nextWaypoint === null ? 0 : math.getDistance(lat1, lon1, route[nextWaypoint].lat(), route[nextWaypoint].lon());
+		var nextDist =
+			nextWaypoint === null ? 0 : route[nextWaypoint].distFromPrev();
 		var flightDist;
 
 		// Checks if the whole route is complete
@@ -35,16 +38,16 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 			if (!route[i].lat() || !route[i].lon()) valid = false;
 		}
 		if (valid) flightDist = distance.route(route.length);
-		else flightDist = math.getDistance(lat1, lon1, lat2, lon2);
+		else flightDist = utils.getDistance(lat1, lon1, lat2, lon2);
 
-		// Calculates times
-		if (!geofs.aircraft.instance.groundContact && flight.arrival) {
-			times[0] = flight.getETE(flightDist, true);
-			times[1] = flight.getETA(times[0][0], times[0][1]);
-			times[4] = flight.getETE(nextDist, false);
-			if ((flightDist - flight.todDist) > 0) {
-				times[2] = flight.getETE((flightDist - flight.todDist()), false);
-				times[3] = flight.getETA(times[2][0], times[2][1]);
+		// Calculates times if aircraft is flying and has an arrival airport
+		if (!geofs.aircraft.instance.groundContact && flight.arrival.airport()) {
+			times[0] = utils.getETE(flightDist, true);
+			times[1] = utils.getETA(times[0][0], times[0][1]);
+			times[4] = utils.getETE(nextDist, false);
+			if ((flightDist - flight.todDist()) > 0) {
+				times[2] = utils.getETE((flightDist - flight.todDist()), false);
+				times[3] = utils.getETA(times[2][0], times[2][1]);
 			}
 		}
 
@@ -60,7 +63,7 @@ define(['knockout', 'distance', 'flight', 'math', 'waypoints', 'exports'], funct
 	 */
 	exports.print = function (flightDist, nextDist, times) {
 		for (var i = 0; i < times.length; i++) {
-			times[i] = flight.formatTime(times[i]);
+			times[i] = utils.formatTime(times[i]);
 		}
 
 		// Formats flightDist

@@ -1,0 +1,66 @@
+div.fmc-legs-container {
+    max-height: 340px;
+    min-height: 70px;
+    width: 665px;
+    overflow: auto;
+    font-family: monospace;
+}
+
+table.fmc-legs-data-table {
+    margin-left: 60px;
+}
+
+table.fmc-legs-data-table tr.activated {
+    color: rgb(83, 109, 254);
+}
+
+table.fmc-legs-data-table tr.activated .wpt-name {
+    font-weight: bold;
+}
+
+table.fmc-legs-data-table th {
+	text-align: left;
+	cursor: default;
+}
+
+table.fmc-legs-data-table td {
+	padding: 10px;
+}
+
+table.fmc-legs-data-table .brng-and-wpt {
+    width: 100px;
+}
+
+table.fmc-legs-data-table .dist-and-info {
+    width: 300px;
+}
+
+table.fmc-legs-data-table .altitude {
+    width: 120px;
+}
+
+table.fmc-legs-data-table .brng-from-prev {
+    height: 20px;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+table.fmc-legs-data-table .wpt-name {
+    font-size: 30px;
+}
+
+table.fmc-legs-data-table .dist-from-prev {
+    height: 20px;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+table.fmc-legs-data-table .wpt-info {
+    height: 20px;
+    font-size: 20px;
+}
+
+table.fmc-legs-data-table .alt-target {
+    font-size: 20px;
+    margin-top: 20px;
+}

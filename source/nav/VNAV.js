@@ -1,6 +1,6 @@
 "use strict";
 
-define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, distance, flight, math, waypoints) {
+define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, distance, flight, utils, waypoints) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes;
@@ -12,6 +12,8 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 		 * Controls VNAV, plane's vertical navigation, set on a timer
 		 */
 		update: function () {
+			if (!flight.vnavEnabled()) return;
+
 			var route = waypoints.route();
 
 			var params = flight.parameters();
@@ -27,7 +29,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 			var currentAlt = geofs.aircraft.instance.animationValue.altitude;
 			var targetAlt, deltaAlt, nextDist, targetDist;
 			if (hasRestriction) {
-				targetAlt = route[next][3];
+				targetAlt = route[next].alt();
 				deltaAlt = targetAlt - currentAlt;
 				nextDist = distance.route(next);
 				targetDist = distance.target(deltaAlt);
@@ -50,7 +52,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 				if (!route[i].lat() || !route[i].lon()) valid = false;
 			}
 			if (valid) flightDist = distance.route(route.length);
-			else flightDist = math.getDistance(lat1, lon1, lat2, lon2);
+			else flightDist = utils.getDistance(lat1, lon1, lat2, lon2);
 
 			// Invalid distance, phase resets to default = climb
 			if (isNaN(flightDist)) flight.phase(0);
@@ -91,7 +93,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 
 					// Checks to see if the altitude restriction is on the climbing phase or descent phase
 					if (nextDist < totalDist) {
-						if (nextDist < targetDist) vs = math.getClimbrate(deltaAlt, nextDist);
+						if (nextDist < targetDist) vs = utils.getClimbrate(deltaAlt, nextDist);
 						else vs = params[1];
 						alt = targetAlt;
 					} else {
@@ -115,7 +117,7 @@ define(['debug', 'distance', 'flight', 'math', 'waypoints'], function (debug, di
 
 					// If targetDist has been reached
 					if (nextDist < targetDist) {
-						vs = math.getClimbrate(deltaAlt, nextDist);
+						vs = utils.getClimbrate(deltaAlt, nextDist);
 						alt = targetAlt;
 					}
 
