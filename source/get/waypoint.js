@@ -1,6 +1,6 @@
 "use strict";
 
-define(['data', 'math', 'waypoints'], function (data, math, waypoints) {
+define(['data', 'utils', 'waypoints'], function (data, utils, waypoints) {
 
     // Autopilot++ Dependencies
     var icao = autopilot_pp.require('json!data/icaoairports.json');
@@ -24,7 +24,7 @@ define(['data', 'math', 'waypoints'], function (data, math, waypoints) {
             var lon = waypoints.route()[waypoints.route().length - 1][1] ||
                 geofs.aircraft.instance.llaLocation[1];
 
-            var relativeDist = math.getDistance(point[0], point[1], lat, lon);
+            var relativeDist = utils.getDistance(point[0], point[1], lat, lon);
 
             // If this point is closer than the previous point, return this point
             if (relativeDist < closestDist) {

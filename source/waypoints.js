@@ -451,7 +451,7 @@ define([
 
 				route()[i].alt(rte[i][3]); // Restriction altitude
 
-				route()[i].info(rte[i][5]); // Waypoint info
+				if (!route()[i].info()) route()[i].info(rte[i][5]); // Waypoint info
 			}
 			// Auto-saves the data once again
 			saveData();
