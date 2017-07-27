@@ -4,6 +4,13 @@ define(['exports'], function (exports) {
 
     var FILE_PATH = PAGE_PATH + 'fmc/compile/compiled-data/';
 
+    exports.waypoints = [];
+    exports.navaids = [];
+    exports.SID = [];
+    exports.STAR = [];
+    exports.ATS = [];
+    exports.runways = [];
+
     $.get(FILE_PATH + 'waypoints.json', function (waypoints) {
         exports.waypoints = waypoints;
     });
