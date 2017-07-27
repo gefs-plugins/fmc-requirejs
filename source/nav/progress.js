@@ -24,13 +24,13 @@ define([
 	exports.update = function () {
 		var route = waypoints.route();
 		var nextWaypoint = waypoints.nextWaypoint();
-		var lat1 = geofs.aircraft.instance.llaLocation[0] || null;
-		var lon1 = geofs.aircraft.instance.llaLocation[1] || null;
-		var lat2 = flight.arrival.coords()[0] || null;
-		var lon2 = flight.arrival.coords()[1] || null;
+		var lat1 = geofs.aircraft.instance.llaLocation[0];
+		var lon1 = geofs.aircraft.instance.llaLocation[1];
+		var lat2 = flight.arrival.coords()[0];
+		var lon2 = flight.arrival.coords()[1];
 		var times = [[], [], [], [], []]; // flightETE, flightETA, todETE, todETA, nextETE
 		var nextDist =
-			nextWaypoint === null ? 0 : utils.getDistance(lat1, lon1, route[nextWaypoint].lat(), route[nextWaypoint].lon());
+			nextWaypoint === null ? 0 : route[nextWaypoint].distFromPrev();
 		var flightDist;
 
 		// Checks if the whole route is complete
