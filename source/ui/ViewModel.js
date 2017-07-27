@@ -41,8 +41,6 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
             },
             write: function (airport) {
                 flight.departure.airport(airport);
-
-                self.departureRwys();
             }
         });
 
@@ -52,8 +50,6 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
             },
             write: function (airport) {
                 flight.arrival.airport(airport);
-
-                self.arrivalRwys();
             }
         });
 
@@ -94,7 +90,6 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
                 });
 
                 _selectedDepartureRwy(rwyData ? rwyData.runway : undefined);
-                self.SIDs();
             }
         });
 
@@ -141,7 +136,6 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
                 });
 
                 _selectedArrivalRwy(rwyData ? rwyData.runway : undefined);
-                self.STARs();
             }
         });
 
