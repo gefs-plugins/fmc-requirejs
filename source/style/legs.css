@@ -7,7 +7,7 @@ div.fmc-legs-container {
 }
 
 table.fmc-legs-data-table {
-    margin-left: 70px;
+    margin-left: 60px;
 }
 
 table.fmc-legs-data-table tr.activated {
@@ -36,7 +36,7 @@ table.fmc-legs-data-table .dist-and-info {
 }
 
 table.fmc-legs-data-table .altitude {
-    width: 100px;
+    width: 120px;
 }
 
 table.fmc-legs-data-table .brng-from-prev {
