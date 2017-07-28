@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'data'], function (ko, data) {
+define(['data'], function (data) {
 
     /**
      * Get all SID info for airport and departure runway
@@ -9,14 +9,15 @@ define(['knockout', 'data'], function (ko, data) {
      * @returns {Array} The array of SID
      */
     return function (airport, runway) {
-        if (!airport || !runway[0]) return [];
+        if (!airport || !runway) return [];
 
         var allSID = data.SID[airport];
         var validSID = [];
 
-        allSID.forEach(function (obj) {
-            if (obj.runway === runway) validSID.push(obj);
-        });
+        if (Array.isArray(allSID))
+            allSID.forEach(function (obj) {
+                if (obj.runway === runway) validSID.push(obj);
+            });
 
         return validSID;
     };

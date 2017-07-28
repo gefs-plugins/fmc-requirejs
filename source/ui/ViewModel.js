@@ -35,14 +35,7 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         /***********
          * RTE Tab *
          ***********/
-        self.departureAirport = ko.pureComputed({
-            read: function () {
-                return flight.departure.airport();
-            },
-            write: function (airport) {
-                flight.departure.airport(airport);
-            }
-        });
+        self.departureAirport = flight.departure.airport;
 
         self.arrivalAirport = ko.pureComputed({
             read: function () {
@@ -71,49 +64,25 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         self.todCalc = flight.todCalc;
 
         // List of departure runways based on departure airport
-        self.departureRwys = ko.pureComputed(function () {
-            return get.runway(flight.departure.airport());
+        self.departureRwyList = ko.pureComputed(function () {
+            return get.runway(self.departureAirport());
         });
 
-        // Selected departure runway
-        var _selectedDepartureRwy = ko.observable();
-        self.selectedDepartureRwy = ko.pureComputed({
-            read: function () {
-                return _selectedDepartureRwy();
-            },
-            write: function (index) {
-                var rwyData = self.departureRwys()[index];
-
-                // Sets selected departure runway and data to 'flight'
-                flight.departure.runway = ko.pureComputed(function () {
-                    return rwyData;
-                });
-
-                _selectedDepartureRwy(rwyData ? rwyData.runway : undefined);
-            }
+        // Selected departure runway and name
+        self.departureRunway = flight.departure.runway;
+        self.departureRwyName = ko.pureComputed(function () {
+            return self.departureRunway().runway;
         });
 
         // List of SIDs based on departure airport and runway
-        self.SIDs = ko.pureComputed(function () {
-            return get.SID(flight.departure.airport(), self.selectedDepartureRwy());
+        self.SIDList = ko.pureComputed(function () {
+            return get.SID(self.departureAirport(), self.departureRwyName());
         });
 
-        // Selected SID
-        var _selectedSID = ko.observable();
-        self.selectedSID = ko.pureComputed({
-            read: function () {
-                return _selectedSID();
-            },
-            write: function (index) {
-                var SID = self.SIDs()[index];
-
-                // Sets selected SID and data to 'flight'
-                flight.departure.SID = ko.pureComputed(function () {
-                    return SID;
-                });
-
-                _selectedSID(SID ? SID.name : undefined);
-            }
+        // Selected SID name
+        self.SID = flight.departure.SID;
+        self.SIDName = ko.pureComputed(function () {
+            return self.SID().name;
         });
 
         // List of arrival runways based on arrival airport
