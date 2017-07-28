@@ -111,16 +111,33 @@ define([
 
 	};
 
-	// Arrival airport name and coords
+	/**
+	 * arrival object: airport, coords, runway, and SID
+	 */
 	var _arrivalAirport = ko.observable();
 	var _arrivalCoords = ko.observable([]);
+	var _selectedArrivalRwy = ko.obervable();
+	var _selectedSTAR = ko.observable();
+
+	// List of runways and STARs
+	var _arrivalRwys = ko.pureComputed(function () {
+		return get.runway(arrival.airport());
+	});
+	var _STARs = ko.pureComputed(function () {
+		return get.SID(arrival.airport(), arrival.runway() ? arrival.runway().runway : false);
+	});
+
 	var arrival = {
+		// Arrival airport name
 		airport: ko.pureComputed({
 			read: function () {
 				return _arrivalAirport();
 			},
 			write: function (airport) {
+				var oldAirport = _arrivalAirport();
 				var coords = icao[airport];
+
+				if (airport !== oldAirport) arrival.runway(undefined);
 
 				if (!coords) {
 					_arrivalAirport(undefined);
@@ -133,9 +150,39 @@ define([
 				lnav.update();
 			}
 		}),
+
+		// Arrival airport coordinates
 		coords: ko.pureComputed(function () {
 			return _arrivalCoords();
+		}),
+
+		// Arrival runway data
+		runway: ko.pureComputed({
+			read: function () {
+				return _selectedArrivalRwy();
+			},
+			write: function (index) {
+				var rwyData = _arrivalRwys()[index];
+
+				if (rwyData) _selectedArrivalRwy(rwyData);
+				else {
+					_selectedArrivalRwy(undefined);
+					arrival.STAR(undefined);
+				}
+			}
+		}),
+
+		// STAR data
+		STAR: ko.pureComputed({
+			read: function () {
+				return _selectedSTAR();
+			},
+			write: function (index) {
+				var STARData = _STARs()[index];
+				_selectedSTAR(STARData);
+			}
 		})
+
 	};
 
 	// Flight Number

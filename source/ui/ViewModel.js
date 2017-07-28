@@ -36,16 +36,7 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
          * RTE Tab *
          ***********/
         self.departureAirport = flight.departure.airport;
-
-        self.arrivalAirport = ko.pureComputed({
-            read: function () {
-                return flight.arrival.airport();
-            },
-            write: function (airport) {
-                flight.arrival.airport(airport);
-            }
-        });
-
+        self.arrivalAirport = flight.arrival.airport;
         self.flightNumber = flight.number;
         self.route = waypoints.route;
         self.nextWaypoint = waypoints.nextWaypoint;
@@ -86,50 +77,26 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         });
 
         // List of arrival runways based on arrival airport
-        self.arrivalRwys = ko.pureComputed(function () {
-            return get.runway(flight.arrival.airport());
+        self.arrivalRwyList = ko.pureComputed(function () {
+            return get.runway(self.arrivalAirport());
         });
 
-        // Selected arrival runway
-        var _selectedArrivalRwy = ko.observable();
-        self.selectedArrivalRwy = ko.pureComputed({
-            read: function () {
-                return _selectedArrivalRwy();
-            },
-            write: function (index) {
-                var rwyData = self.arrivalRwys()[index];
-
-                // Sets selected arrival runway and data to 'flight'
-                flight.arrival.runway = ko.pureComputed(function () {
-                    return rwyData;
-                });
-
-                _selectedArrivalRwy(rwyData ? rwyData.runway : undefined);
-            }
+        // Selected arrival runway and name
+        self.arrivalRunway = flight.arrival.runway;
+        self.arrivalRunwayName = ko.pureComputed(function () {
+            return self.arrivalRunway().runway;
         });
 
         // List of STARs based on arrival airport and runway
         // FIXME: STARs do not necessarily need a runway at first
         self.STARs = ko.pureComputed(function () {
-            return get.STAR(flight.arrival.airport(), self.selectedArrivalRwy());
+            return get.STAR(self.arrivalAirport(), self.arrivalRunwayName());
         });
 
-        // Selected STAR
-        var _selectedSTAR = ko.observable();
-        self.selectedSTAR = ko.pureComputed({
-            read: function () {
-                return _selectedSTAR();
-            },
-            write: function (index) {
-                var STAR = self.STARs()[index];
-
-                // Sets selected STAR and data to 'flight'
-                flight.arrival.STAR = ko.pureComputed(function () {
-                    return STAR;
-                });
-
-                _selectedSTAR(STAR ? STAR.name : undefined);
-            }
+        // Selected STAR name
+        self.STAR = flight.arrival.STAR;
+        self.STARName = ko.pureComputed(function () {
+            return self.STAR().name;
         });
 
         /************
