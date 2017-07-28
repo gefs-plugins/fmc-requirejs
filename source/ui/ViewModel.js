@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'nav/progress'], function (ko, debug, flight, get, log, waypoints, lnav, progress) {
+define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], function (ko, flight, get, log, waypoints, progress) {
 
     /**
      * ViewModel function for knockout bindings
@@ -62,7 +62,8 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         // Selected departure runway and name
         self.departureRunway = flight.departure.runway;
         self.departureRwyName = ko.pureComputed(function () {
-            return self.departureRunway().runway;
+            if (self.departureRunway()) return self.departureRunway().runway;
+            else return undefined;
         });
 
         // List of SIDs based on departure airport and runway
@@ -73,7 +74,8 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         // Selected SID name
         self.SID = flight.departure.SID;
         self.SIDName = ko.pureComputed(function () {
-            return self.SID().name;
+            if (self.SID()) return self.SID().name;
+            else return undefined;
         });
 
         // List of arrival runways based on arrival airport
@@ -84,7 +86,8 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         // Selected arrival runway and name
         self.arrivalRunway = flight.arrival.runway;
         self.arrivalRunwayName = ko.pureComputed(function () {
-            return self.arrivalRunway().runway;
+            if (self.arrivalRunway()) return self.arrivalRunway().runway;
+            else return undefined;
         });
 
         // List of STARs based on arrival airport and runway
@@ -96,7 +99,8 @@ define(['knockout', 'debug', 'flight', 'get', 'log', 'waypoints', 'nav/LNAV', 'n
         // Selected STAR name
         self.STAR = flight.arrival.STAR;
         self.STARName = ko.pureComputed(function () {
-            return self.STAR().name;
+            if (self.STAR()) return self.STAR().name;
+            else return undefined;
         });
 
         /************
