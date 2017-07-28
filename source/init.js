@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2016-2017 Harry Xue and other contributors
+ * @license Copyright (c) 2016-2017 Harry Xue, (c) 2016 Ethan Shields
  * Released under the MIT license. For more details, please visit
  * https://github.com/geofs-plugins/fmc-requirejs/blob/master/LICENSE
  */

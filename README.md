@@ -27,4 +27,4 @@ node node_modules/requirejs/bin/r.js -o build-config.js
 Then you will be able to see the optimized file in *build* as **fmc.min.js**
 
 ----
-> Copyright (c) 2016-2017 Harry Xue and other contributors
+> Copyright (c) 2016-2017 Harry Xue, (c) 2016 Ethan Shields
