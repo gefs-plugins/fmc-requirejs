@@ -116,7 +116,7 @@ define([
 	 */
 	var _arrivalAirport = ko.observable();
 	var _arrivalCoords = ko.observable([]);
-	var _selectedArrivalRwy = ko.obervable();
+	var _selectedArrivalRwy = ko.observable();
 	var _selectedSTAR = ko.observable();
 
 	// List of runways and STARs
