@@ -1,7 +1,7 @@
 /**
  * @license Copyright (c) 2016-2017 Harry Xue, (c) 2016 Ethan Shields
  * Released under the GNU Affero General Public License, v3.0 or later
- * https://github.com/geofs-plugins/fmc-requirejs/blob/master/LICENSE
+ * https://github.com/geofs-plugins/fmc-requirejs/blob/master/LICENSE.md
  */
 
 "use strict";

@@ -28,6 +28,7 @@ Then you will be able to see the optimized file in *build* as **fmc.min.js**
 
 ----
 #### License
+```
 Copyright (C) 2016-2017 Harry Xue, (C) 2016 Ethan Shields
 
 This program is free software: you can redistribute it and/or modify
@@ -42,3 +43,4 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```
