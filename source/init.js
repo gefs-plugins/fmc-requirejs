@@ -1,23 +1,31 @@
 /**
- * @license Copyright (c) 2016-2017 Harry Xue and other contributors
- * Released under the MIT license. For more details, please visit
- * https://github.com/geofs-plugins/fmc-requirejs/blob/master/LICENSE
+ * @license Copyright (c) 2016-2017 Harry Xue, (c) 2016 Ethan Shields
+ * Released under the GNU Affero General Public License, v3.0 or later
+ * https://github.com/geofs-plugins/fmc-requirejs/blob/master/LICENSE.md
  */
 
 "use strict";
 
 (function () {
 
+	var VALID_VERSION = 'v0.10.6';
+
 	// Error if FMC is loaded without Autopilot++ or with outdated Autopilot++
 	function errorNotCompatible () {
-		console.error('You must have Autopilot++ {>= v0.10.6} installed in order to use FMC.');
+		console.error('Incompatible: You must have Autopilot++ ' +
+			'{>= %s} installed in order to use FMC.', VALID_VERSION);
 	}
 
 	// Check if Autopilot++ is installed (version >= v0.10.6)
 	function hasAutopilot () {
 		if (window.autopilot_pp) {
-			var version = autopilot_pp.version.split('.');
-			if ((+version[1] === 10 && +version[2] >= 6) || +version[1] > 10) return true;
+			var apVersion = autopilot_pp.apVersion.split('.');
+			var vlVersion = VALID_VERSION.substring(1).split('.');
+			if (apVersion[0] === vlVersion[0] &&
+				apVersion[1] === vlVersion[1] &&
+				apVersion[2] >= vlVersion[2] ||
+				apVersion[0] > vlVersion[0] ||
+				apVersion[1] > vlVersion[1]) return true;
 		}
 		return false;
 	}
@@ -32,6 +40,6 @@
 
 		if (!hasAutopilot()) errorNotCompatible();
 		else require(['ui/main']);
-	}, 4);
+	}, 250);
 
 })();

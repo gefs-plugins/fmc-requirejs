@@ -3,7 +3,7 @@
     <div class="page-content">
         <div class="fmc-log-container">
             <table class="mdl-data-table mdl-js-data-table">
-                <tbody>
+                <thead>
                     <tr class="log-header">
                         <th class="time-col">Time</th>
                         <th class="spd-col">Spd.</th>
@@ -14,7 +14,7 @@
                         <th class="fps-col">FPS</th>
                         <th class="oth-col">Other</th>
                     </tr>
-                </tbody>
+                </thead>
                 <tbody data-bind="foreach: logData">
                     <tr class="log-data">
                         <td data-bind="text: $data[0]"></td>

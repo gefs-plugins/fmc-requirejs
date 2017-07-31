@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'data'], function (ko, data) {
+define(['data'], function (data) {
 
     /**
      * Get all STAR info for airport and arrival runway
@@ -9,14 +9,16 @@ define(['knockout', 'data'], function (ko, data) {
      * @returns {Array} The array of STAR
      */
     return function (airport, runway) {
-        if (!airport || !runway[0]) return [];
+        if (!airport || !runway) return [];
+        // FIXME: there still can be a STAR even if there is no arrival runway
 
         var allSTAR = data.STAR[airport];
         var validSTAR = [];
 
-        allSTAR.forEach(function (obj) {
-            if (obj.runway === runway) validSTAR.push(obj);
-        });
+        if (Array.isArray(allSTAR))
+            allSTAR.forEach(function (obj) {
+                if (obj.runway === runway) validSTAR.push(obj);
+            });
 
         return validSTAR;
     };

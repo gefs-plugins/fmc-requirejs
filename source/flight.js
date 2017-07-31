@@ -1,6 +1,8 @@
 "use strict";
 
-define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function (ko, lnav, vnav, vnavProfile, exports) {
+define([
+	'knockout', 'get', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'
+], function (ko, get, lnav, vnav, vnavProfile, exports) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes,
@@ -34,16 +36,33 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 	// Speed control
 	var spdControl = ko.observable(true);
 
-	// Departure airport name and coords
+	/**
+	 * departure object: airport, coords, runway, and SID
+	 */
 	var _departureAirport = ko.observable();
 	var _departureCoords = ko.observable([]);
+	var _selectedDepartureRwy = ko.observable();
+	var _selectedSID = ko.observable();
+
+	// List of runways and SIDs
+	var _departureRwys = ko.pureComputed(function () {
+		return get.runway(departure.airport());
+	});
+	var _SIDs = ko.pureComputed(function () {
+		return get.SID(departure.airport(), departure.runway() ? departure.runway().runway : false);
+	});
+
 	var departure = {
+		// Departure airport name
 		airport: ko.pureComputed({
 			read: function () {
 				return _departureAirport();
 			},
 			write: function (airport) {
+				var oldAirport = _departureAirport();
 				var coords = icao[airport];
+
+				if (airport !== oldAirport) departure.runway(undefined);
 
 				if (!coords) {
 					_departureAirport(undefined);
@@ -53,24 +72,72 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 					_departureAirport(airport);
 					_departureCoords(coords);
 				}
+
 				lnav.update();
 			}
 		}),
+
+		// Departure airport coordinates
 		coords: ko.pureComputed(function () {
 			return _departureCoords();
+		}),
+
+		// Departure runway data
+		runway: ko.pureComputed({
+			read: function () {
+				return _selectedDepartureRwy();
+			},
+			write: function (index) {
+				var rwyData = _departureRwys()[index];
+
+				if (rwyData) _selectedDepartureRwy(rwyData);
+				else {
+					_selectedDepartureRwy(undefined);
+					departure.SID(undefined);
+				}
+			}
+		}),
+
+		// SID data
+		SID: ko.pureComputed({
+			read: function () {
+				return _selectedSID();
+			},
+			write: function (index) {
+				var SIDData = _SIDs()[index];
+				_selectedSID(SIDData);
+			}
 		})
+
 	};
 
-	// Arrival airport name and coords
+	/**
+	 * arrival object: airport, coords, runway, and SID
+	 */
 	var _arrivalAirport = ko.observable();
 	var _arrivalCoords = ko.observable([]);
+	var _selectedArrivalRwy = ko.observable();
+	var _selectedSTAR = ko.observable();
+
+	// List of runways and STARs
+	var _arrivalRwys = ko.pureComputed(function () {
+		return get.runway(arrival.airport());
+	});
+	var _STARs = ko.pureComputed(function () {
+		return get.SID(arrival.airport(), arrival.runway() ? arrival.runway().runway : false);
+	});
+
 	var arrival = {
+		// Arrival airport name
 		airport: ko.pureComputed({
 			read: function () {
 				return _arrivalAirport();
 			},
 			write: function (airport) {
+				var oldAirport = _arrivalAirport();
 				var coords = icao[airport];
+
+				if (airport !== oldAirport) arrival.runway(undefined);
 
 				if (!coords) {
 					_arrivalAirport(undefined);
@@ -83,9 +150,39 @@ define(['knockout', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'], function
 				lnav.update();
 			}
 		}),
+
+		// Arrival airport coordinates
 		coords: ko.pureComputed(function () {
 			return _arrivalCoords();
+		}),
+
+		// Arrival runway data
+		runway: ko.pureComputed({
+			read: function () {
+				return _selectedArrivalRwy();
+			},
+			write: function (index) {
+				var rwyData = _arrivalRwys()[index];
+
+				if (rwyData) _selectedArrivalRwy(rwyData);
+				else {
+					_selectedArrivalRwy(undefined);
+					arrival.STAR(undefined);
+				}
+			}
+		}),
+
+		// STAR data
+		STAR: ko.pureComputed({
+			read: function () {
+				return _selectedSTAR();
+			},
+			write: function (index) {
+				var STARData = _STARs()[index];
+				_selectedSTAR(STARData);
+			}
 		})
+
 	};
 
 	// Flight Number
