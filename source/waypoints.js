@@ -476,8 +476,8 @@ define([
 
 		var newIndex = oldIndex + value;
 
-		// If waypoint is shifting up (negative value)
-		if (value < 0 && newIndex >= 0) {
+		// Makes sure waypoints at the end of the route stays unchanged
+		if ((value < 0 && newIndex >= 0) || (value > 0 && newIndex <= route().length - 1)) {
 			move(oldIndex, newIndex);
 
 			if (nextWaypoint() === newIndex) {
@@ -486,18 +486,6 @@ define([
 				activateWaypoint(newIndex);
 			}
 		}
-
-		// If waypoint is shifting down (positive value)
-		else if (value > 0 && newIndex <= route().length - 1) {
-			move(oldIndex, newIndex);
-
-			if (nextWaypoint() === oldIndex) {
-				activateWaypoint(newIndex);
-			} else if (nextWaypoint() === newIndex) {
-				activateWaypoint(oldIndex);
-			}
-		}
-
 	}
 
 	// Variables
