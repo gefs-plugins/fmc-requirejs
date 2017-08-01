@@ -19,7 +19,7 @@
 	// Check if Autopilot++ is installed (version >= v0.10.6)
 	function hasAutopilot () {
 		if (window.autopilot_pp) {
-			var apVersion = autopilot_pp.apVersion.split('.');
+			var apVersion = autopilot_pp.version.split('.');
 			var vlVersion = VALID_VERSION.substring(1).split('.');
 			if (apVersion[0] === vlVersion[0] &&
 				apVersion[1] === vlVersion[1] &&
