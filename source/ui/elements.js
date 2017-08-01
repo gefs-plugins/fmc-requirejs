@@ -11,7 +11,7 @@ define({
         wptList: '.fmc-modal .fmc-wpt-list-container',
         wptRow: '.fmc-modal .fmc-wpt-list-container .wpt-row',
         wptInfo: '.fmc-modal .fmc-wpt-info',
-        arrPage: '.fmc-modal .fmc-arr-container',
+        depArrPage: '.fmc-modal .fmc-dep-arr-container',
         autoTOD: '.fmc-modal .fmc-auto-tod-container',
         vnavPage: '.fmc-modal .fmc-vnav-container',
         vnavPhase: '.fmc-modal .fmc-vnav-phase-container',
