@@ -229,7 +229,7 @@ define([
 			var coords;
 			if (d < 0) coords = d - m;
 			else coords = d + m;
-			return coords;
+			return +coords.toFixed(6);
 		} else return Number(a);
 	}
 
