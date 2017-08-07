@@ -1,17 +1,12 @@
 "use strict";
 
 define([
-	'knockout', './ViewModel', 'log', 'waypoints',
-	'nav/progress', './elements', 'redefine', './position'
-], function (ko, ViewModel, log, waypoints, progress, E) {
+	'knockout', './ViewModel', './position', 'log',
+	'waypoints', 'nav/progress', './elements', 'redefine'
+], function (ko, ViewModel, positioningFMC, log, waypoints, progress, E) {
 
-	// Checks if UI has been properly placed
-	var timer = setInterval(function () {
-		if ($(E.modal)[0] && $(E.btn.fmcBtn)) {
-			clearInterval(timer);
-			loadFMC();
-		}
-	}, 4);
+	// If UI is properly placed, load FMC
+	positioningFMC.then(loadFMC);
 
 	// FMC actions init function
 	function loadFMC () {

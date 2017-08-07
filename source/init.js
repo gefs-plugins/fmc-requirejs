@@ -8,6 +8,8 @@
 
 (function () {
 
+	if (!window.Promise) throw new Error('Browser is outdated.');
+
 	var VALID_VERSION = 'v0.10.6';
 
 	// Error if FMC is loaded without Autopilot++ or with outdated Autopilot++
