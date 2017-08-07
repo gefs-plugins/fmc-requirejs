@@ -14,9 +14,7 @@ define([
 	// If VNAV is enabled
 	var _vnavEnabled = ko.observable(false);
 	var vnavEnabled = ko.pureComputed({
-		read: function () {
-			return _vnavEnabled();
-		},
+		read: _vnavEnabled,
 		write: function (boolean) {
 			var set = _vnavEnabled;
 
@@ -62,9 +60,7 @@ define([
 	var departure = {
 		// Departure airport name
 		airport: ko.pureComputed({
-			read: function () {
-				return _departureAirport();
-			},
+			read: _departureAirport,
 			write: function (airport) {
 				var oldAirport = _departureAirport();
 				var coords = icao[airport];
@@ -91,9 +87,7 @@ define([
 
 		// Departure runway data
 		runway: ko.pureComputed({
-			read: function () {
-				return _selectedDepartureRwy();
-			},
+			read: _selectedDepartureRwy,
 			write: function (index) {
 				var rwyData = _departureRwys()[index];
 
@@ -107,9 +101,7 @@ define([
 
 		// SID data
 		SID: ko.pureComputed({
-			read: function () {
-				return _selectedSID();
-			},
+			read: _selectedSID,
 			write: function (index) {
 				var SIDData = _SIDs()[index];
 				_selectedSID(SIDData);
@@ -137,9 +129,7 @@ define([
 	var arrival = {
 		// Arrival airport name
 		airport: ko.pureComputed({
-			read: function () {
-				return _arrivalAirport();
-			},
+			read: _arrivalAirport,
 			write: function (airport) {
 				var oldAirport = _arrivalAirport();
 				var coords = icao[airport];
@@ -165,9 +155,7 @@ define([
 
 		// Arrival runway data
 		runway: ko.pureComputed({
-			read: function () {
-				return _selectedArrivalRwy();
-			},
+			read: _selectedArrivalRwy,
 			write: function (index) {
 				var rwyData = _arrivalRwys()[index];
 
@@ -181,9 +169,7 @@ define([
 
 		// STAR data
 		STAR: ko.pureComputed({
-			read: function () {
-				return _selectedSTAR();
-			},
+			read: _selectedSTAR,
 			write: function (index) {
 				var STARData = _STARs()[index];
 				_selectedSTAR(STARData);
@@ -198,9 +184,7 @@ define([
 	// Cruise altitude
 	var _cruiseAlt = ko.observable();
 	var cruiseAlt = ko.pureComputed({
-		read: function () {
-			return _cruiseAlt();
-		},
+		read: _cruiseAlt,
 		write: function (val) {
 			var set = _cruiseAlt;
 
@@ -214,9 +198,7 @@ define([
 	// Flight phase
 	var _phase = ko.observable(0);
 	var phase = ko.pureComputed({
-		read: function () {
-			return _phase();
-		},
+		read: _phase,
 		write: function (index) {
 			if (phaseLocked() || index > 3) return;
 			_phase(index);
@@ -225,9 +207,7 @@ define([
 
 	var _phaseLocked = ko.observable(false);
 	var phaseLocked = ko.pureComputed({
-		read: function () {
-			return _phaseLocked();
-		},
+		read: _phaseLocked,
 		write: function (boolean, viewmodel) { // jshint unused:false
 			_phaseLocked(boolean);
 		}

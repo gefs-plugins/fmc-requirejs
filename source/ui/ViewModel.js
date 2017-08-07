@@ -13,9 +13,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
          *************************/
         var _opened = ko.observable(false);
         self.opened = ko.pureComputed({
-            read: function () {
-                return _opened();
-            },
+            read: _opened,
             write: function (boolean, viewmodel) { // jshint unused:false
                 _opened(boolean);
             }
@@ -23,9 +21,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
 
         self.modalWarning = ko.observable();
         log.warn = ko.pureComputed({ // Prints modal warning, disappears after 5 seconds
-    		read: function () {
-    			return self.modalWarning();
-    		},
+    		read: self.modalWarning,
     		write: function (warningText) {
     			self.modalWarning(warningText);
     			setTimeout(function () { self.modalWarning(undefined); }, 5000);
@@ -139,9 +135,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
 
         var generatedRouteText = ko.observable();
         self.generateRoute = ko.pureComputed({
-            read: function () {
-                return generatedRouteText();
-            },
+            read: generatedRouteText,
             write: function (isGenerate, viewmodel) { // jshint unused:false
                 var generatedRoute = isGenerate ? waypoints.toRouteString() : undefined;
                 generatedRouteText(generatedRoute);
