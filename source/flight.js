@@ -46,10 +46,17 @@ define([
 
 	// List of runways and SIDs
 	var _departureRwys = ko.pureComputed(function () {
-		return get.runway(departure.airport());
+		var depArpt = departure.airport();
+		var depSID = departure.SID() ? departure.SID().name : undefined;
+
+		return get.runway(depArpt, depSID, true);
 	});
 	var _SIDs = ko.pureComputed(function () {
-		return get.SID(departure.airport(), departure.runway() ? departure.runway().runway : false);
+		var depArpt = departure.airport();
+		var depRwy = departure.runway() ? departure.runway().runway : undefined;
+		var depSID = departure.SID() ? departure.SID().name : undefined;
+
+		return get.SID(depArpt, depRwy, depSID);
 	});
 
 	var departure = {

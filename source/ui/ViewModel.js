@@ -54,9 +54,11 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
         self.todDist = flight.todDist;
         self.todCalc = flight.todCalc;
 
-        // List of departure runways based on departure airport
+        // List of departure runways based on departure airport and SID
         self.departureRwyList = ko.pureComputed(function () {
-            return get.runway(self.departureAirport());
+            if (self.SIDName())
+                return get.SID(self.departureAirport(), self.departureRwyName(), self.SIDName()).availableRunways;
+            else return get.runway(self.departureAirport(), self.SIDName(), true);
         });
 
         // Selected departure runway and name
