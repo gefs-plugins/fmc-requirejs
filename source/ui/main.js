@@ -17,14 +17,13 @@ define([
 	function loadFMC () {
 		var modal = E.modal,
 			container = E.container,
-			btn = E.btn,
-			textarea = E.textarea;
+			btn = E.btn;
 
 		// Applies knockout bindings
 		var vm = window.debugVM = new ViewModel();
 		ko.applyBindings(vm, $(modal)[0]);
 		ko.applyBindings(vm, $(btn.fmcBtn)[1]);
-		ko.applyBindings(vm, $('.fmc-prog-info.geofs-f-standard-ui')[0]);
+		ko.applyBindings(vm, $(container.uiBottomProgInfo)[0]);
 
 		// Adds one input field on start
 		waypoints.addWaypoint();
@@ -55,10 +54,6 @@ define([
 			$that.removeClass(c);
 			$this.addClass(c);
 		});
-
-		// Disables editing on the generated route textarea
-		$(textarea.generateRte).prop('disabled', true);
-
 
 		/* ---- All Initializations ---- */
 

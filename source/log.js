@@ -1,6 +1,6 @@
 "use strict";
 
-define(['knockout', 'ui/elements', 'utils', 'exports'], function (ko, E, utils, exports) {
+define(['knockout', 'utils', 'exports'], function (ko, utils, exports) {
 
 	var animationValue = geofs.aircraft.instance.animationValue;
 
