@@ -10,49 +10,48 @@ define(['data', 'utils', 'waypoints'], function (data, utils, waypoints) {
      * or current coordinates
      *
      * @param {Array} list The list of coordinates
+     * @param {Number} index Index of the route
      */
-    function closestPoint (list) {
-        var closestDist = Infinity;
+    function closestPoint (list, index) {
+        var closestDist = Infinity, closestIndex = 0;
 
-        return list.reduce(function (closestPoint, point) {
+        for (var i = 0; i < list.length; i++) {
 
-            // Sets current coords to the last waypoint in the list if applicable
+            // Sets current coords to the previous waypoint in the list if applicable
             // Else, current coords set to current position
-            // FIXME add better logic
-            var lat = waypoints.route()[waypoints.route().length - 1][0] ||
-                geofs.aircraft.instance.llaLocation[0];
-            var lon = waypoints.route()[waypoints.route().length - 1][1] ||
-                geofs.aircraft.instance.llaLocation[1];
+            var curLat = geofs.aircraft.instance.llaLocation[0];
+            var curLon = geofs.aircraft.instance.llaLocation[1];
+            var lat = index === 0 ? curLat : waypoints.route()[index-1].lat();
+            var lon = index === 0 ? curLon : waypoints.route()[index-1].lon();
 
-            var relativeDist = utils.getDistance(point[0], point[1], lat, lon);
+            var relativeDist = utils.getDistance(list[i][0], list[i][1], lat, lon);
 
-            // If this point is closer than the previous point, return this point
             if (relativeDist < closestDist) {
                 closestDist = relativeDist;
-                return point;
+                closestIndex = i;
             }
 
-            // If this point is further than the closest point, return closestPoint
-            return closestPoint;
+        }
 
-        });
+        return list[closestIndex];
     }
 
     /**
      * Gets coordinates for ICAO Airports, Waypoints, or Navaids
      *
      * @param {String} fix The name of the fix
+     * @param {Number} index Index of the route
      * @returns {Array} The coordinates array
      */
-    return function getWaypoint (fix) {
+    return function (fix, index) {
         var coords = icao[fix];
         if (coords) return coords;
 
         var list = data.waypoints[fix];
-        if (list) return closestPoint(list);
+        if (list) return closestPoint(list, index);
 
         list = data.navaids[fix];
-        if (list) return closestPoint(list);
+        if (list) return closestPoint(list, index);
 
         return undefined;
     };

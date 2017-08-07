@@ -30,7 +30,7 @@ define([
 			write: function (val) {
 				_wpt(val);
 
-				var coords = get.waypoint(val);
+				var coords = get.waypoint(val, getIndex(self));
 				var isValid = coords && coords[0] && coords[1];
 
 				self.lat(isValid ? coords[0] : undefined, isValid);
