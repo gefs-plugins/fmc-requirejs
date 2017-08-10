@@ -1,66 +1,70 @@
 'use strict';
 
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
-var path = require('path');
+const Promise = require('bluebird');
+
+const fs = Promise.promisifyAll(require('fs'));
+const path = require('path');
 
 require('graceful-fs').gracefulify(fs);
 
-var PATH = path.join(__dirname, require('./constants').ROOT_FOLDER + 'proc/');
-var RWY_REGEXP = /^\d\d[LCR]?$/;
+const PATH = path.join(__dirname, require('./utils').ROOT_FOLDER + 'proc/');
+const RWY_REGEXP = /^\d\d[LCR]?$/;
 
-var waypoints = require('./compiled-data/waypoints.json');
-var navaids = require('./compiled-data/navaids.json');
+const waypoints = require('./compiled-data/waypoints.json');
+const navaids = require('./compiled-data/navaids.json');
+const fileList = require('./utils').readDir(PATH);
 
-var promises = [];
-var fileList = require('./constants').readDir(PATH);
-var approaches = {};
+let promises = [], approaches = {};
 
-fileList.forEach(function (file) {
-    promises.push(new Promise(function (resolve, reject) {
-        var airportName = file.substring(0, file.indexOf('.txt'));
+fileList.forEach(file => {
+    promises.push(new Promise(resolve => {
+        const airportName = file.substring(0, file.indexOf('.txt'));
 
         fs.readFileAsync(PATH + file, 'utf-8')
-            .then(function (data) { parseFile(data, airportName); })
+            .then(data => parseFile(data, airportName))
             .then(resolve);
     }));
 });
 
-Promise.all(promises).then(writeFile);
+module.exports = new Promise(resolve => {
+    console.log('Parsing approach data');
+    Promise.all(promises).then(writeFile);
+});
 
 // Normalize an approach name
 function toNormalized (name) {
-    var convertMap = {
+    const convertMap = {
         I: 'ILS',
         R: 'RNAV',
         D: 'VOR'
     }; // FIXME there are also 'S' and 'N', probably more...
 
-    var normalized = convertMap[name.substring(0, 1)] || name.substring(0, 1);
+    let normalized = convertMap[name.substring(0, 1)] || name.substring(0, 1);
     return normalized + name.substring(1, name.length);
 }
 
 // Callback functions
 function parseFile (fileContent, airportName) { // FIXME Various airports outside US
     // Splits each block (may contain SID, STAR, Final...)
-    var temp = fileContent.split('\r\n\r\n');
+    let temp = fileContent.split('\r\n\r\n');
     temp.shift();
     fileContent = []; // Empties fileContent for approach filters
 
     // Indeces of FINALs with at least one preceeding APPTR
-    var finalWithAPPTR = {};
+    let finalWithAPPTR = {};
 
     // Filters and combines APPTR and FINAL blocks and pushes to fileContent
-    for (var i = 0; i < temp.length; i++) {
+    for (let i = 0; i < temp.length; i++) {
         if (temp[i].indexOf('APPTR') === 0) {
-            var apptrBlock = temp[i];
+            let apptrBlock = temp[i];
 
             // Loops to find FINAL that pairs with current APPTR
             // FIXME logic check: does FINAL follow APPTR?
-            for (var offset = i + 1; offset < temp.length; offset++)
+            let offset;
+            for (offset = i + 1; offset < temp.length; offset++)
                 if (temp[offset].indexOf('FINAL') === 0) break;
 
-            var finalBlock = temp[offset];
+            let finalBlock = temp[offset];
 
             finalWithAPPTR[offset] = true;
 
@@ -70,7 +74,7 @@ function parseFile (fileContent, airportName) { // FIXME Various airports outsid
             finalBlock.splice(0, 2); // Removes first two lines
 
             // Joins the two blocks with a new line
-            var processedBlock = [apptrBlock, finalBlock.join('\r\n')].join('\r\n');
+            const processedBlock = [apptrBlock, finalBlock.join('\r\n')].join('\r\n');
 
             // Gives fileContent the processed block
             fileContent.push(processedBlock);
@@ -83,23 +87,23 @@ function parseFile (fileContent, airportName) { // FIXME Various airports outsid
 
     approaches[airportName] = [];
 
-    for (var blocks = 0; blocks < fileContent.length; blocks++) {
+    for (let blocks = 0; blocks < fileContent.length; blocks++) {
         // Splits each approach block by line
         fileContent[blocks] = fileContent[blocks].split('\r\n');
 
-        var obj = {
+        let obj = {
             name: undefined,
             runway: undefined,
             transition: undefined,
             waypoints: []
         };
 
-        var isEndOfApproach = false;
+        let isEndOfApproach = false;
 
-        for (var lines = 0; lines < fileContent[blocks].length; lines++) {
+        for (let lines = 0; lines < fileContent[blocks].length; lines++) {
             // Splits each approach line by element
             fileContent[blocks][lines] = fileContent[blocks][lines].split(',');
-            var potentialWaypoint = fileContent[blocks][lines][1];
+            const potentialWaypoint = fileContent[blocks][lines][1];
 
             if (lines > 0) {
                 // If end of approach (ignore failed approach waypoints)
@@ -123,10 +127,10 @@ function parseFile (fileContent, airportName) { // FIXME Various airports outsid
             if (isEndOfApproach) break;
         }
 
-        var descriptor = fileContent[blocks][0];
-        var name = toNormalized(descriptor[1]).trim();
-        var runway = String(descriptor[2]).trim();
-        var transition = String(descriptor[3]).trim();
+        const descriptor = fileContent[blocks][0];
+        const name = toNormalized(descriptor[1]).trim();
+        const runway = String(descriptor[2]).trim();
+        const transition = String(descriptor[3]).trim();
 
         if (name) obj.name = name;
         if (runway) obj.runway = runway;
