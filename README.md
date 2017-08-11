@@ -20,7 +20,7 @@ First, make sure that you have run `npm install`.
 
 If so, open a terminal/command prompt in this directory, then do
 ```
-node node_modules/requirejs/bin/r.js -o build-config.js
+node_modules/requirejs/bin/r.js -o build.json
 ```
 Then you will be able to see the optimized file in *build* as **fmc.min.js**
 
