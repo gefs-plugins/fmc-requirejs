@@ -1,12 +1,11 @@
 "use strict";
 
 define([
-	'knockout', 'get', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'
-], function (ko, get, lnav, vnav, vnavProfile, exports) {
+	'knockout', 'get', 'nav/LNAV', 'nav/VNAV', 'exports'
+], function (ko, get, lnav, vnav, exports) {
 
 	// Autopilot++ Dependencies
-	var apModes = autopilot_pp.require('autopilot').modes,
-		icao = autopilot_pp.require('json!data/icaoairports.json');
+	var icao = autopilot_pp.require('json!data/icaoairports.json');
 
 	// Top Of Descent distance
 	var todDist = ko.observable();
@@ -219,79 +218,6 @@ define([
 	// Arrival Airport field altitude
 	var fieldElev = ko.observable();
 
-	/**
-	 * Gets each plane's flight parameters, for VNAV
-	 *
-	 * @returns {Array} [speed, vertical speed]
-	 */
-	function getFlightParameters () {
-		var spd, vs;
-		var a = geofs.aircraft.instance.animationValue.altitude;
-
-		// Defaults to KIAS mode
-		apModes.speed.isMach(false);
-
-		// CLIMB
-		if (phase() === 0) {
-			var profile = getVNAVProfile().climb;
-
-			for (var i = 0, index = 0; i < profile.length; i++) {
-				if (a > profile[i][0] && a <= profile[i][1]) {
-					index = i;
-					break;
-				}
-			}
-
-			spd = profile[index][2];
-			vs = profile[index][3];
-
-			switchIfMach(spd);
-		}
-
-		// DESCENT
-		else if (phase() === 2) {
-			var profile = getVNAVProfile().descent;
-
-			for (var i = 0, index = 0; i < profile.length; i++) {
-				if (a > profile[i][0] && a <= profile[i][1]) {
-					index = i;
-					break;
-				}
-			}
-
-			spd = profile[index][2];
-			vs = profile[index][3];
-
-			switchIfMach(spd);
-		}
-
-		return [spd, vs];
-	}
-
-	/**
-	 * @private
-	 * Gets the climb/descent profile for VNAV
-	 *
-	 * @returns {Object} The profile needed by VNAV
-	 */
-	function getVNAVProfile () {
-		return geofs.aircraft.instance.setup.fmc
-			|| vnavProfile[geofs.aircraft.instance.id]
-			|| vnavProfile.DEFAULT;
-	}
-
-	/**
-	 * @private
-	 * Checks if the speed input is mach and switches mode
-	 *
-	 * @param {Number} spd The speed to be checked
-	 */
-	function switchIfMach (spd) {
-		if (spd <= 10) apModes.speed.isMach(true);
-	}
-
-
-	// Variables
 	exports.todDist = todDist;
 	exports.vnavEnabled = vnavEnabled;
 	exports.spdControl = spdControl;
@@ -303,8 +229,5 @@ define([
 	exports.phaseLocked = phaseLocked;
 	exports.todCalc = todCalc;
 	exports.fieldElev = fieldElev;
-
-	// Functions
-	exports.parameters = getFlightParameters;
 
 });

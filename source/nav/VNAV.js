@@ -1,6 +1,8 @@
 "use strict";
 
-define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, distance, flight, utils, waypoints) {
+define([
+	'debug', 'distance', 'flight', 'utils', 'waypoints', 'vnav-profile'
+], function (debug, distance, flight, utils, waypoints, vnavProfile) {
 
 	// Autopilot++ Dependencies
 	var apModes = autopilot_pp.require('autopilot').modes;
@@ -16,7 +18,7 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 
 			var route = waypoints.route();
 
-			var params = flight.parameters();
+			var params = getFlightParameters();
 
 			var next = waypoints.nextWptAltRes();
 			var hasRestriction = next !== -1;
@@ -81,10 +83,8 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 
 			if (flight.spdControl()) spd = params[0];
 
-			var phase = flight.phase();
-
 			// If the aircraft is climbing
-			if (phase === 0) {
+			if (flight.phase() === 0) {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -110,7 +110,7 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 			}
 
 			// If the aircraft is on descent
-			else if (phase === 2) {
+			else if (flight.phase() === 2) {
 
 				// If there is an altitude restriction somewhere on the route
 				if (hasRestriction) {
@@ -132,7 +132,7 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 			}
 
 			// Calculates Top of Descent
-			if (phase === 1 && (todCalc || !todDist)) {
+			if (flight.phase() === 1 && (todCalc || !todDist)) {
 				if (hasRestriction) {
 					todDist = distance.route(route.length) - nextDist;
 					todDist += distance.target(targetAlt - cruiseAlt);
@@ -150,4 +150,75 @@ define(['debug', 'distance', 'flight', 'utils', 'waypoints'], function (debug, d
 			if (alt) apModes.altitude.value(alt);
 		}
 	};
+
+	/**
+	 * Gets each plane's flight parameters, for VNAV
+	 *
+	 * @returns {Array} [speed, vertical speed]
+	 */
+	function getFlightParameters () {
+		var spd, vs;
+		var a = geofs.aircraft.instance.animationValue.altitude;
+
+		// Defaults to KIAS mode
+		apModes.speed.isMach(false);
+
+		// CLIMB
+		if (flight.phase() === 0) {
+			var profile = getVNAVProfile().climb;
+
+			for (var i = 0, index = 0; i < profile.length; i++) {
+				if (a > profile[i][0] && a <= profile[i][1]) {
+					index = i;
+					break;
+				}
+			}
+
+			spd = profile[index][2];
+			vs = profile[index][3];
+
+			switchIfMach(spd);
+		}
+
+		// DESCENT
+		else if (flight.phase() === 2) {
+			var profile = getVNAVProfile().descent;
+
+			for (var i = 0, index = 0; i < profile.length; i++) {
+				if (a > profile[i][0] && a <= profile[i][1]) {
+					index = i;
+					break;
+				}
+			}
+
+			spd = profile[index][2];
+			vs = profile[index][3];
+
+			switchIfMach(spd);
+		}
+
+		return [spd, vs];
+	}
+
+	/**
+	 * @private
+	 * Gets the climb/descent profile for VNAV
+	 *
+	 * @returns {Object} The profile needed by VNAV
+	 */
+	function getVNAVProfile () {
+		return geofs.aircraft.instance.setup.fmc
+			|| vnavProfile[geofs.aircraft.instance.id]
+			|| vnavProfile.DEFAULT;
+	}
+
+	/**
+	 * @private
+	 * Checks if the speed input is mach and switches mode
+	 *
+	 * @param {Number} spd The speed to be checked
+	 */
+	function switchIfMach (spd) {
+		if (spd <= 10) apModes.speed.isMach(true);
+	}
 });
