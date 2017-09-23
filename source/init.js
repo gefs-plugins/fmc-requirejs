@@ -8,6 +8,8 @@
 
 (function () {
 
+	if (!window.Promise) throw new Error('Browser is outdated.');
+
 	var VALID_VERSION = 'v0.10.6';
 
 	// Error if FMC is loaded without Autopilot++ or with outdated Autopilot++
@@ -19,7 +21,7 @@
 	// Check if Autopilot++ is installed (version >= v0.10.6)
 	function hasAutopilot () {
 		if (window.autopilot_pp) {
-			var apVersion = autopilot_pp.apVersion.split('.');
+			var apVersion = autopilot_pp.version.split('.');
 			var vlVersion = VALID_VERSION.substring(1).split('.');
 			if (apVersion[0] === vlVersion[0] &&
 				apVersion[1] === vlVersion[1] &&

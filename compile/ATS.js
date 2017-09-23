@@ -1,25 +1,31 @@
 'use strict';
 
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
-var path = require('path');
+const Promise = require('bluebird');
 
-var FILE_NAME = path.join(__dirname, require('./constants').ROOT_FOLDER + 'ATS.txt');
+const fs = Promise.promisifyAll(require('fs'));
+const path = require('path');
 
-var ATS = {};
+const FILE_NAME = path.join(__dirname, `${require('./utils').ROOT_FOLDER}ATS.txt`);
 
-fs.readFileAsync(FILE_NAME, 'utf-8').then(parseFile).then(writeFile);
+let ATS = {};
+
+module.exports = new Promise(resolve => {
+    fs.readFileAsync(FILE_NAME, 'utf-8').then(parseFile).then(writeFile).then(resolve);
+});
+
 
 
 // --
 function parseFile (fileContent) {
+    console.log('Parsing airways data');
+
     fileContent = fileContent.split('\r\n\r\n');
 
-    for (var blocks = 0; blocks < fileContent.length - 1; blocks++) {
-        var fixesList = [];
+    for (let blocks = 0; blocks < fileContent.length - 1; blocks++) {
+        let fixesList = [];
         fileContent[blocks] = fileContent[blocks].split('\r\n');
 
-        for (var lines = 0; lines < fileContent[blocks].length; lines++) {
+        for (let lines = 0; lines < fileContent[blocks].length; lines++) {
             fileContent[blocks][lines] = fileContent[blocks][lines].split(',');
 
             // Ignores the first line (descriptor) when adding fixes

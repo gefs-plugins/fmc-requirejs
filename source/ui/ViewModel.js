@@ -13,9 +13,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
          *************************/
         var _opened = ko.observable(false);
         self.opened = ko.pureComputed({
-            read: function () {
-                return _opened();
-            },
+            read: _opened,
             write: function (boolean, viewmodel) { // jshint unused:false
                 _opened(boolean);
             }
@@ -23,9 +21,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
 
         self.modalWarning = ko.observable();
         log.warn = ko.pureComputed({ // Prints modal warning, disappears after 5 seconds
-    		read: function () {
-    			return self.modalWarning();
-    		},
+    		read: self.modalWarning,
     		write: function (warningText) {
     			self.modalWarning(warningText);
     			setTimeout(function () { self.modalWarning(undefined); }, 5000);
@@ -54,9 +50,11 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
         self.todDist = flight.todDist;
         self.todCalc = flight.todCalc;
 
-        // List of departure runways based on departure airport
+        // List of departure runways based on departure airport and SID
         self.departureRwyList = ko.pureComputed(function () {
-            return get.runway(self.departureAirport());
+            if (self.SIDName())
+                return get.SID(self.departureAirport(), self.departureRwyName(), self.SIDName()).availableRunways;
+            else return get.runway(self.departureAirport(), self.SIDName(), true);
         });
 
         // Selected departure runway and name
@@ -137,9 +135,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
 
         var generatedRouteText = ko.observable();
         self.generateRoute = ko.pureComputed({
-            read: function () {
-                return generatedRouteText();
-            },
+            read: generatedRouteText,
             write: function (isGenerate, viewmodel) { // jshint unused:false
                 var generatedRoute = isGenerate ? waypoints.toRouteString() : undefined;
                 generatedRouteText(generatedRoute);

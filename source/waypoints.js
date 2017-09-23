@@ -27,13 +27,11 @@ define([
 		// Waypoint name
 		var _wpt = ko.observable();
 		self.wpt = ko.pureComputed({
-			read: function () {
-				return _wpt();
-			},
+			read: _wpt,
 			write: function (val) {
 				_wpt(val);
 
-				var coords = get.waypoint(val);
+				var coords = get.waypoint(val, getIndex(self));
 				var isValid = coords && coords[0] && coords[1];
 
 				self.lat(isValid ? coords[0] : undefined, isValid);
@@ -45,9 +43,7 @@ define([
 		// Latitude
 		var _lat = ko.observable();
 		self.lat = ko.pureComputed({
-			read: function () {
-				return _lat();
-			},
+			read: _lat,
 			write: function (val, isValid) {
 				val = formatCoords(val);
 				_lat(!isNaN(val) ? val : undefined);
@@ -58,9 +54,7 @@ define([
 		// Longitude
 		var _lon = ko.observable();
 		self.lon = ko.pureComputed({
-			read: function () {
-				return _lon();
-			},
+			read: _lon,
 			write: function (val, isValid) {
 				val = formatCoords(val);
 				_lon(!isNaN(val) ? val : undefined);
@@ -104,12 +98,7 @@ define([
 	 * @private
 	 */
 	function getInfoFromPrev (self) {
-		// Find which index this Route is
-		for (var index = 0; index < route().length; index++) {
-			if (self === route()[index]) break;
-		}
-
-		var distance, bearing;
+		var distance, bearing, index = getIndex(self);
 
 		// Calculates info from current location
 		// if waypoint is at the start of the list or
@@ -130,6 +119,20 @@ define([
 		}
 
 		return [ Math.round(distance * 10) / 10 || null, Math.round(bearing) || null ];
+	}
+
+	/**
+	 * Finds what index a Route is in the route array
+	 *
+	 * @param {Route} self Current `Route` object
+	 * @returns {Number} Index
+	 */
+	function getIndex (self) {
+		for (var index = 0; index < route().length; index++) {
+			if (self === route()[index]) break;
+		}
+
+		return index;
 	}
 
 	/**
@@ -230,7 +233,7 @@ define([
 			var coords;
 			if (d < 0) coords = d - m;
 			else coords = d + m;
-			return coords;
+			return +coords.toFixed(6);
 		} else return Number(a);
 	}
 
@@ -386,9 +389,12 @@ define([
 	 * 		   -1 if not eligible
 	 */
 	function getNextWaypointWithAltRestriction () {
+		if (nextWaypoint() === null) return -1;
+
 		for (var i = nextWaypoint(); i < route().length; i++) {
 			if (route()[i] && route()[i].alt()) return i;
 		}
+
 		return -1;
 	}
 
@@ -477,8 +483,8 @@ define([
 
 		var newIndex = oldIndex + value;
 
-		// If waypoint is shifting up (negative value)
-		if (value < 0 && newIndex >= 0) {
+		// Makes sure waypoints at the end of the route stays unchanged
+		if ((value < 0 && newIndex >= 0) || (value > 0 && newIndex <= route().length - 1)) {
 			move(oldIndex, newIndex);
 
 			if (nextWaypoint() === newIndex) {
@@ -487,18 +493,6 @@ define([
 				activateWaypoint(newIndex);
 			}
 		}
-
-		// If waypoint is shifting down (positive value)
-		else if (value > 0 && newIndex <= route().length - 1) {
-			move(oldIndex, newIndex);
-
-			if (nextWaypoint() === oldIndex) {
-				activateWaypoint(newIndex);
-			} else if (nextWaypoint() === newIndex) {
-				activateWaypoint(oldIndex);
-			}
-		}
-
 	}
 
 	// Variables

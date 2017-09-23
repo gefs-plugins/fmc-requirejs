@@ -4,18 +4,24 @@ define([
 	'./elements', 'minify!html/button.html', 'minify!html/externaldist.html',
 	'minify!html/modal.html', 'html/tab-contents/main', 'style/main'
 ], function (E, button, externalDist, modal, tabContents, mainCSS) {
-	// Main FMC stylesheet
-	$('<style>').addClass('fmc-stylesheet').text(mainCSS).appendTo('head');
 
-	// Inits Modal dialog
-	$(modal).appendTo('body');
+	return new Promise(function (resolve) {
+		// Main FMC stylesheet
+		$('<style>').addClass('fmc-stylesheet').text(mainCSS).appendTo('head');
 
-	// Inits tab contents
-	$(tabContents).appendTo(E.container.modalContent);
+		// Inits Modal dialog
+		$(modal).appendTo('body');
 
-	// FMC toggle button
-	$(button).insertAfter('button.geofs-f-standard-ui[data-toggle-panel=".geofs-map-list"]');
+		// Inits tab contents
+		$(tabContents).appendTo(E.container.modalContent);
 
-	// External Distance indicator
-	$(externalDist).appendTo('.geofs-ui-bottom');
+		// FMC toggle button
+		$(button).insertAfter('button.geofs-f-standard-ui[data-toggle-panel=".geofs-map-list"]');
+
+		// External Distance indicator
+		$(externalDist).appendTo('.geofs-ui-bottom');
+
+		resolve();
+	});
+
 });

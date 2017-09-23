@@ -1,4 +1,4 @@
-div.fmc-arr-container .fmc-arr__input-label {
+div.fmc-dep-arr-container .fmc-dep-arr__input-label {
     margin-left: 50px;
     font-size: 16px;
     font-weight: bold;
@@ -6,14 +6,14 @@ div.fmc-arr-container .fmc-arr__input-label {
     cursor: default;
 }
 
-div.fmc-arr-container td div {
+div.fmc-dep-arr-container td div {
     width: 140px;
     margin-left: 10px;
     position: relative;
 }
 
-div.fmc-arr-container .mdl-textfield__input,
-div.fmc-arr-container label {
+div.fmc-dep-arr-container .mdl-textfield__input,
+div.fmc-dep-arr-container label {
     width: 137px;
 }
 

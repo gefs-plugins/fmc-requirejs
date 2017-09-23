@@ -3,4 +3,4 @@ shortName = "fmc"
 crxName = "fmc_requirejs"
 
 [requirejs]
-mainConfigFile = "./build-config.js"
+mainConfigFile = "./build.json"

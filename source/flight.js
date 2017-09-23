@@ -1,12 +1,11 @@
 "use strict";
 
 define([
-	'knockout', 'get', 'nav/LNAV', 'nav/VNAV', 'vnav-profile', 'exports'
-], function (ko, get, lnav, vnav, vnavProfile, exports) {
+	'knockout', 'get', 'nav/LNAV', 'nav/VNAV', 'exports'
+], function (ko, get, lnav, vnav, exports) {
 
 	// Autopilot++ Dependencies
-	var apModes = autopilot_pp.require('autopilot').modes,
-		icao = autopilot_pp.require('json!data/icaoairports.json');
+	var icao = autopilot_pp.require('json!data/icaoairports.json');
 
 	// Top Of Descent distance
 	var todDist = ko.observable();
@@ -14,9 +13,7 @@ define([
 	// If VNAV is enabled
 	var _vnavEnabled = ko.observable(false);
 	var vnavEnabled = ko.pureComputed({
-		read: function () {
-			return _vnavEnabled();
-		},
+		read: _vnavEnabled,
 		write: function (boolean) {
 			var set = _vnavEnabled;
 
@@ -46,18 +43,23 @@ define([
 
 	// List of runways and SIDs
 	var _departureRwys = ko.pureComputed(function () {
-		return get.runway(departure.airport());
+		var depArpt = departure.airport();
+		var depSID = departure.SID() ? departure.SID().name : undefined;
+
+		return get.runway(depArpt, depSID, true);
 	});
 	var _SIDs = ko.pureComputed(function () {
-		return get.SID(departure.airport(), departure.runway() ? departure.runway().runway : false);
+		var depArpt = departure.airport();
+		var depRwy = departure.runway() ? departure.runway().runway : undefined;
+		var depSID = departure.SID() ? departure.SID().name : undefined;
+
+		return get.SID(depArpt, depRwy, depSID);
 	});
 
 	var departure = {
 		// Departure airport name
 		airport: ko.pureComputed({
-			read: function () {
-				return _departureAirport();
-			},
+			read: _departureAirport,
 			write: function (airport) {
 				var oldAirport = _departureAirport();
 				var coords = icao[airport];
@@ -84,9 +86,7 @@ define([
 
 		// Departure runway data
 		runway: ko.pureComputed({
-			read: function () {
-				return _selectedDepartureRwy();
-			},
+			read: _selectedDepartureRwy,
 			write: function (index) {
 				var rwyData = _departureRwys()[index];
 
@@ -100,9 +100,7 @@ define([
 
 		// SID data
 		SID: ko.pureComputed({
-			read: function () {
-				return _selectedSID();
-			},
+			read: _selectedSID,
 			write: function (index) {
 				var SIDData = _SIDs()[index];
 				_selectedSID(SIDData);
@@ -130,9 +128,7 @@ define([
 	var arrival = {
 		// Arrival airport name
 		airport: ko.pureComputed({
-			read: function () {
-				return _arrivalAirport();
-			},
+			read: _arrivalAirport,
 			write: function (airport) {
 				var oldAirport = _arrivalAirport();
 				var coords = icao[airport];
@@ -158,9 +154,7 @@ define([
 
 		// Arrival runway data
 		runway: ko.pureComputed({
-			read: function () {
-				return _selectedArrivalRwy();
-			},
+			read: _selectedArrivalRwy,
 			write: function (index) {
 				var rwyData = _arrivalRwys()[index];
 
@@ -174,9 +168,7 @@ define([
 
 		// STAR data
 		STAR: ko.pureComputed({
-			read: function () {
-				return _selectedSTAR();
-			},
+			read: _selectedSTAR,
 			write: function (index) {
 				var STARData = _STARs()[index];
 				_selectedSTAR(STARData);
@@ -191,9 +183,7 @@ define([
 	// Cruise altitude
 	var _cruiseAlt = ko.observable();
 	var cruiseAlt = ko.pureComputed({
-		read: function () {
-			return _cruiseAlt();
-		},
+		read: _cruiseAlt,
 		write: function (val) {
 			var set = _cruiseAlt;
 
@@ -207,9 +197,7 @@ define([
 	// Flight phase
 	var _phase = ko.observable(0);
 	var phase = ko.pureComputed({
-		read: function () {
-			return _phase();
-		},
+		read: _phase,
 		write: function (index) {
 			if (phaseLocked() || index > 3) return;
 			_phase(index);
@@ -218,9 +206,7 @@ define([
 
 	var _phaseLocked = ko.observable(false);
 	var phaseLocked = ko.pureComputed({
-		read: function () {
-			return _phaseLocked();
-		},
+		read: _phaseLocked,
 		write: function (boolean, viewmodel) { // jshint unused:false
 			_phaseLocked(boolean);
 		}
@@ -232,79 +218,6 @@ define([
 	// Arrival Airport field altitude
 	var fieldElev = ko.observable();
 
-	/**
-	 * Gets each plane's flight parameters, for VNAV
-	 *
-	 * @returns {Array} [speed, vertical speed]
-	 */
-	function getFlightParameters () {
-		var spd, vs;
-		var a = geofs.aircraft.instance.animationValue.altitude;
-
-		// Defaults to KIAS mode
-		apModes.speed.isMach(false);
-
-		// CLIMB
-		if (phase() === 0) {
-			var profile = getVNAVProfile().climb;
-
-			for (var i = 0, index = 0; i < profile.length; i++) {
-				if (a > profile[i][0] && a <= profile[i][1]) {
-					index = i;
-					break;
-				}
-			}
-
-			spd = profile[index][2];
-			vs = profile[index][3];
-
-			switchIfMach(spd);
-		}
-
-		// DESCENT
-		else if (phase() === 2) {
-			var profile = getVNAVProfile().descent;
-
-			for (var i = 0, index = 0; i < profile.length; i++) {
-				if (a > profile[i][0] && a <= profile[i][1]) {
-					index = i;
-					break;
-				}
-			}
-
-			spd = profile[index][2];
-			vs = profile[index][3];
-
-			switchIfMach(spd);
-		}
-
-		return [spd, vs];
-	}
-
-	/**
-	 * @private
-	 * Gets the climb/descent profile for VNAV
-	 *
-	 * @returns {Object} The profile needed by VNAV
-	 */
-	function getVNAVProfile () {
-		return geofs.aircraft.instance.setup.fmc
-			|| vnavProfile[geofs.aircraft.instance.id]
-			|| vnavProfile.DEFAULT;
-	}
-
-	/**
-	 * @private
-	 * Checks if the speed input is mach and switches mode
-	 *
-	 * @param {Number} spd The speed to be checked
-	 */
-	function switchIfMach (spd) {
-		if (spd <= 10) apModes.speed.isMach(true);
-	}
-
-
-	// Variables
 	exports.todDist = todDist;
 	exports.vnavEnabled = vnavEnabled;
 	exports.spdControl = spdControl;
@@ -316,8 +229,5 @@ define([
 	exports.phaseLocked = phaseLocked;
 	exports.todCalc = todCalc;
 	exports.fieldElev = fieldElev;
-
-	// Functions
-	exports.parameters = getFlightParameters;
 
 });

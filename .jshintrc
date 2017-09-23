@@ -9,11 +9,12 @@
   , "define": true
   , "require": true
   , "requirejs": true
+  , "Promise": true
   }
 , "laxcomma": true
 , "laxbreak": true
 , "multistr": true
-, "eqnull": true
+, "eqeqeq": true
 , "smarttabs": true
 , "globalstrict": true
 , "jquery": true

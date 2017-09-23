@@ -1,4 +1,7 @@
 { "globals":
     { "module": true },
-    "node": true
+    "node": true,
+    "predef": [ "-Promise" ],
+    "varstmt": true,
+    "esnext": 6
 }

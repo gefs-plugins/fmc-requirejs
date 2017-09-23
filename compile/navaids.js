@@ -1,28 +1,30 @@
 'use strict';
 
-var fs = require('fs');
-var csv = require('csv-parser');
-var path = require('path');
+const Promise = require('bluebird');
 
-var PATH = require('./constants').ROOT_FOLDER + 'Navaids.csv';
-var FILE_NAME = path.join(__dirname, PATH);
+const fs = require('fs');
+const csv = require('csv-parser');
+const path = require('path');
 
-var navaids = {};
+const PATH = `${require('./utils').ROOT_FOLDER}Navaids.csv`;
+const FILE_NAME = path.join(__dirname, PATH);
 
-fs.createReadStream(FILE_NAME)
-    .pipe(csv())
-    .on('data', function (vor) {
-        var arr = [ +vor.lat, +vor.lon, vor.name ];
+module.exports = new Promise(resolve => {
+    console.log('Parsing navaids data');
 
-        if (navaids[vor.navaid] && Array.isArray(navaids[vor.navaid]))
-            navaids[vor.navaid].push(arr);
-        else navaids[vor.navaid] = [arr];
-    }).on('end', function () {
-        var stringified = JSON.stringify(navaids);
-        // stringified = stringified.replace(/\],"/g, ']\n, "')
-        //     .replace(/,(?=[-\d])/g, ', ')
-        //     .replace(/:\[/g, ': [')
-        //     .replace(/\],\[/g, '], [');
+    let navaids = {};
+    fs.createReadStream(FILE_NAME)
+        .pipe(csv())
+        .on('data', vor => {
+            let arr = [ +vor.lat, +vor.lon, vor.name ];
 
-        fs.writeFileSync('compiled-data/navaids.json', stringified);
-    });
+            if (navaids[vor.navaid] && Array.isArray(navaids[vor.navaid]))
+                navaids[vor.navaid].push(arr);
+            else navaids[vor.navaid] = [ arr ];
+        }).on('end', () => {
+            const stringified = JSON.stringify(navaids);
+
+            fs.writeFileSync('compiled-data/navaids.json', stringified);
+            resolve();
+        });
+});

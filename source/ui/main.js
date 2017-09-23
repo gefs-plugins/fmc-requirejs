@@ -1,30 +1,24 @@
 "use strict";
 
 define([
-	'knockout', './ViewModel', 'log', 'waypoints',
-	'nav/progress', './elements', 'redefine', './position'
-], function (ko, ViewModel, log, waypoints, progress, E) {
+	'knockout', './ViewModel', './position', 'log',
+	'waypoints', 'nav/progress', './elements', 'redefine'
+], function (ko, ViewModel, positioningFMC, log, waypoints, progress, E) {
 
-	// Checks if UI has been properly placed
-	var timer = setInterval(function () {
-		if ($(E.modal)[0] && $(E.btn.fmcBtn)) {
-			clearInterval(timer);
-			loadFMC();
-		}
-	}, 4);
+	// If UI is properly placed, load FMC
+	positioningFMC.then(loadFMC);
 
 	// FMC actions init function
 	function loadFMC () {
 		var modal = E.modal,
 			container = E.container,
-			btn = E.btn,
-			textarea = E.textarea;
+			btn = E.btn;
 
 		// Applies knockout bindings
 		var vm = window.debugVM = new ViewModel();
 		ko.applyBindings(vm, $(modal)[0]);
 		ko.applyBindings(vm, $(btn.fmcBtn)[1]);
-		ko.applyBindings(vm, $('.fmc-prog-info.geofs-f-standard-ui')[0]);
+		ko.applyBindings(vm, $(container.uiBottomProgInfo)[0]);
 
 		// Adds one input field on start
 		waypoints.addWaypoint();
@@ -55,10 +49,6 @@ define([
 			$that.removeClass(c);
 			$this.addClass(c);
 		});
-
-		// Disables editing on the generated route textarea
-		$(textarea.generateRte).prop('disabled', true);
-
 
 		/* ---- All Initializations ---- */
 

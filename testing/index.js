@@ -1,13 +1,13 @@
+/* jshint node:true, varstmt:true, esversion:6 */
 "use strict";
 
-// jshint node:true
-var heads = require('robohydra').heads;
-var RoboHydraHeadFilesystem = heads.RoboHydraHeadFilesystem;
-var RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
-var RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
-var path = require('path');
-var script = '<script data-main="fmc/source/init" src="/fmc/node_modules/requirejs/require.js"></script>\
-	<script src="fmc/source/config.js"></script></head>';
+const heads = require('robohydra').heads;
+const RoboHydraHeadFilesystem = heads.RoboHydraHeadFilesystem;
+const RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
+const RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
+const path = require('path');
+
+const script = '<script src="fmc/testing/script.js"></script></head>';
 
 exports.getBodyParts = function () {
 	return {
@@ -19,9 +19,7 @@ exports.getBodyParts = function () {
 
 			new RoboHydraHeadFilter({
 				path: '/geofs.php*',
-				filter: function (buffer) {
-					return buffer.toString().replace('</head>', script);
-				}
+				filter: buffer => buffer.toString().replace('</head>', script)
 			}),
 
 			new RoboHydraHeadProxy({
