@@ -33,12 +33,12 @@ define([
 			if (hasRestriction) {
 				targetAlt = route[next].alt();
 				deltaAlt = targetAlt - currentAlt;
-				nextDist = distance.route(next);
+				nextDist = distance.route(next + 1);
 				targetDist = distance.target(deltaAlt);
 				debug.log('targetAlt: ' + targetAlt + ', deltaAlt: ' + deltaAlt + ', nextDist: ' + nextDist + ', targetDist: ' + targetDist);
 			}
 
-			var spd, vs, alt;
+			var spd = params[0], vs, alt;
 
 			/**********************
 			 * Flight Phase Logic *
@@ -80,8 +80,6 @@ define([
 			else flight.phase(0);
 
 			// ==============================
-
-			if (flight.spdControl()) spd = params[0];
 
 			// If the aircraft is climbing
 			if (flight.phase() === 0) {
@@ -160,9 +158,6 @@ define([
 		var spd, vs;
 		var a = geofs.aircraft.instance.animationValue.altitude;
 
-		// Defaults to KIAS mode
-		apModes.speed.isMach(false);
-
 		// CLIMB
 		if (flight.phase() === 0) {
 			var profile = getVNAVProfile().climb;
@@ -174,10 +169,12 @@ define([
 				}
 			}
 
-			spd = profile[index][2];
-			vs = profile[index][3];
+			if (flight.spdControl()) {
+				spd = profile[index][2];
+				switchSpeedMode(spd);
+			}
 
-			switchIfMach(spd);
+			vs = profile[index][3];
 		}
 
 		// DESCENT
@@ -191,10 +188,12 @@ define([
 				}
 			}
 
-			spd = profile[index][2];
-			vs = profile[index][3];
+			if (flight.spdControl()) {
+				spd = profile[index][2];
+				switchSpeedMode(spd);
+			}
 
-			switchIfMach(spd);
+			vs = profile[index][3];
 		}
 
 		return [spd, vs];
@@ -218,7 +217,8 @@ define([
 	 *
 	 * @param {Number} spd The speed to be checked
 	 */
-	function switchIfMach (spd) {
+	function switchSpeedMode (spd) {
 		if (spd <= 10) apModes.speed.isMach(true);
+		else apModes.speed.isMach(false);
 	}
 });
