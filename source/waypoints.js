@@ -388,9 +388,12 @@ define([
 	 * 		   -1 if not eligible
 	 */
 	function getNextWaypointWithAltRestriction () {
+		if (nextWaypoint() === null) return -1;
+
 		for (var i = nextWaypoint(); i < route().length; i++) {
 			if (route()[i] && route()[i].alt()) return i;
 		}
+
 		return -1;
 	}
 
