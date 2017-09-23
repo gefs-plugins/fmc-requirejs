@@ -143,13 +143,14 @@ define([
 			}
 
 			// Updates SPD, VS, and ALT in Autopilot++ if new values exist
-			if (spd) apModes.speed.value(spd);
-			if (vs) apModes.vs.value(vs);
-			if (alt) apModes.altitude.value(alt);
+			if (spd !== undefined) apModes.speed.value(spd);
+			if (vs !== undefined) apModes.vs.value(vs);
+			if (alt !== undefined) apModes.altitude.value(alt);
 		}
 	};
 
 	/**
+	 * @private
 	 * Gets each plane's flight parameters, for VNAV
 	 *
 	 * @returns {Array} [speed, vertical speed]
@@ -162,7 +163,7 @@ define([
 		if (flight.phase() === 0) {
 			var profile = getVNAVProfile().climb;
 
-			for (var i = 0, index = 0; i < profile.length; i++) {
+			for (var index, i = 0; i < profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
 					break;
@@ -171,29 +172,31 @@ define([
 
 			if (flight.spdControl()) {
 				spd = profile[index][2];
+				if (index < profile.length - 1) vs = profile[index][3];
 				switchSpeedMode(spd);
 			}
-
-			vs = profile[index][3];
 		}
 
 		// DESCENT
 		else if (flight.phase() === 2) {
 			var profile = getVNAVProfile().descent;
 
-			for (var i = 0, index = 0; i < profile.length; i++) {
+			for (var index, i = 0; i < profile.length; i++) {
 				if (a > profile[i][0] && a <= profile[i][1]) {
 					index = i;
 					break;
 				}
 			}
 
-			if (flight.spdControl()) {
+			var belowLastAlt = index === undefined;
+
+			// If current alt below lowest alt in profile
+			// SPD and V/S will not be restricted
+			if (flight.spdControl() && !belowLastAlt) {
 				spd = profile[index][2];
+				vs = profile[index][3];
 				switchSpeedMode(spd);
 			}
-
-			vs = profile[index][3];
 		}
 
 		return [spd, vs];
@@ -218,6 +221,7 @@ define([
 	 * @param {Number} spd The speed to be checked
 	 */
 	function switchSpeedMode (spd) {
+		if (!spd) return;
 		if (spd <= 10) apModes.speed.isMach(true);
 		else apModes.speed.isMach(false);
 	}
