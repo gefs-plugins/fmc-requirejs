@@ -2,15 +2,15 @@
 
 define(['ui/elements'], function (E) {
 
-    // Production flag to determine if debug info is printed
-    var PRODUCTION = false;
-
     // Stops event propagation
     function stopPropagation (event) {
         event.stopImmediatePropagation();
     }
 
     return {
+        // If FMC is production
+        PRODUCTION: false,
+
         /**
          * Stops input key propagation
          */
@@ -25,7 +25,7 @@ define(['ui/elements'], function (E) {
          * Logs debug statement into console when needed if not PRODUCTION
          */
         log: function (text) {
-            if (!PRODUCTION) console.log(text);
+            if (!this.PRODUCTION) console.log(text);
         }
     };
 });

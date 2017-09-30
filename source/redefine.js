@@ -1,6 +1,6 @@
 "use strict";
 
-define(['log'], function (log) {
+define(['debug', 'log'], function (debug, log) {
 
 	// Adds a confirm window to prevent accidental reset
 	geofs.resetFlight = function () {
@@ -69,5 +69,11 @@ define(['log'], function (log) {
 			controls.setPartAnimationDelta(controls.flaps);
 		}
 	};
+
+	// Fixes google map API problem
+	if (!debug.PRODUCTION) {
+		google = {};
+		$('<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBlCxVOtJO6rKOmWnIhHSWx2EHzU_7hakQ"></script>').appendTo('head');
+	}
 
 });
