@@ -43,12 +43,10 @@ define(['debug', 'log'], function (debug, log) {
 		if (controls.flaps.target > 0) {
 			controls.flaps.target--;
 
-			log.update('Flaps raised to ' + controls.flaps.target);
-
-			// TODO figure out what this statement is
 			if (geofs.aircraft.instance.setup.flapsPositions) {
 				controls.flaps.positionTarget = geofs.aircraft.instance.setup.flapsPositions[controls.flaps.target];
-			}
+				log.update('Flaps raised to ' + controls.flaps.positionTarget);
+			} else log.update('Flaps raised to ' + controls.flaps.target);
 
 			controls.setPartAnimationDelta(controls.flaps);
 		}
@@ -59,22 +57,13 @@ define(['debug', 'log'], function (debug, log) {
 		if (controls.flaps.target < geofs.aircraft.instance.setup.flapsSteps) {
 			controls.flaps.target++;
 
-			log.update('Flaps lowered to ' + controls.flaps.target);
-
-			// TODO figure out what this statement is
 			if (geofs.aircraft.instance.setup.flapsPositions) {
 				controls.flaps.positionTarget = geofs.aircraft.instance.setup.flapsPositions[controls.flaps.target];
-			}
+				log.update('Flaps lowered to ' + controls.flaps.positionTarget);
+			} log.update('Flaps lowered to ' + controls.flaps.target);
 
 			controls.setPartAnimationDelta(controls.flaps);
 		}
 	};
-
-	// Fixes google map API problem
-	if (!debug.PRODUCTION) {
-		google = {};
-		$('<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBlCxVOtJO6rKOmWnIhHSWx2EHzU_7hakQ"></script>').appendTo('head');
-		ui.createMap();
-	}
 
 });
