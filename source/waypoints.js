@@ -32,9 +32,12 @@ define([
 				var coords = get.waypoint(val, getIndex(self));
 				var isValid = coords && coords[0] && coords[1];
 
-				self.lat(isValid ? coords[0] : undefined, isValid);
-				self.lon(isValid ? coords[1] : undefined, isValid);
+				self.lat(isValid ? coords[0] : self.lat(), isValid);
+				self.lon(isValid ? coords[1] : self.lon(), isValid);
 				self.info(isValid ? coords[2] : undefined);
+
+				if (!isValid) self.marker(val);
+				else self.marker(val);
 			}
 		});
 
@@ -46,6 +49,7 @@ define([
 				val = formatCoords(val);
 				_lat(!isNaN(val) ? val : undefined);
 				self.valid(Boolean(isValid));
+				self.marker(self.wpt(), { lat: val, lng: self.lon() });
 			}
 		});
 
@@ -57,6 +61,7 @@ define([
 				val = formatCoords(val);
 				_lon(!isNaN(val) ? val : undefined);
 				self.valid(Boolean(isValid));
+				self.marker(self.wpt(), { lat: self.lat(), lng: val });
 			}
 		});
 
@@ -79,19 +84,16 @@ define([
 			return getInfoFromPrev(self)[1];
 		});
 
+		// Waypoint marker =
 		var _marker = ko.observable(new google.maps.Marker({
 			map: ui.map
 		}));
 		self.marker = ko.pureComputed({
 			read: _marker,
-			write: function() {
-				if (self.wpt()) {
-					_marker.title = self.wpt();
-				}
-				if (self.lat() && self.lon()) {
-					_marker.position.lat = self.lat();
-					_marker.position.lng = self.lon();
-				}
+			write: function (wptName, coords) {
+				_marker().setTitle(wptName);
+				if (coords && !isNaN(coords.lat) && !isNaN(coords.lng))
+					_marker().setPosition(coords);
 			}
 		});
 
@@ -248,7 +250,7 @@ define([
 			if (d < 0) coords = d - m;
 			else coords = d + m;
 			return +coords.toFixed(6);
-		} else return Number(a);
+		} else return a === '' ? NaN : Number(a);
 	}
 
 	/**
@@ -291,7 +293,8 @@ define([
 			return;
 		}
 
-		route.removeAll();
+		// Removes all waypoint
+		removeWaypoint(true);
 
 		// Departure airport input/clear
 		if (departure) {
@@ -336,19 +339,21 @@ define([
 	 * @param {Object} [data] Passed in by knockout
 	 * @param {Object} [event] Passed in by knockout
 	 */
-	function removeWaypoint (n, data, event) { // jshint unused:false
-		if (event.shiftKey) {
+	function removeWaypoint (n, data, event) { // jshint ignore:line
+		var isRemoveAll = event && event.shiftKey || typeof n === 'boolean';
+		if (isRemoveAll) {
 			route().forEach(function(e) {
 				e.marker().setMap(null);
 			});
-			route.removeAll(); // Shift-click: removes all waypoints
+			route.removeAll();
 		}
-		else route.splice(n, 1);
+		else {
+			map.path.removeAt(n);
+	        route()[n].marker().setMap(null);
+			route.splice(n, 1);
+		}
 
-		map.path.removeAt(n);
-        route.marker().setMap(null);
-
-		if (nextWaypoint() === n || event.shiftKey) {
+		if (nextWaypoint() === n || isRemoveAll) {
 			activateWaypoint(false);
 		} else if (nextWaypoint() === n + 1) activateWaypoint(n);
 		else if (nextWaypoint() > n) nextWaypoint(nextWaypoint() - 1);
@@ -457,7 +462,7 @@ define([
 
 		if (arr) {
 			// Clears all
-			route.removeAll();
+			removeWaypoint(true);
 
 			var rte = arr[3];
 

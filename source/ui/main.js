@@ -1,9 +1,9 @@
 "use strict";
 
 define([
-	'knockout', './ViewModel', './position', 'log',
+	'knockout', './ViewModel', './position', 'debug', 'log',
 	'waypoints', 'nav/progress', './elements', 'redefine'
-], function (ko, ViewModel, positioningFMC, log, waypoints, progress, E) {
+], function (ko, ViewModel, positioningFMC, debug, log, waypoints, progress, E) {
 
 	// If UI is properly placed, load FMC
 	positioningFMC.then(loadFMC);
@@ -21,6 +21,7 @@ define([
 		ko.applyBindings(vm, $(container.uiBottomProgInfo)[0]);
 
 		// Adds one input field on start
+		ui.createMap();
 		waypoints.addWaypoint();
 
 		/* ---- UI actions binding ---- */

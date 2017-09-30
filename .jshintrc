@@ -6,6 +6,7 @@
   , "autopilot_pp": true
   , "componentHandler": true
   , "google": true
+  , "ui": true
   , "define": true
   , "require": true
   , "requirejs": true

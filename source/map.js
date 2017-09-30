@@ -1,18 +1,15 @@
 "use strict";
 
-define(['knockout', 'map/style'], function (ko, style) {
-
-    var map = ui.map;
+define(function () {
     var polyline = new google.maps.Polyline({
         strokeColor: '#000000',
         strokeOpacity: 1.0,
         strokeWeight: 3
     });
-    var path = polyline.getPath();
-    polyline.setMap(map);
+
+    polyline.setMap(ui.map);
 
     return {
-        path: path
+        path: polyline.getPath()
     };
-
 });
