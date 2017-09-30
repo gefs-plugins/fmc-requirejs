@@ -1,7 +1,7 @@
 "use strict";
 
 define([
-	'knockout', 'debug', 'get', 'flight', 'log', 'map', 'utils', 'nav/lnav', 'nav/progress', 'exports'
+	'knockout', 'debug', 'get', 'flight', 'log', 'map', 'utils', 'nav/LNAV', 'nav/progress', 'exports'
 ], function (ko, debug, get, flight, log, map, utils, lnav, progress, exports) {
 
 	// Autopilt++ Dependencies
