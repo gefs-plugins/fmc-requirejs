@@ -1,8 +1,8 @@
 "use strict";
 
 define([
-	'knockout', 'debug', 'get', 'flight', 'log', 'utils', 'nav/lnav', 'nav/progress', 'exports'
-], function (ko, debug, get, flight, log, utils, lnav, progress, exports) {
+	'knockout', 'debug', 'get', 'flight', 'log', 'map', 'utils', 'nav/lnav', 'nav/progress', 'exports'
+], function (ko, debug, get, flight, log, map, utils, lnav, progress, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -12,14 +12,13 @@ define([
 	var route = ko.observableArray();
 	var nextWaypoint = ko.observable(null);
 
-
 	/**
-	 * Route object to distinguish between each route item
+	 * Waypoint object to distinguish between each route item
 	 *
 	 * @private
 	 * @constructor
 	 */
-	var Route = function () {
+	var Waypoint = function () {
 
 		var self = this;
 
@@ -80,6 +79,22 @@ define([
 			return getInfoFromPrev(self)[1];
 		});
 
+		var _marker = ko.observable(new google.maps.Marker({
+			map: ui.map
+		}));
+		self.marker = ko.pureComputed({
+			read: _marker,
+			write: function() {
+				if (self.wpt()) {
+					_marker.title = self.wpt();
+				}
+				if (self.lat() && self.lon()) {
+					_marker.position.lat = self.lat();
+					_marker.position.lng = self.lon();
+				}
+			}
+		});
+
 	};
 
 	// Makes llaLocation an observable for automatic data updates
@@ -91,7 +106,7 @@ define([
 	/**
 	 * Computes heading and bearing information from previous waypoint to current
 	 *
-	 * @param {Route} self Current `Route` object
+	 * @param {Waypoint} self Current `Waypoint` object
 	 * @returns {Array} [distance, bearing]
 	 *
 	 * @private
@@ -121,9 +136,9 @@ define([
 	}
 
 	/**
-	 * Finds what index a Route is in the route array
+	 * Finds what index a Waypoint is in the route array
 	 *
-	 * @param {Route} self Current `Route` object
+	 * @param {Waypoint} self Current `Waypoint` object
 	 * @returns {Number} Index
 	 */
 	function getIndex (self) {
@@ -309,7 +324,7 @@ define([
 	 * Adds 1 waypoint input field to end of waypoints list
 	 */
 	function addWaypoint () {
-		route.push(new Route());
+		route.push(new Waypoint());
 		if (typeof componentHandler === 'object') componentHandler.upgradeDom();
 		debug.stopPropagation();
 	}
@@ -322,8 +337,16 @@ define([
 	 * @param {Object} [event] Passed in by knockout
 	 */
 	function removeWaypoint (n, data, event) { // jshint unused:false
-		if (event.shiftKey) route.removeAll(); // Shift-click: removes all waypoints
+		if (event.shiftKey) {
+			route().forEach(function(e) {
+				e.marker().setMap(null);
+			});
+			route.removeAll(); // Shift-click: removes all waypoints
+		}
 		else route.splice(n, 1);
+
+		map.path.removeAt(n);
+        route.marker().setMap(null);
 
 		if (nextWaypoint() === n || event.shiftKey) {
 			activateWaypoint(false);

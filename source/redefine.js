@@ -74,6 +74,7 @@ define(['debug', 'log'], function (debug, log) {
 	if (!debug.PRODUCTION) {
 		google = {};
 		$('<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBlCxVOtJO6rKOmWnIhHSWx2EHzU_7hakQ"></script>').appendTo('head');
+		ui.createMap();
 	}
 
 });

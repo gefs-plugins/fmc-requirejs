@@ -8,3 +8,4 @@ package
 ._*
 .idea
 *.log
+package-lock.json
