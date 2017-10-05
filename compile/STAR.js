@@ -26,14 +26,8 @@ fileList.forEach(file => {
     }));
 });
 
-module.exports = {
-    promises: promises,
-    writeFile: writeFile
-};
-// new Promise(resolve => {
-//     console.log('Parsing STAR data');
-//     Promise.all(promises).then(writeFile).then(resolve);
-// });
+console.log('Parsing STAR data');
+Promise.all(promises).then(writeFile);
 
 // Callback functions
 function parseFile (fileContent, airportName) {

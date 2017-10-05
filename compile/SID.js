@@ -26,15 +26,8 @@ fileList.forEach(file => {
     }));
 });
 
-// new Promise(resolve => {
-//     console.log('Parsing SID data');
-//     Promise.all(promises).then(writeFile).then(resolve);
-// });
-
-module.exports = {
-    promises: promises,
-    writeFile: writeFile
-};
+console.log('Parsing SID data');
+Promise.all(promises).then(writeFile);
 
 // Callback functions
 function parseFile (fileContent, airportName) {
