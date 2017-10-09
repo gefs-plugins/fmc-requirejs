@@ -92,8 +92,10 @@ define([
 			read: _marker,
 			write: function (wptName, coords) {
 				_marker().setTitle(wptName);
-				if (coords && !isNaN(coords.lat) && !isNaN(coords.lng))
+				if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
 					_marker().setPosition(coords);
+					map.path.insertAt(getIndex(self), new google.maps.LatLng(coords.lat, coords.lng));
+				}
 			}
 		});
 
@@ -346,10 +348,11 @@ define([
 				e.marker().setMap(null);
 			});
 			route.removeAll();
+			map.path.clear();
 		}
 		else {
-			map.path.removeAt(n);
 	        route()[n].marker().setMap(null);
+			map.path.removeAt(n);
 			route.splice(n, 1);
 		}
 

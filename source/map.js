@@ -7,9 +7,8 @@ define(function () {
         strokeWeight: 3
     });
 
-    polyline.setMap(ui.map);
-
     return {
+        polyline: polyline,
         path: polyline.getPath()
     };
 });

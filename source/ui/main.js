@@ -2,8 +2,8 @@
 
 define([
 	'knockout', './ViewModel', './position', 'debug', 'log',
-	'waypoints', 'nav/progress', './elements', 'redefine'
-], function (ko, ViewModel, positioningFMC, debug, log, waypoints, progress, E) {
+	'map', 'waypoints', 'nav/progress', './elements', 'redefine'
+], function (ko, ViewModel, positioningFMC, debug, log, map, waypoints, progress, E) {
 
 	// If UI is properly placed, load FMC
 	positioningFMC.then(loadFMC);
@@ -21,8 +21,12 @@ define([
 		ko.applyBindings(vm, $(container.uiBottomProgInfo)[0]);
 
 		// Adds one input field on start
+		/* HACK: toggling map panel before creation is less buggy */
+		ui.panel.toggle('.geofs-map-list');
 		ui.createMap();
+		map.polyline.setMap(ui.map);
 		waypoints.addWaypoint();
+		ui.panel.toggle('.geofs-map-list');
 
 		/* ---- UI actions binding ---- */
 
