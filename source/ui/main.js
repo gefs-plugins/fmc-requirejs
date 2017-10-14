@@ -15,18 +15,25 @@ define([
 			btn = E.btn;
 
 		// Applies knockout bindings
-		var vm = window.debugVM = new ViewModel();
+		var vm = new ViewModel();
 		ko.applyBindings(vm, $(modal)[0]);
 		ko.applyBindings(vm, $(btn.fmcBtn)[1]);
 		ko.applyBindings(vm, $(container.uiBottomProgInfo)[0]);
 
-		// Adds one input field on start
-		/* HACK: toggling map panel before creation is less buggy */
-		ui.panel.toggle('.geofs-map-list');
-		ui.createMap();
-		map.polyline.setMap(ui.map);
-		waypoints.addWaypoint();
-		ui.panel.toggle('.geofs-map-list');
+		// Inits waypoint field
+		// HACK: opens nav tab to make sure map imagery loads
+		new Promise(function (resolve) {
+			ui.panel.toggle('.geofs-map-list');
+			ui.createMap();
+			var timer = setInterval(function () {
+				if (!ui.map) return;
+				clearInterval(timer);
+				resolve();
+			}, 250);
+		}).then(function () {
+			map.polyline.setMap(ui.map);
+			waypoints.addWaypoint();
+		});
 
 		/* ---- UI actions binding ---- */
 
@@ -36,7 +43,7 @@ define([
 				$(modal).removeClass('opened');
 		});
 
-		// TODO Move to knockout?
+		// IDEA Move to knockout?
 		// Modal tab contents: toggle
 		$(container.tabBar).on('click', 'a', function (event) {
 			event.preventDefault();
