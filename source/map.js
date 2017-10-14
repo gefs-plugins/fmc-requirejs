@@ -2,9 +2,9 @@
 
 define(function () {
     var polyline = new google.maps.Polyline({
-        strokeColor: '#000000',
+        strokeColor: '#7b7c14',
         strokeOpacity: 1.0,
-        strokeWeight: 3
+        strokeWeight: 2
     });
 
     return {

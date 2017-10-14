@@ -86,7 +86,13 @@ define([
 
 		// Waypoint marker =
 		var _marker = ko.observable(new google.maps.Marker({
-			map: ui.map
+			map: ui.map,
+			icon: {
+				url: PAGE_PATH + 'fmc/images/waypoint.png',
+				scaledSize: new google.maps.Size(24, 24),
+				anchor: new google.maps.Point(12, 12),
+				zIndex: 1000
+			}
 		}));
 		self.marker = ko.pureComputed({
 			read: _marker,
@@ -94,7 +100,12 @@ define([
 				_marker().setTitle(wptName);
 				if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
 					_marker().setPosition(coords);
-					map.path.insertAt(getIndex(self), new google.maps.LatLng(coords.lat, coords.lng));
+					var index = getIndex(self);
+
+					// If path at this index exists, amend it
+					if (map.path.getArray()[index])
+						map.path.setAt(index, new google.maps.LatLng(coords.lat, coords.lng));
+					else map.path.insertAt(index, new google.maps.LatLng(coords.lat, coords.lng));
 				}
 			}
 		});
@@ -174,6 +185,11 @@ define([
 
 		// Sets tempRoute as the new route
 		route(tempRoute);
+
+		// Moves map path
+		var curLatLng = map.path.getAt(index1);
+		map.path.removeAt(index1);
+		map.path.insertAt(index2, curLatLng);
 	}
 
 	/**
