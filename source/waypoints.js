@@ -84,16 +84,18 @@ define([
 			return getInfoFromPrev(self)[1];
 		});
 
-		// Waypoint marker =
-		var _marker = ko.observable(new google.maps.Marker({
+		var markerSettings = {
 			map: ui.map,
 			icon: {
-				url: PAGE_PATH + 'fmc/images/waypoint.png',
+				url: PAGE_PATH + 'images/waypoint.png',
 				scaledSize: new google.maps.Size(24, 24),
 				anchor: new google.maps.Point(12, 12),
 				zIndex: 1000
 			}
-		}));
+		};
+
+		// Waypoint marker
+		var _marker = ko.observable(new google.maps.Marker(markerSettings));
 		self.marker = ko.pureComputed({
 			read: _marker,
 			write: function (wptName, coords) {
