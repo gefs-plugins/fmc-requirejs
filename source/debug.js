@@ -2,8 +2,8 @@
 
 define(['ui/elements'], function (E) {
 
-    // Production flag to determine if debug info is printed
-    var PRODUCTION = false;
+    // If FMC is production
+    var PRODUCTION = true;
 
     // Stops event propagation
     function stopPropagation (event) {
@@ -15,7 +15,7 @@ define(['ui/elements'], function (E) {
          * Stops input key propagation
          */
         stopPropagation: function () {
-            $(E.modal).find('input')
+            $(E.modal)
                 .keyup(stopPropagation)
                 .keydown(stopPropagation)
                 .keypress(stopPropagation);
