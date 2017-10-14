@@ -60,7 +60,7 @@ define(['debug', 'log'], function (debug, log) {
 			if (geofs.aircraft.instance.setup.flapsPositions) {
 				controls.flaps.positionTarget = geofs.aircraft.instance.setup.flapsPositions[controls.flaps.target];
 				log.update('Flaps lowered to ' + controls.flaps.positionTarget);
-			} log.update('Flaps lowered to ' + controls.flaps.target);
+			} else log.update('Flaps lowered to ' + controls.flaps.target);
 
 			controls.setPartAnimationDelta(controls.flaps);
 		}
