@@ -170,7 +170,9 @@ define([
 				}
 			}
 
-			if (flight.spdControl()) {
+			var belowStartAlt = index === undefined;
+
+			if (flight.spdControl() && !belowStartAlt) {
 				spd = profile[index][2];
 				if (index < profile.length - 1) vs = profile[index][3];
 				switchSpeedMode(spd);

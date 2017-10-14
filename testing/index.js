@@ -19,7 +19,9 @@ exports.getBodyParts = function () {
 
 			new RoboHydraHeadFilter({
 				path: '/geofs.php*',
-				filter: buffer => buffer.toString().replace('</head>', script)
+				filter: buffer => buffer.toString()
+					.replace(/geofs\.jsapiKey = '[^]*?'/, 'geofs.jsapiKey = "AIzaSyBlCxVOtJO6rKOmWnIhHSWx2EHzU_7hakQ"')
+					.replace('</head>', script)
 			}),
 
 			new RoboHydraHeadProxy({

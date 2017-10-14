@@ -1,6 +1,6 @@
 "use strict";
 
-define(['log'], function (log) {
+define(['debug', 'log'], function (debug, log) {
 
 	// Adds a confirm window to prevent accidental reset
 	geofs.resetFlight = function () {
@@ -43,12 +43,10 @@ define(['log'], function (log) {
 		if (controls.flaps.target > 0) {
 			controls.flaps.target--;
 
-			log.update('Flaps raised to ' + controls.flaps.target);
-
-			// TODO figure out what this statement is
 			if (geofs.aircraft.instance.setup.flapsPositions) {
 				controls.flaps.positionTarget = geofs.aircraft.instance.setup.flapsPositions[controls.flaps.target];
-			}
+				log.update('Flaps raised to ' + controls.flaps.positionTarget);
+			} else log.update('Flaps raised to ' + controls.flaps.target);
 
 			controls.setPartAnimationDelta(controls.flaps);
 		}
@@ -59,12 +57,10 @@ define(['log'], function (log) {
 		if (controls.flaps.target < geofs.aircraft.instance.setup.flapsSteps) {
 			controls.flaps.target++;
 
-			log.update('Flaps lowered to ' + controls.flaps.target);
-
-			// TODO figure out what this statement is
 			if (geofs.aircraft.instance.setup.flapsPositions) {
 				controls.flaps.positionTarget = geofs.aircraft.instance.setup.flapsPositions[controls.flaps.target];
-			}
+				log.update('Flaps lowered to ' + controls.flaps.positionTarget);
+			} else log.update('Flaps lowered to ' + controls.flaps.target);
 
 			controls.setPartAnimationDelta(controls.flaps);
 		}
