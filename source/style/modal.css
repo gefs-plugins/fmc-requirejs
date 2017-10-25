@@ -71,6 +71,7 @@ div.fmc-modal .fmc-modal__no-shadow {
 	background: white !important;
     min-height: inherit;
     height: inherit;
+	position: static !important; /* Default MDL css was redefined */
 }
 
 @media screen and (max-width: 1024px) {
@@ -78,6 +79,10 @@ div.fmc-modal .fmc-modal__no-shadow {
 	div.fmc-modal .fmc-modal__no-shadow {
 		display: block !important;
 	}
+}
+
+div.fmc-modal .fmc-modal__content main {
+	padding-top: 0px !important; /* Default MDL css was redefined */
 }
 
 div.fmc-modal__layout-container {
