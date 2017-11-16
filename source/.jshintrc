@@ -1,0 +1,31 @@
+{ "globals":
+  { "geofs": true
+  , "controls": true
+  , "METERS_TO_FEET": true
+  , "PAGE_PATH": true
+  , "autopilot_pp": true
+  , "componentHandler": true
+  , "google": true
+  , "ui": true
+  , "define": true
+  , "require": true
+  , "requirejs": true
+  , "Promise": true
+  }
+, "laxcomma": true
+, "laxbreak": true
+, "multistr": true
+, "eqeqeq": true
+, "smarttabs": true
+, "globalstrict": true
+, "jquery": true
+, "curly": false
+, "browser": true
+, "expr": true
+, "devel": true
+, "debug": true
+, "funcscope": false
+, "unused": true
+, "bitwise": true
+, "-W004": false
+}
