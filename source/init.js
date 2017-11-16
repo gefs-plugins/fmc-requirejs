@@ -34,7 +34,8 @@
 
 	// Check if game has completed loading
 	var timer = setInterval(function () {
-		if (!(window.geofs && geofs.aircraft &&
+		if (!(window.google && google.maps &&
+			window.geofs && geofs.aircraft &&
 			geofs.aircraft.instance &&
 			geofs.aircraft.instance.object3d)) return;
 
