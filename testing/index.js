@@ -1,4 +1,3 @@
-/* jshint node:true, varstmt:true, esversion:6 */
 "use strict";
 
 const heads = require('robohydra').heads;

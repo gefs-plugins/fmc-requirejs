@@ -8,8 +8,8 @@
                 <span>Waypoints / Route</span>
                 <i class="material-icons">mode_edit</i>
             </div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':loadRouteText}">
-                <input class="mdl-textfield__input load-wpt" data-bind="value: loadRouteText">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input load-wpt" data-bind="value: loadRouteText, mdlTextfield: true">
                 <label class="mdl-textfield__label">Enter waypoints separated by spaces or a generated route</label>
             </div>
             <button class="mdl-button mdl-js-button mdl-button--icon load-wpt" data-bind="click: loadRoute">
@@ -17,8 +17,8 @@
             </button>
 
             <!-- Generate Route -->
-            <div class="mdl-textfield mdl-js-textfield fmc-generate-rte-container" data-bind="css:{'is-dirty':generateRoute}">
-                <textarea class="mdl-textfield__input generate-rte" readonly rows="6" maxrows="6" data-bind="value: generateRoute"></textarea>
+            <div class="mdl-textfield mdl-js-textfield fmc-generate-rte-container">
+                <textarea class="mdl-textfield__input generate-rte" readonly rows="6" maxrows="6" data-bind="value: generateRoute, mdlTextfield: true"></textarea>
                 <label class="mdl-textfield__label">Generated Route</label>
             </div>
         </div>

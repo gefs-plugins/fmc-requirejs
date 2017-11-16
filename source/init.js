@@ -10,7 +10,7 @@
 
 	if (!window.Promise) throw new Error('Browser is outdated.');
 
-	var VALID_VERSION = 'v0.10.6';
+	var VALID_VERSION = 'v0.11.0';
 
 	// Error if FMC is loaded without Autopilot++ or with outdated Autopilot++
 	function errorNotCompatible () {
@@ -34,7 +34,8 @@
 
 	// Check if game has completed loading
 	var timer = setInterval(function () {
-		if (!(window.geofs && geofs.aircraft &&
+		if (!(window.google && google.maps &&
+			window.geofs && geofs.aircraft &&
 			geofs.aircraft.instance &&
 			geofs.aircraft.instance.object3d)) return;
 

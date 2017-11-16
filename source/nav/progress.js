@@ -72,7 +72,8 @@ define([
 		} else flightDist = Math.round(flightDist);
 
 		// If T/D is entered and T/D has not been passed
-		if (flight.todDist() && flight.todDist() < flightDist) var todDist = flightDist - flight.todDist();
+		var todDist;
+		if (flight.todDist() && flight.todDist() < flightDist) todDist = flightDist - flight.todDist();
 
 		// Formats nextDist
 		if (nextDist < 10) {

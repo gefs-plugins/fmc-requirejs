@@ -211,9 +211,9 @@ define([
 	 * @returns {Object} The profile needed by VNAV
 	 */
 	function getVNAVProfile () {
-		return geofs.aircraft.instance.setup.fmc
-			|| vnavProfile[geofs.aircraft.instance.id]
-			|| vnavProfile.DEFAULT;
+		return geofs.aircraft.instance.setup.fmc ||
+			vnavProfile[geofs.aircraft.instance.id] ||
+			vnavProfile.DEFAULT;
 	}
 
 	/**

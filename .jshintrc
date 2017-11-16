@@ -1,33 +1,20 @@
-{ "globals":
-  { "geofs": true
-  , "controls": true
-  , "METERS_TO_FEET": true
-  , "PAGE_PATH": true
-  , "autopilot_pp": true
-  , "componentHandler": true
-  , "google": true
-  , "ui": true
-  , "define": true
-  , "require": true
-  , "requirejs": true
-  , "Promise": true
-  }
+{ "globals": { "module": true }
+, "node": true
+, "predef": [ "-Promise" ]
+, "varstmt": true
+, "esnext": 6
 , "laxcomma": true
 , "laxbreak": true
 , "multistr": true
 , "eqeqeq": true
 , "smarttabs": true
-, "globalstrict": true
-, "jquery": true
 , "curly": false
-, "browser": true
 , "expr": true
 , "devel": true
 , "debug": true
-, "funcscope": true
+, "funcscope": false
 , "unused": true
 , "bitwise": true
-, "-W079": false
 , "-W058": false
 , "-W002": false
 , "-W004": false

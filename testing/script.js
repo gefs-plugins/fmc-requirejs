@@ -1,3 +1,4 @@
+/* jshint browser:true, jquery:true */
 "use strict";
 
 window.addEventListener('deferredload', function () {
