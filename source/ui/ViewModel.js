@@ -14,7 +14,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
         var _opened = ko.observable(false);
         self.opened = ko.pureComputed({
             read: _opened,
-            write: function (boolean, viewmodel) { // jshint unused:false
+            write: function (boolean, _vm) { // jshint ignore:line
                 _opened(boolean);
             }
         });
@@ -136,7 +136,7 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
         var generatedRouteText = ko.observable();
         self.generateRoute = ko.pureComputed({
             read: generatedRouteText,
-            write: function (isGenerate, viewmodel) { // jshint unused:false
+            write: function (isGenerate, _vm) { // jshint ignore:line
                 var generatedRoute = isGenerate ? waypoints.toRouteString() : undefined;
                 generatedRouteText(generatedRoute);
             }
@@ -149,6 +149,45 @@ define(['knockout', 'flight', 'get', 'log', 'waypoints', 'nav/progress'], functi
         self.removeLogData = log.removeData;
 
     }
+
+    /**
+     * Handles CSS of MDL switch buttons
+     */
+    ko.bindingHandlers.mdlSwitch = {
+        update: function (element, _unused, bindings) { // jshint ignore:line
+            // Listens for 'checked' binding
+            var isChecked = bindings.get('checked');
+            if (isChecked) isChecked();
+
+            // Listens for 'disable' binding
+            bindings.get('disable');
+
+            var materialSwitch = element.parentNode.MaterialSwitch;
+            if (!materialSwitch) return;
+
+            materialSwitch.checkDisabled();
+            materialSwitch.checkToggleState();
+        }
+    };
+
+    /**
+     * Handles CSS of MDL textfields
+     */
+    ko.bindingHandlers.mdlTextfield = {
+        update: function (element, _unused, bindings) { // jshint ignore:line
+            // Listens for 'value' binding
+            var hasValue = bindings.get('value');
+            if (hasValue) hasValue();
+
+            var materialTextfield = element.parentNode.MaterialTextfield;
+            if (!materialTextfield) return;
+
+            materialTextfield.checkDirty();
+            materialTextfield.checkDisabled();
+            materialTextfield.checkFocus();
+            materialTextfield.checkValidity();
+        }
+    };
 
     return ViewModel;
 });

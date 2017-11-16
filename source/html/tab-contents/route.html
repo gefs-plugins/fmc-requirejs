@@ -9,24 +9,24 @@
                     <!-- Departure input -->
                     <td>
                         <i class="material-icons">flight_takeoff</i>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':departureAirport}">
-                            <input class="mdl-textfield__input dep" data-bind="value: departureAirport">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input dep" data-bind="value: departureAirport, mdlTextfield: true">
                             <label class="mdl-textfield__label">Departure</label>
                         </div>
                     </td>
                     <!-- Arrival input -->
                     <td>
                         <i class="material-icons">flight_land</i>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':arrivalAirport}">
-                            <input class="mdl-textfield__input arr" data-bind="value: arrivalAirport">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input arr" data-bind="value: arrivalAirport, mdlTextfield: true">
                             <label class="mdl-textfield__label">Arrival</label>
                         </div>
                     </td>
                     <!-- Flight num input -->
                     <td>
                         <i class="material-icons">local_airport</i>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" data-bind="css:{'is-dirty':flightNumber}">
-                            <input class="mdl-textfield__input fn" data-bind="value: flightNumber">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input fn" data-bind="value: flightNumber, mdlTextfield: true">
                             <label class="mdl-textfield__label">Flight #</label>
                         </div>
                     </td>
@@ -56,31 +56,31 @@
                         <td>
                             <!-- Waypoint input -->
                             <span class="fmc-wpt-info" data-bind="text: info"></span>
-                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':wpt}">
-                                <input class="mdl-textfield__input wpt" data-bind="value: wpt">
+                            <div class="mdl-textfield mdl-js-textfield">
+                                <input class="mdl-textfield__input wpt" data-bind="value: wpt, mdlTextfield: true">
                                 <label class="mdl-textfield__label">Fix, VOR, ICAO</label>
                             </div>
                         </td>
                         <td>
                             <!-- Latitude input -->
-                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':lat}">
-                                <input class="mdl-textfield__input lat" data-bind="value: lat" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+                            <div class="mdl-textfield mdl-js-textfield">
+                                <input class="mdl-textfield__input lat" data-bind="value: lat, mdlTextfield: true" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
                                 <label class="mdl-textfield__label">Lat.</label>
                                 <span class="mdl-textfield__error">Invalid Latitude</span>
                             </div>
                         </td>
                         <td>
                             <!-- Longitude input -->
-                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':lon}">
-                                <input class="mdl-textfield__input lon" data-bind="value: lon" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
+                            <div class="mdl-textfield mdl-js-textfield">
+                                <input class="mdl-textfield__input lon" data-bind="value: lon, mdlTextfield: true" pattern="-?(\d*(\.\d+)?|\d*\s\d+(\.\d+)?)">
                                 <label class="mdl-textfield__label">Lon.</label>
                                 <span class="mdl-textfield__error">Invalid Longitude</span>
                             </div>
                         </td>
                         <td>
                             <!-- Altitude input -->
-                            <div class="mdl-textfield mdl-js-textfield" data-bind="css:{'is-dirty':alt}">
-                                <input class="mdl-textfield__input alt" type="number" max=3280000 step=10 data-bind="value: alt">
+                            <div class="mdl-textfield mdl-js-textfield">
+                                <input class="mdl-textfield__input alt" type="number" max=3280000 step=10 data-bind="value: alt, mdlTextfield: true">
                                 <label class="mdl-textfield__label">Ft.</label>
                                 <span class="mdl-textfield__error">Invalid Altitude</span>
                             </div>
