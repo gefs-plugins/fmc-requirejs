@@ -20,14 +20,14 @@ First, make sure that you have run `npm install`.
 
 If so, open a terminal/command prompt in this directory, then do
 ```
-node_modules/requirejs/bin/r.js -o build.json
+node node_modules/requirejs/bin/r.js -o build.json
 ```
 Then you will be able to see the optimized file in *build* as **fmc.min.js**
 
 ----
 #### License
 ```
-Copyright (C) 2016-2017 Harry Xue, (C) 2016-2017 Ethan Shields
+Copyright (C) 2016-2018 Harry Xue, (C) 2016-2017 Ethan Shields
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
