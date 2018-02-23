@@ -77,13 +77,20 @@ define(['flight', 'utils', 'waypoints', 'exports'], function (flight, utils, way
 	/**
 	 * Computes the turning distance to next waypoint for an aircraft to be on course
 	 *
-	 * @param {Number} angle Angle of turning
-	 * @returns {Number} The turning distance
+	 * @param {Number} bankAngle Bank angle of the turning aircraft
+	 * @param {Number} theta The difference in bearing of two front courses (max 120)
+	 * @returns {Number} The turning distance in nautical miles
 	 */
-	exports.turn = function (angle) {
-		var v = geofs.aircraft.instance.animationValue.kcas;
-		var r = 0.107917 * Math.pow(Math.E, 0.0128693 * v);
-		var a = utils.toRadians(angle);
-		return r * Math.tan(a / 2) + 0.20;
+	exports.turn = function (bankAngle, theta) {
+		// Converts angles to radians
+		bankAngle = utils.toRadians(bankAngle);
+		theta = utils.toRadians(Math.min(Math.abs(theta), 120));
+
+		// Calculates turn radius using centripetal acceleration
+		var g = 68624.6695; // knots per hour
+		var tas = geofs.aircraft.instance.animationValue.ktas;
+		var turnRadius = tas * tas / (g * Math.tan(bankAngle));
+
+		return turnRadius * Math.tan(theta / 2);
 	};
 });
