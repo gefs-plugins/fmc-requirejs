@@ -2,8 +2,8 @@
 
 define([
 	'knockout', './ViewModel', './position', 'debug', 'log',
-	'map', 'waypoints', 'nav/progress', './elements', 'redefine'
-], function (ko, ViewModel, positioningFMC, debug, log, map, waypoints, progress, E) {
+	/*'polyline', */'waypoints', 'nav/progress', './elements', 'redefine'
+], function (ko, ViewModel, positioningFMC, debug, log, /*polyline, */waypoints, progress, E) {
 
 	// If UI is properly placed, load FMC
 	positioningFMC.then(loadFMC);
@@ -22,18 +22,18 @@ define([
 
 		// Inits waypoint field
 		// HACK: opens nav tab to make sure map imagery loads
-		new Promise(function (resolve) {
-			ui.panel.toggle('.geofs-map-list');
-			ui.createMap();
-			var timer = setInterval(function () {
-				if (!ui.map) return;
-				clearInterval(timer);
-				resolve();
-			}, 250);
-		}).then(function () {
-			map.polyline.setMap(ui.map);
+		// new Promise(function (resolve) {
+		// 	ui.panel.toggle('.geofs-map-list');
+		// 	ui.createMap();
+		// 	var timer = setInterval(function () {
+		// 		if (!ui.map) return;
+		// 		clearInterval(timer);
+		// 		resolve();
+		// 	}, 250);
+		// }).then(function () {
+			// polyline.path.addTo(ui.mapInstance);
 			waypoints.addWaypoint();
-		});
+		// });
 
 		/* ---- UI actions binding ---- */
 

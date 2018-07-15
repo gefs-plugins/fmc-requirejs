@@ -1,8 +1,8 @@
 "use strict";
 
 define([
-	'knockout', 'debug', 'get', 'flight', 'log', 'map', 'utils', 'nav/LNAV', 'nav/progress', 'exports'
-], function (ko, debug, get, flight, log, map, utils, lnav, progress, exports) {
+	'knockout', 'debug', 'get', 'flight', 'log', /*'polyline', */'utils', 'nav/LNAV', 'nav/progress', 'exports'
+], function (ko, debug, get, flight, log, /*polyline, */utils, lnav, progress, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -37,8 +37,8 @@ define([
 				self.lon(isValid ? coords[1] : self.lon(), isValid);
 				self.info(isValid ? coords[2] : undefined);
 
-				if (!isValid) self.marker(val);
-				else self.marker(val);
+				// if (!isValid) self.marker(val);
+				// else self.marker(val);
 			}
 		});
 
@@ -46,11 +46,11 @@ define([
 		var _lat = ko.observable();
 		self.lat = ko.pureComputed({
 			read: _lat,
-			write: function (val, isValid) {
+			write: function (val, isValid) {debugger;
 				val = formatCoords(val);
 				_lat(!isNaN(val) ? val : undefined);
 				self.valid(Boolean(isValid));
-				self.marker(self.wpt(), { lat: val, lng: self.lon() });
+				// self.marker(self.wpt(), L.latLng(val, self.lon()));
 			}
 		});
 
@@ -58,11 +58,11 @@ define([
 		var _lon = ko.observable();
 		self.lon = ko.pureComputed({
 			read: _lon,
-			write: function (val, isValid) {
+			write: function (val, isValid) {debugger;
 				val = formatCoords(val);
 				_lon(!isNaN(val) ? val : undefined);
 				self.valid(Boolean(isValid));
-				self.marker(self.wpt(), { lat: self.lat(), lng: val });
+				// self.marker(self.wpt(), L.latLng(self.lat(), val));
 			}
 		});
 
@@ -85,33 +85,43 @@ define([
 			return getInfoFromPrev(self)[1];
 		});
 
-		var markerSettings = {
-			map: ui.map,
-			icon: {
-				url: PAGE_PATH + 'images/waypoint.png',
-				scaledSize: new google.maps.Size(24, 24),
-				anchor: new google.maps.Point(12, 12),
-				zIndex: 1000
-			}
-		};
+		// var markerSettings = {
+		// 	map: ui.map,
+		// 	icon: {
+		// 		url: PAGE_PATH + 'images/waypoint.png',
+		// 		scaledSize: new google.maps.Size(24, 24),
+		// 		anchor: new google.maps.Point(12, 12),
+		// 		zIndex: 1000
+		// 	}
+		// };
+
+		// var markerIcon =  L.icon({
+		// 	iconUrl: PAGE_PATH + 'images/waypoint.png',
+		// 	iconSize: [24, 24],
+		// 	iconAnchor: [12, 12],
+		// });
 
 		// Waypoint marker
-		var _marker = ko.observable(new google.maps.Marker(markerSettings));
-		self.marker = ko.pureComputed({
-			read: _marker,
-			write: function (wptName, coords) {
-				_marker().setTitle(wptName);
-				if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
-					_marker().setPosition(coords);
-					var index = getIndex(self);
-
-					// If path at this index exists, amend it
-					if (map.path.getArray()[index])
-						map.path.setAt(index, new google.maps.LatLng(coords.lat, coords.lng));
-					else map.path.insertAt(index, new google.maps.LatLng(coords.lat, coords.lng));
-				}
-			}
-		});
+		// var _marker = ko.observable();
+		// self.marker = ko.pureComputed({
+		// 	read: _marker,
+		// 	write: function (wptName, coords) {
+		// 		var markerOption = {
+		// 			icon: markerIcon,
+		// 			title: wptName
+		// 		};
+		//
+		// 		if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
+		// 			_marker(L.marker(coords, markerOption).addTo(ui.mapInstance));
+		// 			var index = getIndex(self);
+		//
+		// 			// If path at this index exists, amend it
+		// 			if (polyline.path.getLatLngs()[index])
+		// 				polyline.setAt(index, coords);
+		// 			else polyline.insertAt(index, coords);
+		// 		}
+		// 	}
+		// });
 
 	};
 
@@ -190,9 +200,9 @@ define([
 		route(tempRoute);
 
 		// Moves map path
-		var curLatLng = map.path.getAt(index1);
-		map.path.removeAt(index1);
-		map.path.insertAt(index2, curLatLng);
+		// var cur = polyline.path.getLatLngs()[index1];
+		// polyline.deleteAt(index1);
+		// polyline.insertAt(index2, cur);
 	}
 
 	/**
@@ -363,15 +373,15 @@ define([
 	function removeWaypoint (n, data, event) { // jshint ignore:line
 		var isRemoveAll = event && event.shiftKey || typeof n === 'boolean';
 		if (isRemoveAll) {
-			route().forEach(function(e) {
-				e.marker().setMap(null);
-			});
+			// route().forEach(function(e) {
+			// 	e.marker().remove();
+			// });
 			route.removeAll();
-			map.path.clear();
+			// polyline.path.setLatLngs([]);
 		}
 		else {
-	        route()[n].marker().setMap(null);
-			map.path.removeAt(n);
+	        // route()[n].marker().remove();
+			// polyline.removeAt(n);
 			route.splice(n, 1);
 		}
 
