@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2016-2017 Harry Xue, (c) 2016-2017 Ethan Shields
+ * @license Copyright (c) 2016-2018 Harry Xue, (c) 2016-2017 Ethan Shields
  * Released under the GNU Affero General Public License, v3.0 or later
  * https://github.com/geofs-plugins/fmc-requirejs/blob/master/LICENSE.md
  */
@@ -10,7 +10,7 @@
 
 	if (!window.Promise) throw new Error('Browser is outdated.');
 
-	var VALID_VERSION = 'v0.11.0';
+	var VALID_VERSION = 'v0.11.2';
 
 	// Error if FMC is loaded without Autopilot++ or with outdated Autopilot++
 	function errorNotCompatible () {
