@@ -3,6 +3,7 @@ node_modules
 build
 compile/data
 compile/compiled-data
+testing/imagery.js
 package
 *.pem
 ._*

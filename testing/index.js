@@ -6,7 +6,7 @@ const RoboHydraHeadFilter = heads.RoboHydraHeadFilter;
 const RoboHydraHeadProxy = heads.RoboHydraHeadProxy;
 const path = require('path');
 
-const script = '<script src="fmc/testing/script.js"></script></head>';
+const script = '<script src="fmc/testing/script.js?_=' + Date.now() + '"></script></head>';
 
 exports.getBodyParts = function () {
 	return {
@@ -19,6 +19,9 @@ exports.getBodyParts = function () {
 			new RoboHydraHeadFilter({
 				path: '/geofs.php*',
 				filter: buffer => buffer.toString()
+					.replace(/geofs\.masterDomain = '[^]*?'/, 'geofs.masterDomain = "127.0.0.1:3000"')
+					.replace(/geofs\.url = '[^]*?'/, 'geofs.url = "http://127.0.0.1:3000"')
+					.replace(/geofs\.localUrl = '[^]*?'/, 'geofs.localUrl = "http://127.0.0.1:3000"')
 					.replace(/geofs\.jsapiKey = '[^]*?'/, 'geofs.jsapiKey = "AIzaSyBlCxVOtJO6rKOmWnIhHSWx2EHzU_7hakQ"')
 					.replace('</head>', script)
 			}),
