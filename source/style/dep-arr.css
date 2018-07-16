@@ -1,3 +1,7 @@
+div.fmc-dep-arr-container {
+    overflow: hidden;
+}
+
 div.fmc-dep-arr-container .fmc-dep-arr__input-label {
     margin-left: 50px;
     font-size: 16px;

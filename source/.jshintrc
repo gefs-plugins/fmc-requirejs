@@ -5,7 +5,7 @@
   , "PAGE_PATH": true
   , "autopilot_pp": true
   , "componentHandler": true
-  , "google": true
+  , "L": true
   , "ui": true
   , "define": true
   , "require": true
