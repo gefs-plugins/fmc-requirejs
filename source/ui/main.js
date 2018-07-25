@@ -2,8 +2,8 @@
 
 define([
 	'knockout', './ViewModel', './position', 'debug', 'log',
-	/*'polyline', */'waypoints', 'nav/progress', './elements', 'redefine'
-], function (ko, ViewModel, positioningFMC, debug, log, /*polyline, */waypoints, progress, E) {
+	'waypoints', 'nav/progress', './elements', 'redefine'
+], function (ko, ViewModel, positioningFMC, debug, log, waypoints, progress, E) {
 
 	// If UI is properly placed, load FMC
 	positioningFMC.then(loadFMC);
@@ -22,23 +22,19 @@ define([
 
 		// Inits waypoint field
 		// HACK: opens nav tab to make sure map imagery loads
-		// new Promise(function (resolve) {
-		// 	ui.panel.toggle('.geofs-map-list');
-		// 	ui.createMap();
-		// 	var timer = setInterval(function () {
-		// 		if (!ui.map) return;
-		// 		clearInterval(timer);
-		// 		resolve();
-		// 	}, 250);
-		// }).then(function () {
-			// polyline.path.addTo(ui.mapInstance);
+		$('[data-toggle-panel=".geofs-map-list"]').click();
+		var timer = setInterval(function () {
+			if (!ui.mapInstance) return;
+			clearInterval(timer);
+
+			$('[data-toggle-panel=".geofs-map-list"]').click();
 			waypoints.addWaypoint();
-		// });
+		}, 250);
 
 		/* ---- UI actions binding ---- */
 
 		// Modal actions: close on button click
-		$(modal).keydown(function (event) { // Sets escape button to close FMC
+		$(document).keydown(function (event) { // Sets escape button to close FMC
 			if ((event.which === 27 || event.keyCode === 27) && $(this).is(':visible'))
 				$(modal).removeClass('opened');
 		});

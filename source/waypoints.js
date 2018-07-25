@@ -1,8 +1,8 @@
 "use strict";
 
 define([
-	'knockout', 'debug', 'get', 'flight', 'log', /*'polyline', */'utils', 'nav/LNAV', 'nav/progress', 'exports'
-], function (ko, debug, get, flight, log, /*polyline, */utils, lnav, progress, exports) {
+	'knockout', 'debug', 'get', 'flight', 'log', 'path', 'utils', 'nav/LNAV', 'nav/progress', 'exports'
+], function (ko, debug, get, flight, log, Path, utils, lnav, progress, exports) {
 
 	// Autopilt++ Dependencies
 	var autopilot = autopilot_pp.require('autopilot'),
@@ -36,8 +36,8 @@ define([
 				self.lon(isValid ? coords[1] : self.lon(), isValid);
 				self.info(isValid ? coords[2] : undefined);
 
-				// if (!isValid) self.marker(val);
-				// else self.marker(val);
+				if (!isValid) self.marker(val);
+				else self.marker(val, coords);
 			}
 		});
 
@@ -45,11 +45,11 @@ define([
 		var _lat = ko.observable();
 		self.lat = ko.pureComputed({
 			read: _lat,
-			write: function (val, isValid) {debugger;
+			write: function (val, isValid) {
 				val = formatCoords(val);
 				_lat(!isNaN(val) ? val : undefined);
 				self.valid(Boolean(isValid));
-				// self.marker(self.wpt(), L.latLng(val, self.lon()));
+				self.marker(self.wpt(), [ val, self.lon() ]);
 			}
 		});
 
@@ -57,11 +57,11 @@ define([
 		var _lon = ko.observable();
 		self.lon = ko.pureComputed({
 			read: _lon,
-			write: function (val, isValid) {debugger;
+			write: function (val, isValid) {
 				val = formatCoords(val);
 				_lon(!isNaN(val) ? val : undefined);
 				self.valid(Boolean(isValid));
-				// self.marker(self.wpt(), L.latLng(self.lat(), val));
+				self.marker(self.wpt(), [ self.lat(), val ]);
 			}
 		});
 
@@ -74,6 +74,18 @@ define([
 		// Waypoint info
 		self.info = ko.observable();
 
+		// Next waypoint
+		self.next = function () {
+			var index = getIndex(self);
+			return route()[index + 1];
+		};
+
+		// Previous waypoint
+		self.prev = function () {
+			var index = getIndex(self);
+			return route()[index - 1];
+		};
+
 		// Distance from previous waypoint
 		self.distFromPrev = ko.pureComputed(function () {
 			return getInfoFromPrev(self)[0];
@@ -84,44 +96,51 @@ define([
 			return getInfoFromPrev(self)[1];
 		});
 
-		// var markerSettings = {
-		// 	map: ui.map,
-		// 	icon: {
-		// 		url: PAGE_PATH + 'images/waypoint.png',
-		// 		scaledSize: new google.maps.Size(24, 24),
-		// 		anchor: new google.maps.Point(12, 12),
-		// 		zIndex: 1000
-		// 	}
-		// };
-
-		// var markerIcon =  L.icon({
-		// 	iconUrl: PAGE_PATH + 'images/waypoint.png',
-		// 	iconSize: [24, 24],
-		// 	iconAnchor: [12, 12],
-		// });
-
 		// Waypoint marker
-		// var _marker = ko.observable();
-		// self.marker = ko.pureComputed({
-		// 	read: _marker,
-		// 	write: function (wptName, coords) {
-		// 		var markerOption = {
-		// 			icon: markerIcon,
-		// 			title: wptName
-		// 		};
-		//
-		// 		if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
-		// 			_marker(L.marker(coords, markerOption).addTo(ui.mapInstance));
-		// 			var index = getIndex(self);
-		//
-		// 			// If path at this index exists, amend it
-		// 			if (polyline.path.getLatLngs()[index])
-		// 				polyline.setAt(index, coords);
-		// 			else polyline.insertAt(index, coords);
-		// 		}
-		// 	}
-		// });
+		var _marker = ko.observable();
+		self.marker = ko.pureComputed({
+			read: _marker,
+			write: function (wptName, coords) {
+				var markerOption = {
+					icon: L.icon({
+						iconUrl: PAGE_PATH + 'images/waypoint.png',
+						iconSize: [24, 24],
+						iconAnchor: [12, 12],
+					}),
+					title: wptName
+				};
 
+				if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
+					_marker(L.marker(coords, markerOption));
+					_marker().addTo(ui.mapInstance.apiMap.map);
+				}
+
+				self.updatePath(true);
+			}
+		});
+
+		// Flight path
+		self.path = ko.observable(new Path());
+
+		var _updatePath = function (wrapping) {
+			if (nextWaypoint() === getIndex(self)) self.path().options.color = 'red';
+			else self.path().options.color = '#7b7c14';
+
+			self.path().update(self.prev(), self);
+
+			// Checks waypoints before and after
+			if (wrapping) {
+				var before = self.prev();
+				var after = self.next();
+				if (before) before.updatePath();
+				if (after) after.updatePath();
+			}
+		};
+
+		self.updatePath = ko.computed({
+			read: _updatePath,
+			write: _updatePath
+		});
 	};
 
 	// Makes llaLocation an observable for automatic data updates
@@ -198,10 +217,9 @@ define([
 		// Sets tempRoute as the new route
 		route(tempRoute);
 
-		// Moves map path
-		// var cur = polyline.path.getLatLngs()[index1];
-		// polyline.deleteAt(index1);
-		// polyline.insertAt(index2, cur);
+		// Updates path before, at, and after each index
+		route()[index1].updatePath(true);
+		route()[index2].updatePath(true);
 	}
 
 	/**
@@ -372,16 +390,21 @@ define([
 	function removeWaypoint (n, data, event) { // jshint ignore:line
 		var isRemoveAll = event && event.shiftKey || typeof n === 'boolean';
 		if (isRemoveAll) {
-			// route().forEach(function(e) {
-			// 	e.marker().remove();
-			// });
+			route().forEach(function(e) {
+				if (e.marker()) e.marker().remove();
+				if (e.path()) e.path().remove();
+			});
 			route.removeAll();
-			// polyline.path.setLatLngs([]);
 		}
 		else {
-	        // route()[n].marker().remove();
-			// polyline.removeAt(n);
+			if (!route()[n]) return;
+
+	        route()[n].marker().remove();
+			route()[n].path().remove();
 			route.splice(n, 1);
+
+			// Updates the path of the waypoint below
+			if (route()[n]) route()[n].updatePath();
 		}
 
 		if (nextWaypoint() === n || isRemoveAll) {
