@@ -23,10 +23,7 @@ define(['geodesic'], function () {
     };
 
     return function Path () {
-        return L.geodesic([], {
-            color: '#7b7c14',
-            weight: 2,
-        }).addTo(ui.mapInstance.apiMap.map);
+        return L.geodesic([], { weight: 2 }).addTo(ui.mapInstance.apiMap.map);
     };
 
 });

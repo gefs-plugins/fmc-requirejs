@@ -101,17 +101,8 @@ define([
 		self.marker = ko.pureComputed({
 			read: _marker,
 			write: function (wptName, coords) {
-				var markerOption = {
-					icon: L.icon({
-						iconUrl: PAGE_PATH + 'images/waypoint.png',
-						iconSize: [24, 24],
-						iconAnchor: [12, 12],
-					}),
-					title: wptName
-				};
-
 				if (coords && !isNaN(coords[0]) && !isNaN(coords[1])) {
-					_marker(L.marker(coords, markerOption));
+					_marker(L.marker(coords, { title: wptName }));
 					_marker().addTo(ui.mapInstance.apiMap.map);
 				}
 
@@ -123,8 +114,23 @@ define([
 		self.path = ko.observable(new Path());
 
 		var _updatePath = function (wrapping) {
-			if (nextWaypoint() === getIndex(self)) self.path().options.color = 'red';
-			else self.path().options.color = '#7b7c14';
+			if (!self.path() || !self.marker()) return;
+
+			if (nextWaypoint() === getIndex(self)) {
+				self.path().options.color = '#c51bff';
+				self.marker().setIcon(L.icon({
+					iconUrl: /*FIXME PAGE_PATH + */'fmc/images/waypoint-active.png',
+					iconSize: [24, 24],
+					iconAnchor: [12, 12],
+				}));
+			} else {
+				self.path().options.color = '#1da5ce';
+				self.marker().setIcon(L.icon({
+					iconUrl: /*FIXME PAGE_PATH + */'fmc/images/waypoint.png',
+					iconSize: [24, 24],
+					iconAnchor: [12, 12],
+				}));
+			}
 
 			self.path().update(self.prev(), self);
 
