@@ -6,8 +6,8 @@
   "dependencies": {
     "geodesic": "henrythasler/Leaflet.Geodesic",
     "knockout": "^3.4.2",
-    "minify": "harryxue1999/minify",
-    "requirejs": "latest"
+    "requirejs": "latest",
+    "text": "requirejs/text"
   },
   "devDependencies": {
     "robohydra": "^0.6.4",
@@ -16,7 +16,9 @@
     "graceful-fs": "latest"
   },
   "scripts": {
-    "start": "robohydra -I ./ -n -P testing -q"
+    "start": "robohydra -I ./ -n -P testing -q",
+    "build": "r.js -o build.json optimize=none",
+    "build-production": "r.js -o build.json"
   },
   "repository": {
     "type": "git",

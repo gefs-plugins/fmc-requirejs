@@ -6,8 +6,7 @@
     	paths: {
             geodesic: '../node_modules/Leaflet.Geodesic/Leaflet.Geodesic',
             knockout: '../node_modules/knockout/build/output/knockout-latest',
-    		text: '../node_modules/text/text',
-    		minify: '../node_modules/minify/minify'
+    		text: '../node_modules/text/text'
     	}
     });
 })();
