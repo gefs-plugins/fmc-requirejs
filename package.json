@@ -4,7 +4,7 @@
   "description": "Proxy server to test FMC RequireJS port",
   "main": "index.js",
   "dependencies": {
-    "geodesic": "henrythasler/Leaflet.Geodesic",
+    "leaflet.geodesic": "^2.6.1",
     "knockout": "^3.4.2",
     "requirejs": "latest",
     "text": "requirejs/text"
